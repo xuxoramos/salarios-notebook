@@ -1,5 +1,7 @@
 # Análisis Causal de Salarios en TI: México 2020-2022
 
+> **📌 Nota para Practicantes de Machine Learning:** Este análisis usa **inferencia causal**, no modelado predictivo. Si vienes de ML/DS y estás acostumbrado a optimizar R² y minimizar error de predicción, la sección de [Metodología](#metodología) explica por qué este enfoque es diferente y cuándo usar cada paradigma. **TL;DR:** Predicción responde "¿qué salario tiene X?", Causalidad responde "¿qué pasa si CAMBIO X?" - preguntas fundamentalmente distintas que requieren herramientas distintas.
+
 ## 📊 Resumen Ejecutivo
 
 Este repositorio contiene un análisis exhaustivo de inferencia causal para entender **qué factores causan diferencias salariales** en el sector de Tecnologías de la Información en México, basado en 5,798 respuestas de encuestas realizadas entre 2020 y 2022.
@@ -39,71 +41,557 @@ Este repositorio contiene un análisis exhaustivo de inferencia causal para ente
 
 ## Metodología
 
-### ¿Qué es Inferencia Causal y por qué importa?
+### Para Practicantes de Machine Learning: Predicción ≠ Causalidad
 
-La **inferencia causal** va más allá de identificar correlaciones; busca establecer **relaciones de causa y efecto**. Por ejemplo:
+Si vienes del mundo de ML, este análisis puede parecer contraintuitivo. Aquí **no buscamos maximizar R² ni minimizar error de predicción**. Esta sección explica por qué el mejor modelo predictivo no responde preguntas causales.
 
-- **Correlación simple:** "Las personas con más experiencia ganan más"
-- **Inferencia causal:** "¿Cuánto del salario se debe directamente a la experiencia, versus a otros factores como mejores roles o habilidades de negociación que vienen con la experiencia?"
+---
 
-### Intuición detrás de nuestro enfoque
+### Predicción vs Causalidad: La Distinción Fundamental
 
-#### 1. **Variables Confusoras: El Problema Fundamental**
+#### **Machine Learning Tradicional: El Paradigma Predictivo**
 
-Imagina que quieres saber si aprender Python aumenta tu salario. Observas que quienes saben Python ganan $20,000 más. ¿Pero es el lenguaje, o es que los programadores Python tienden a trabajar en ciencia de datos (mejor pagada) versus soporte técnico?
+En ML supervisado, el objetivo es:
 
-**Solución:** Controlamos por las **actividades** (roles desempeñados), comparando personas con roles similares que difieren solo en el conocimiento de Python.
+```python
+# Objetivo: Minimizar error de predicción
+ŷ = f(X)  donde  min E[(y - ŷ)²]
 
-```
-Salario = f(Python, Experiencia, Actividades, Ciudad, ...)
-                ↑
-          Efecto "puro" de Python después de aislar otros factores
-```
-
-#### 2. **Regresión Lineal con Controles**
-
-Usamos regresión lineal multivariada:
-
-```
-Salario = β₀ + β₁·Experiencia + β₂·Inglés + β₃·Python + ... + ε
+# Éxito se mide por:
+- R² en validación
+- RMSE en test set
+- Generalización out-of-sample
 ```
 
-Cada coeficiente (β) representa el **efecto causal marginal** de esa variable, **manteniendo constantes** todas las demás.
+**Pregunta que responde ML:** "Dado que alguien tiene estas características X, ¿qué salario Y tiene probablemente?"
 
-**Intuición:** Es como hacer un experimento controlado en laboratorio, pero usando herramientas estadísticas para "simular" el control que no podemos tener en datos observacionales.
+**Ejemplo ML:** Un Random Forest con 100 features puede predecir salario con R²=0.65 en validación. ¡Excelente modelo predictivo!
 
-#### 3. **Significancia Estadística (valores-p)**
+#### **Inferencia Causal: El Paradigma Intervencionista**
 
-Cada efecto viene con un **valor-p** que indica la probabilidad de observar ese efecto si en realidad no existiera:
+En causalidad, el objetivo es:
 
-- **p < 0.001 (\*\*\*)**: Evidencia muy fuerte (probabilidad < 0.1% de ser azar)
-- **p < 0.01 (\*\*)**: Evidencia fuerte
-- **p < 0.05 (\*)**: Evidencia moderada
-- **p ≥ 0.05**: No significativo (podría ser azar)
+```python
+# Objetivo: Estimar efecto de INTERVENCIÓN
+E[Y | do(X=x₁)] - E[Y | do(X=x₀)]
 
-#### 4. **R-cuadrado (R²): Poder Explicativo del Modelo**
-
-El R² indica qué porcentaje de la variabilidad salarial explica nuestro modelo:
-
-- **R² = 11%** (modelo simple con solo experiencia): Explica poco
-- **R² = 39%** (modelo completo): Explica mucho más, pero ~61% aún depende de factores no medidos
-
-**Intuición:** Un R² del 39% significa que nuestro modelo captura los principales determinantes estructurales del salario, pero factores individuales (negociación, desempeño, suerte) siguen siendo importantes.
-
-#### 5. **Diferencias-en-Diferencias (DiD): Efectos de la Pandemia**
-
-Para medir el impacto de la pandemia en trabajadores remotos vs no remotos, usamos DiD:
-
-```
-Efecto = (Salario_Remoto_2022 - Salario_Remoto_2020) 
-       - (Salario_NoRemoto_2022 - Salario_NoRemoto_2020)
+# Éxito se mide por:
+- Identificación causal correcta
+- Supuestos de confounding satisfechos
+- Interpretabilidad del efecto marginal
 ```
 
-**Intuición:** Comparamos cómo cambió el salario de trabajadores remotos versus no remotos. Si ambos grupos experimentaron el mismo crecimiento por inflación, la diferencia nos da el efecto **atribuible al trabajo remoto**.
+**Pregunta que responde Causalidad:** "Si CAMBIO X de x₀ a x₁ (intervención), ¿cuánto CAMBIA Y?"
+
+**Ejemplo Causal:** Si tomas un curso de inglés (intervención: nivel 1→3), ¿cuánto aumenta TU salario? (no: ¿cuánto ganan los que YA tienen nivel 3?)
+
+---
+
+### ¿Por Qué No Puedes Usar XGBoost para Causalidad?
+
+Esta es la pregunta que todo ML engineer hace. La respuesta corta: **los modelos predictivos confunden asociación con causación**.
+
+#### **Problema 1: Confounding (Variables Omitidas)**
+
+**Escenario ML Predictivo:**
+```python
+# Entrenar modelo predictivo de salario
+X = ['python', 'years_exp', 'city', 'english', ...]
+y = 'salary'
+
+xgb_model.fit(X, y)
+feature_importance = xgb_model.feature_importances_
+
+# Python aparece como "importante" (alta importancia)
+# Conclusión INCORRECTA: "Aprender Python causa +$20K salario"
+```
+
+**¿Por qué es incorrecto?**
+
+El modelo captura **asociaciones predictivas**, no causas:
+- Python correlaciona con rol de data scientist
+- Data scientists ganan más (por el rol, no el lenguaje)
+- Python es **proxy** del rol, no la causa del salario
+
+**Representación como Grafo Causal (DAG):**
+
+```
+         Rol (DS)
+        /        \
+       v          v
+    Python  →  Salario
+    (spurious    (confounded)
+     correlation)
+```
+
+En este DAG:
+- `Rol → Python` (data scientists aprenden Python)
+- `Rol → Salario` (data scientists ganan más)
+- La correlación Python-Salario es **espuria** (causada por el confounder "Rol")
+
+**Tu modelo XGBoost captura la correlación predictiva, pero para causalidad necesitas BLOQUEAR el path espurio controlando por Rol.**
+
+#### **Problema 2: Causalidad Inversa (Reverse Causation)**
+
+**Ejemplo:**
+```python
+# Observación: Empresas que pagan bien tienen más gente con inglés avanzado
+correlation(english_level, salary) = 0.45
+
+# ¿Interpretación causal?
+# (A) Inglés → Salario alto  [lo que buscamos]
+# (B) Salario alto → Inglés  [causalidad inversa: empresas tech invierten en training]
+# (C) Ambas simultáneas
+```
+
+Los modelos ML no distinguen direccionalidad. Un RandomForest te dirá "inglés es importante para predecir salario" pero no distingue (A) de (B).
+
+**Para causalidad necesitas:** Teoría (inglés precede al salario actual), instrumentos, o diseño cuasi-experimental.
+
+#### **Problema 3: Post-Treatment Bias (Condicionamiento Incorrecto)**
+
+Este error es común en ML: "¡más features = mejor modelo!"
+
+**Escenario erróneo:**
+```python
+# Queremos efecto causal de Experiencia en Salario
+# Alguien sugiere: "Agreguemos TODAS las variables para controlar"
+
+X = ['experience', 'role', 'company_size', 'python', 'leadership_reviews', ...]
+```
+
+**Problema:** Algunas variables son **consecuencias** de experiencia (mediadores):
+- Experiencia → Rol senior → Salario
+- Experiencia → Habilidades técnicas → Salario
+- Experiencia → Company size (acceso a mejores empresas) → Salario
+
+**Si controlas por estas variables, BLOQUEAS los caminos causales legítimos:**
+
+```
+Experiencia → Rol → Salario
+              ↑
+            (bloqueado al controlar)
+```
+
+Resultado: **Subestimas el efecto real de experiencia** porque eliminas los mecanismos por los cuales experiencia CAUSA mayor salario.
+
+**En ML esto está bien** (tu objetivo es predicción pura).  
+**En Causalidad esto es fatal** (destruyes la identificación causal).
+
+---
+
+### El Framework Causal: DAGs y d-Separation
+
+Para hacer inferencia causal, necesitamos **grafo causal dirigido (DAG)** que representa nuestra teoría de cómo las variables se relacionan.
+
+#### **Ejemplo: Efecto del Inglés en Salario**
+
+**DAG Teórico:**
+
+```
+  Experiencia
+    /    \
+   v      v
+Inglés → Salario ← Ciudad
+           ↑
+           |
+        Rol/Actividad
+```
+
+En este DAG:
+1. **Experiencia → Inglés:** Más años en tech = mayor probabilidad de aprender inglés
+2. **Experiencia → Salario:** Efecto directo de antigüedad
+3. **Inglés → Salario:** El efecto causal que buscamos
+4. **Ciudad → Salario:** Algunas ciudades pagan más
+5. **Rol → Salario:** Directores ganan más que juniors
+
+**Variables a Controlar (Confounders):**
+- `Experiencia`: Abrimos "backdoor path" Inglés ← Experiencia → Salario
+- `Rol/Actividad`: Aseguramos comparar personas con responsabilidades similares
+
+**Variables a NO Controlar:**
+- Variables post-tratamiento (ej: "tamaño de empresa actual" si inglés te dio acceso a ella)
+- Mediadores por los cuales inglés causa salario (ej: "trabaja remoto para empresa USA" es CÓMO inglés aumenta salario, no un confounder)
+
+**Criterio del Backdoor (Pearl, 2009):**
+
+Para identificar el efecto causal de X → Y necesitas un conjunto de variables Z tal que:
+1. Z bloquea TODOS los backdoor paths entre X e Y
+2. Z NO incluye descendientes de X (no mediadores)
+3. Z NO abre colliders (variables causadas por dos variables simultáneamente)
+
+**Este es un concepto inexistente en ML predictivo** - donde incluir más features casi siempre mejora R².
+
+---
+
+### Regresión Lineal OLS: ¿Por Qué Tan "Simple"?
+
+Viniendo de ML, usar regresión lineal puede parecer **primitivo**. "¿Por qué no un neural network con 10 capas?"
+
+#### **La Respuesta: Interpretabilidad Causal vs Flexibilidad Predictiva**
+
+| Aspecto | Regresión Lineal OLS | XGBoost / Deep Learning |
+|---------|---------------------|------------------------|
+| **Interpretabilidad** | β₁ = efecto marginal directo | Feature importance ≠ efecto causal |
+| **Supuestos explícitos** | Linealidad, aditividad (testeable) | Caja negra (no testeable) |
+| **Inferencia** | Errores estándar, intervalos de confianza | Bootstrap, pero sin interpretación causal |
+| **Extrapolación** | Peligrosa pero entendible | Peligrosísima y opaca |
+| **Goal** | Estimar efecto de intervención β | Minimizar error cuadrático predictivo |
+
+**Ejemplo Concreto:**
+
+```python
+# REGRESIÓN LINEAL CAUSAL:
+salary = β₀ + β₁·english + β₂·experience + ε
+
+# Interpretación: Si incrementas english de 2→3 (intervención),
+# salary aumenta β₁ pesos, MANTENIENDO experience constante.
+# β₁ es el "efecto causal marginal" del inglés.
+
+# XGBoost:
+salary = f(english, experience, role, city, ...)  # f es función no-lineal compleja
+
+# Interpretación: No existe. El modelo captura patrones predictivos complejos,
+# pero NO te dice qué pasa si intervienes cambiando solo english.
+```
+
+#### **Trade-Off Fundamental: Bias-Variance en Contexto Causal**
+
+En ML, el bias-variance tradeoff es:
+- **Modelos simples (high bias):** Underfitting, R² bajo
+- **Modelos complejos (high variance):** Overfitting, mala generalización
+- **Solución:** Regularización, validación cruzada
+
+En Causalidad, el trade-off es:
+- **Modelos simples (lineal):** Posible misspecification, pero efecto causal identificable e interpretable
+- **Modelos complejos (ML):** Mejor fit predictivo, pero **confunde asociación con causación**
+- **Solución:** Sacrificar R² predictivo por identificación causal correcta
+
+**En este análisis priorizamos identificación causal sobre accuracy predictivo.**
+
+---
+
+### Nuestra Estrategia de Identificación Causal
+
+#### 1. **Construcción del DAG Basado en Teoría**
+
+No dejamos que los datos "hablen solos" (como en ML). Usamos **conocimiento del dominio** para construir estructura causal:
+
+- **Experiencia precede a salario** (temporalidad)
+- **Inglés afecta acceso a empresas** (mecanismo económico)
+- **Roles son determinados conjuntamente con salario** (negociación)
+- **Geografía es exógena** (no eliges ciudad basado en salario futuro - supuesto fuerte)
+
+#### 2. **Selección de Controles Guiada por DAG (No por R²)**
+
+**MAL (enfoque ML):**
+```python
+# Tirar todo al modelo y ver qué mejora R²
+features = all_columns  # 200+ variables
+best_model = auto_ml(features, target='salary')
+```
+
+**BIEN (enfoque causal):**
+```python
+# Para efecto de Inglés, controlar solo confounders:
+controls = ['experience']  # Backdoor path: English ← Experience → Salary
+
+# NO controlar:
+# - 'works_for_US_company' (mediador: English → US_company → Salary)
+# - 'current_role' (posible mediador: English → Senior role → Salary)
+```
+
+#### 3. **Regresión Multivariada con Controles**
+
+**Modelo General:**
+```
+Salario = β₀ + β₁·Tratamiento + Σⱼ γⱼ·Confounder_j + ε
+```
+
+Donde:
+- **Tratamiento:** Variable de interés causal (ej: inglés, remoto, Python)
+- **Confounders:** Variables que afectan tanto tratamiento como outcome
+- **β₁:** El efecto causal estimado (nuestro objetivo)
+
+**Interpretación de β₁:**
+
+> "El cambio esperado en Salario por unidad de cambio en Tratamiento, **manteniendo constantes los confounders**, lo cual equivale a comparar personas que difieren solo en el tratamiento pero son idénticas en los confounders."
+
+Esto es una **aproximación a experimento aleatorizado** donde "aleatorizamos" condicionando en confounders observables.
+
+**Supuesto Crítico (CIA - Conditional Independence Assumption):**
+
+```
+(Y₀, Y₁) ⊥ T | X
+
+Donde:
+- Y₀ = salario potencial sin tratamiento
+- Y₁ = salario potencial con tratamiento  
+- T = tratamiento recibido (ej: aprendió inglés)
+- X = confounders observados
+```
+
+Esto significa: **Condicional en X, el tratamiento es "como si fuera aleatorio"** (no hay confounders no observados).
+
+Este supuesto **NO ES TESTEABLE** (requiere fe/teoría). Por eso reportamos limitaciones extensivamente.
+
+---
+
+### Entendiendo R² en Contexto Causal
+
+#### **La Paradoja del ML Engineer**
+
+En ML pensamos: "R²=0.39 es malo, mi XGBoost tiene R²=0.72 en validación."
+
+**Pero en causalidad:**
+- **R² bajo NO es problema** si coeficientes causales están bien identificados
+- **R² alto puede ser PELIGROSO** si incluyes variables post-treatment o mediadores
+
+#### **Ejemplo Ilustrativo:**
+
+**Modelo Causal Simple:**
+```python
+# R² = 0.11 (solo experiencia)
+salary = 35000 + 1522·experience + ε
+
+# Interpretación: Experiencia explica 11% varianza
+# Efecto causal: β₁ = 1522 (altamente significativo)
+# Conclusion: Experiencia CAUSA +1522/año, pero hay mucha heterogeneidad individual
+```
+
+**Modelo Predictivo Complejo:**
+```python
+# R² = 0.72 (100+ features incluyendo post-treatment)
+salary = f(experience, current_role, company_name, team_size, 
+           manager_rating, peer_reviews, last_promotion_date, ...)
+
+# Interpretación predictiva: ¡Excelente! Predice bien salarios
+# Interpretación CAUSAL: ✗ Inválida - incluye mediadores y coliders
+# No puedes decir "cuánto CAUSA experiencia" porque bloqueaste mecanismos
+```
+
+#### **R² en Nuestro Análisis:**
+
+Nuestro modelo completo: **R² = 0.3874**
+
+**Qué significa:**
+- ✅ **38.74% explicado:** Factores estructurales observables (experiencia, inglés, ciudad, rol, tecnologías)
+- ✅ **61.26% no explicado:** Heterogeneidad individual (negociación, timing, desempeño, suerte, conexiones)
+
+**Por qué esto es BUENO en causalidad:**
+1. Identificamos los **determinantes estructurales más importantes**
+2. Nuestros efectos causales son **interpretables** (puedes actuar sobre ellos)
+3. El 61% restante refleja **realidad**: No todo es determinista - hay espacio enorme para agencia individual
+
+**Analogía para ML Engineers:**
+
+Piensa en R² causal como **"variance explained by actionable features"** vs R² predictivo como **"total variance explained including non-actionable features"**.
+
+Para tomar decisiones de carrera, el primero es más útil.
+
+---
+
+### Diferencias-en-Diferencias (DiD): Identificación Cuasi-Experimental
+
+#### **El Problema con Comparaciones Simples**
+
+**Pregunta:** ¿La pandemia aumentó salarios de trabajadores remotos?
+
+**Enfoque ingenuo (ML):**
+```python
+# Comparar salarios remotos vs no-remotos en 2022
+remote_salary_2022 = df[df.remote==1 & df.year==2022]['salary'].mean()
+not_remote_salary_2022 = df[df.remote==0 & df.year==2022]['salary'].mean()
+difference = remote_salary_2022 - not_remote_salary_2022  # ¿Efecto causal?
+```
+
+**Problema:** **Selection bias** - las personas que trabajan remoto son diferentes (ej: más senior, mejores habilidades, viven en ciudades caras).
+
+Esta diferencia confunde:
+1. Efecto causal de remoto
+2. Diferencias pre-existentes entre grupos
+
+#### **DiD: Explotando Variación Temporal**
+
+**La Idea:** Usa cambio temporal para "difference out" las diferencias pre-existentes.
+
+**Datos Panel:**
+```
+         2020 (Pre-Pandemia)  →  2022 (Post-Pandemia)
+Remotos:      $43,785         →      $56,438         Δ = +$12,653
+No-Remotos:   $42,290         →      $49,643         Δ = +$7,353
+                                                      
+DiD = $12,653 - $7,353 = +$5,300  ← Efecto causal de pandemia en remotos
+```
+
+**Fórmula:**
+```
+δ_DiD = [E[Y_remote,2022] - E[Y_remote,2020]] - [E[Y_non-remote,2022] - E[Y_non-remote,2020]]
+```
+
+**Intuición:**
+- Ambos grupos crecen por inflación, tendencia general del mercado
+- La **diferencia en crecimiento** aísla el efecto atribuible a trabajar remoto durante pandemia
+- Es como tener un **grupo control** (no-remotos) para comparar
+
+**Supuesto Crítico: Parallel Trends**
+
+```
+E[Y₀,remote,t - Y₀,remote,t-1] = E[Y₀,non-remote,t - Y₀,non-remote,t-1]
+
+En palabras: "Sin la pandemia (mundo contrafactual Y₀), ambos grupos 
+hubieran crecido igual"
+```
+
+**Cómo verificamos:**
+- Checar trends pre-2020 (2018-2019): ¿grupos crecían paralelamente?
+- Controlar por cambios en composición (ej: experiencia promedio constante)
+
+**Por qué DiD es más creíble que regresión simple:**
+- Elimina confounders **time-invariant** (características fijas de las personas)
+- Explota shock exógeno (pandemia) como cuasi-experimento natural
+
+---
+
+### Significancia Estadística: Diferencia con ML Metrics
+
+En ML usamos:
+- **Accuracy, Precision, Recall** (clasificación)
+- **RMSE, MAE** (regresión)
+- **AUC-ROC** (ranking)
+
+En causalidad usamos:
+- **Valores-p:** Probabilidad de observar efecto ≥ β si verdadero efecto = 0
+- **Intervalos de confianza:** Rango plausible para verdadero efecto causal
+- **Estadístico-t:** β / SE(β), mide cuántos "errores estándar" el efecto está alejado de cero
+
+#### **Interpretación de Valores-p:**
+
+- **p < 0.001 (\*\*\*):** "Si el efecto real fuera cero, la probabilidad de observar un efecto tan grande por azar puro es < 0.1%"
+- **p = 0.15 (NS):** "No podemos rechazar hipótesis nula de efecto = 0" (NO significa que efecto es cero, significa evidencia insuficiente)
+
+**Cuidado con interpretación ML:**
+
+```python
+# INCORRECTO (pensamiento ML):
+if p_value < 0.05:
+    print("El modelo es correcto")  # ✗
+
+# CORRECTO (pensamiento causal):
+if p_value < 0.05:
+    print("Evidencia contra H0: efecto=0, sugiere efecto real ≠ 0")  # ✓
+    print("Pero: tamaño del efecto y relevancia práctica importan más")
+```
+
+**Problema de Multiple Testing:**
+
+Con 42 variables, ~2 tendrán p<0.05 por azar (42 × 0.05 = 2.1).
+
+**Mitigación:**
+- Corrección Bonferroni (conservadora): α = 0.05/42 = 0.0012
+- False Discovery Rate (menos conservadora)
+- O reportar efectos honestamente con significancia sin corregir y dejar al lector juzgar
+
+---
+
+### Limitaciones: Lo Que Este Análisis NO Puede Hacer
+
+#### **1. Causalidad de Selección No Observable**
+
+**Problema:** Aunque controlamos por variables observables (experiencia, ciudad, rol), quedan confounders no observados:
+
+- **Habilidad innata** (talento, IQ)
+- **Networking skills** (capacidad de hacer conexiones)
+- **Preferencias de riesgo** (disposición a cambiar trabajo)
+- **Información privilegiada** (conocer vacantes ocultas)
+
+Si estas variables correlacionan con tratamiento (ej: habilidad → aprende inglés + salario alto), nuestros efectos están **sesgados**.
+
+**En ML esto genera:** Mala generalización out-of-distribution  
+**En Causalidad esto genera:** Estimados de efecto causal incorrectos
+
+**Solución ideal:** Experimento aleatorizado (RCT)  
+**Solución realista:** Reconocer limitación, usar instrumentos si existen, triangular con múltiples diseños
+
+#### **2. Heterogeneidad de Efectos**
+
+Reportamos efectos **promedio** (ATE - Average Treatment Effect):
+
+```
+ATE = E[Y₁ - Y₀] = promedio sobre población
+```
+
+Pero los efectos pueden variar por individuo:
+- Inglés puede valer +$50K para backend developer (acceso a FAANG)
+- Inglés puede valer +$5K para DBA (menos internacional)
+
+**En ML harías:** Separate models por segmento, o conditional average treatment effect (CATE)  
+**En este análisis:** Reportamos ATE por parsimonia, pero reconocemos limitación
+
+#### **3. No-Linearidades y Efectos de Saturación**
+
+Usamos modelo lineal:
+```
+Salary = β₀ + β₁·Inglés + ...
+```
+
+Esto asume: **Efecto constante por nivel** (+$12K cada nivel: 0→1, 1→2, 2→3, 3→4)
+
+**Realidad probable:**
+- Mayor retorno 2→3 (unlocks remote work)
+- Menor retorno 0→1 (beginner English no abre mucho)
+
+**En ML harías:** Polynomial features, splines, GAMs  
+**Trade-off:** Perdemos interpretabilidad simple del coeficiente β₁
+
+---
+
+### Para Seguir Aprendiendo: Recursos de Causal ML
+
+Si esta aproximación te interesa, existe un campo emergente: **Causal Machine Learning**
+
+**Papers Seminales:**
+- Pearl (2009): "Causality" - La biblia de DAGs y do-calculus
+- Rubin (1974): "Estimating Causal Effects" - Potential outcomes framework
+- Angrist & Pischke (2009): "Mostly Harmless Econometrics" - Causal inference aplicada
+
+**Métodos Avanzados (Causal ML):**
+- **Propensity Score Matching:** Encontrar "twins" estadísticos para comparar
+- **Instrumental Variables:** Explotar variables que afectan tratamiento pero no outcome directamente
+- **Regression Discontinuity:** Explotar cutoffs arbitrarios (ej: edad de graduación)
+- **Synthetic Controls:** Construir contrafactual sintético con weighted average de controles
+- **Causal Forests (Athey & Imbens):** Random forests adaptado para estimar heterogeneous treatment effects
+- **Double/Debiased ML:** ML para controlar confounders + inferencia causal rigurosa
+
+**Librerías Python:**
+- `CausalML` (Uber): Uplift modeling, meta-learners
+- `EconML` (Microsoft): Double ML, causal forests, instrumental variables
+- `DoWhy` (Microsoft): Framework para causal inference con DAGs
+- `CausalImpact` (Google): Bayesian structural time series para intervenciones
+
+**Este análisis es "Causal Inference 101" con regresión clásica. El campo es mucho más profundo.**
 
 ---
 
 ## Análisis por Variable
+
+### Interpretando los Análisis: Framework Causal vs Predictivo
+
+Cada análisis de variable que sigue tiene esta estructura:
+
+1. **Metodología:** Qué modelo causal usamos y por qué
+2. **Hallazgos:** Coeficientes, significancia, R²
+3. **Interpretación Causal:** Qué significa el coeficiente como efecto de intervención
+4. **Mecanismos:** Por qué creemos que el efecto es causal (no espurio)
+
+**Recordatorio para audiencia ML:**
+
+- **Los coeficientes β NO son feature importances.** Son efectos causales marginales estimados bajo supuesto de confounders observados.
+- **R² bajo NO implica análisis inválido.** Solo indica heterogeneidad individual alta (lo cual es realista).
+- **Cada modelo controla solo confounders identificados en DAG teórico,** no todas las variables posibles.
+- **La pregunta no es "¿predice bien?" sino "¿si intervengo X, cambia Y?"**
+
+---
 
 ### 1. Experiencia Laboral
 
@@ -115,6 +603,8 @@ Regresión lineal simple:
 ```
 Salario = β₀ + β₁·Experiencia + ε
 ```
+
+**Justificación causal:** Experiencia es **exógena al salario actual** (ocurrió en el pasado, no puede ser causada por salario futuro). No controlamos otras variables aún - este es el **efecto total** de experiencia incluyendo todos los mecanismos (mejores roles, habilidades, negociación, etc.).
 
 #### Hallazgos
 
@@ -129,12 +619,38 @@ Salario = β₀ + β₁·Experiencia + ε
 
 Cada año adicional de experiencia está asociado con un incremento de **$1,522 MXN** en el salario mensual. El estadístico-t extremadamente alto (27.06) y el valor-p prácticamente cero indican que este efecto es **altamente robusto** y no puede atribuirse al azar.
 
-**Por qué este efecto es causal:**
-- La experiencia claramente precede al salario (no hay causalidad inversa)
-- La magnitud ($1,522/año) es consistente con aumentos anuales típicos (~3.2% del salario promedio)
-- El efecto se mantiene en todos los modelos más complejos
+**Contraste Predicción vs Causalidad:**
 
-**Intuición:** La experiencia acumula tanto **capital humano** (habilidades) como **capital social** (contactos, reputación), además de poder de negociación. Cada año de experiencia te hace más productivo Y más valioso en el mercado.
+**Interpretación Predictiva (ML):**
+> "Si veo que alguien tiene X años de experiencia, predigo que ganan $1,522X más que alguien con 0 años."
+
+**Interpretación Causal (nuestro análisis):**
+> "Si TÚ trabajas un año más (intervención), tu salario esperado aumentará ~$1,522 MXN/mes, **asumiendo que este año acumulas experiencia en condiciones similares al promedio de la muestra**."
+
+**Por qué este efecto es creíblemente causal:**
+
+1. **Temporalidad:** Experiencia precede al salario (no hay causalidad inversa posible)
+2. **Magnitud consistente:** $1,522/año ≈ 3.2% del salario promedio ($47,415) - consistente con inflación + aumentos típicos
+3. **Mecanismo económico claro:** Experiencia acumula:
+   - **Capital humano:** Habilidades técnicas, conocimiento de dominio
+   - **Capital social:** Red profesional, reputación, referencias
+   - **Señalización:** CV más fuerte para negociar
+   - **Acceso:** Puertas a roles senior que requieren N+ años
+4. **Robustez:** Efecto persiste en todos los modelos multivariados (+$1,267/año en modelo completo)
+
+**Limitaciones de identificación causal:**
+
+- **Heterogeneidad no observada:** El efecto promedio oculta que algunos ganan mucho más por año (cambios estratégicos) y otros menos (estancamiento)
+- **Selection bias potencial:** Los que permanecen en tech 10+ años pueden ser más talentosos (survivorship bias)
+- **No-linearidad:** Probable que retornos disminuyan con años (saturación) - modelo lineal es aproximación
+
+**R² = 11.21%: ¿Es "malo"?**
+
+En ML sería bajo. En causalidad es esperado:
+- **11% explicado:** Retorno estructural a experiencia
+- **89% restante:** Heterogeneidad individual en trayectorias de carrera (algunas personas maximizan experiencia, otras no)
+
+**Analogía:** Si predijeras peso de personas solo con altura (R²~40%), no significa que altura no CAUSA peso - significa que hay mucha variación en peso dado altura (dieta, genética, etc.).
 
 ---
 
@@ -150,7 +666,29 @@ Regresión multivariada controlando por experiencia (variable confusora):
 Salario = β₀ + β₁·NivelInglés + β₂·Experiencia + ε
 ```
 
-**¿Por qué controlar por experiencia?** Personas con más experiencia tienden a tener mejor inglés. Sin control, el efecto del inglés estaría **inflado** al incluir el efecto de la experiencia.
+**¿Por qué controlar por experiencia?** 
+
+**DAG relevante:**
+```
+  Experiencia
+      ↓
+    Inglés  →  Salario
+      ↓           ↑
+       ←──────────┘
+     (efecto que buscamos)
+```
+
+Personas con más experiencia:
+1. Han tenido más tiempo/oportunidad de aprender inglés (Experiencia → Inglés)
+2. Ganan más por su experiencia directamente (Experiencia → Salario)
+
+**Sin controlar:** El efecto de inglés estaría **inflado** al incluir el efecto de experiencia (confounding).
+
+**Con control:** Comparamos personas **con la misma experiencia** que difieren en inglés - esto aproxima el efecto causal aislado del inglés.
+
+**Por qué NO controlamos por más variables (ej: empresa actual):**
+- Si inglés te dio acceso a empresa internacional (Inglés → Empresa → Salario), controlar por empresa **bloquea** un mecanismo causal legítimo
+- Queremos el **efecto total** de inglés, incluyendo todos los canales por los que causa mayor salario
 
 #### Hallazgos
 
@@ -676,6 +1214,192 @@ Pandemia generó:
 - Cambios estructurales en trabajo remoto
 - Inflación acelerada
 - Resultados pueden no generalizar a mercado "normal"
+
+---
+
+## Para Practicantes de ML: Tu Camino de Aprendizaje en Causal Inference
+
+Si este análisis te ha interesado y quieres profundizar en la diferencia entre predicción y causalidad, aquí está tu roadmap.
+
+### 🎯 Preguntas Clave que Ahora Puedes Hacerte
+
+**Antes (pensamiento ML predictivo):**
+- "¿Qué tan bien puedo predecir Y dado X?"
+- "¿Qué features tienen mayor importancia?"
+- "¿Mi modelo generaliza a test set?"
+
+**Después (pensamiento causal):**
+- "¿Qué pasa si cambio X? ¿Cuánto cambia Y?"
+- "¿Esta correlación es espuria o causal?"
+- "¿Qué variables debo controlar y cuáles NO?"
+- "¿Puedo identificar efectos causales con datos observacionales?"
+
+### 📚 Recursos Recomendados (Orden Sugerido)
+
+#### **Nivel 1: Fundamentos Conceptuales**
+
+**Para ML practitioners que empiezan:**
+
+1. **"Causal Inference for Data Science"** - Brian Calloway (O'Reilly)
+   - Escrito específicamente para audiencia DS/ML
+   - Muchos ejemplos prácticos en Python
+   - Bridge perfecto entre ML y causalidad
+
+2. **"Causal Inference: The Mixtape"** - Scott Cunningham (free online)
+   - Muy accesible, con código en R/Python/Stata
+   - Enfoque económico pero generalizable
+   - Disponible gratis: [mixtape.scunning.com](https://mixtape.scunning.com)
+
+3. **"The Book of Why"** - Judea Pearl (divulgación)
+   - No técnico, excelente para intuición
+   - Introduce DAGs y do-calculus conceptualmente
+   - Lectura de fin de semana
+
+#### **Nivel 2: Técnico pero Accesible**
+
+4. **"Mostly Harmless Econometrics"** - Angrist & Pischke
+   - Biblia de causal inference aplicada
+   - No requiere background de economía
+   - Enfoque: identificación práctica con datos observacionales
+
+5. **Curso: "A Crash Course in Causality"** - Jason Roy (Coursera)
+   - 5 semanas, muy bien estructurado
+   - Cubre: confounding, propensity scores, DAGs, sensitivity analysis
+   - Incluye assignments prácticos
+
+#### **Nivel 3: Causal ML (Estado del Arte)**
+
+6. **"Causal Inference for Statistics, Social, and Biomedical Sciences"** - Imbens & Rubin
+   - Más técnico, marco de "potential outcomes"
+   - Fundamental para entender ATE, CATE, etc.
+
+7. **Papers Clave:**
+   - Athey & Imbens (2016): "Recursive Partitioning for Heterogeneous Causal Effects"
+   - Chernozhukov et al. (2018): "Double/Debiased Machine Learning"
+   - Künzel et al. (2019): "Metalearners for Estimating Heterogeneous Treatment Effects"
+
+8. **Librerías Python:**
+   ```python
+   # Microsoft EconML: Heterogeneous treatment effects
+   from econml.dml import CausalForestDML
+   
+   # Uber CausalML: Uplift modeling
+   from causalml.inference.meta import XGBTRegressor
+   
+   # Microsoft DoWhy: DAG-based causal inference
+   import dowhy
+   ```
+
+### 🔬 Proyectos Prácticos para Aprender Haciendo
+
+#### **Proyecto 1: Re-analiza un modelo predictivo con lente causal**
+
+Toma un proyecto ML anterior donde predijiste outcome Y con features X:
+
+```python
+# Tu modelo predictivo anterior
+model = RandomForestRegressor()
+model.fit(X, y)
+print(f"R² en test: {model.score(X_test, y_test)}")  # Ej: 0.78
+feature_importances = model.feature_importances_
+
+# Ahora hazte preguntas causales:
+# 1. ¿Cuáles features son confounders vs mediadores vs coliders?
+# 2. ¿El feature "más importante" causa Y o solo predice?
+# 3. ¿Puedo dibujar un DAG de mis variables?
+# 4. ¿Qué pasa si intervengo en top feature? ¿Y realmente aumentará?
+```
+
+**Output esperado:** Documento explicando qué efectos son (probablemente) causales vs puramente predictivos.
+
+#### **Proyecto 2: Replica un análisis de este repo**
+
+Elige una variable de este análisis (ej: inglés, remoto) y:
+
+1. Dibuja el DAG completo de esa variable
+2. Justifica qué controlar y qué no
+3. Corre regresión con controles
+4. Compara con regresión sin controles (cuantifica el bias)
+5. Discute supuestos de identificación
+
+#### **Proyecto 3: A/B test retrospectivo con DiD**
+
+Si tienes datos temporales de algún "treatment" (ej: feature launch, política nueva):
+
+```python
+# En vez de comparar post-treatment effect:
+treated_post = df[(df.group=='treatment') & (df.period=='post')]['outcome'].mean()
+control_post = df[(df.group=='control') & (df.period=='post')]['outcome'].mean()
+effect_naive = treated_post - control_post  # ✗ Sesgado si grupos diferentes
+
+# Usa DiD:
+did = (treated_post - treated_pre) - (control_post - control_pre)  # ✓ Elimina diferencias pre-existentes
+```
+
+### 🎓 Conceptos Clave para Dominar
+
+**Si solo aprendes 5 cosas:**
+
+1. **Confounding ≠ Multicollinearity**
+   - Multicollinearity (ML): Variables muy correlacionadas → inferencia inestable
+   - Confounding (Causal): Variable que causa X e Y → bias en efecto de X→Y
+
+2. **DAGs son tu mejor amigo**
+   - Representan asunciones causales explícitamente
+   - Determinan qué controlar (backdoor criterion)
+   - Testean qué modelos son identificables
+
+3. **do(X=x) ≠ see(X=x)**
+   - P(Y | X=x): "Probabilidad de Y dado que observo X=x" (predictivo)
+   - P(Y | do(X=x)): "Probabilidad de Y si SETEO X=x interviniendo" (causal)
+   - Solo el segundo responde "¿qué pasa si cambio X?"
+
+4. **Identificación > Estimación**
+   - ML: "¿Qué algoritmo minimiza error?" (estimación)
+   - Causal: "¿Puedo identificar el efecto causal con estos datos?" (identificación)
+   - Si identificación falla, no importa qué algoritmo uses
+
+5. **R² es irrelevante para validez causal**
+   - Alta correlación ≠ causalidad
+   - Modelo simple bien identificado > modelo complejo mal identificado
+   - En causalidad: Prioriza interpretabilidad y supuestos explícitos
+
+### 🤔 Cuándo Usar Cada Enfoque
+
+| Pregunta | Enfoque | Herramientas |
+|----------|---------|--------------|
+| "¿Qué salario tiene X?" | **Predictivo (ML)** | XGBoost, Neural Networks, Feature engineering |
+| "¿Qué pasa si cambio X?" | **Causal** | Regresión con controles, IV, RDD, DiD |
+| "¿A quién targeting para intervención?" | **Causal ML (CATE)** | Causal Forests, Meta-learners, Double ML |
+| "¿Cuánto impactó campaña?" | **Causal experimental** | A/B test, switchback experiments |
+| "¿Qué features importan?" | **Depende del 'por qué'** | ML si predictivo, Causal si intervención |
+
+### 💡 Reflexión Final: El Triángulo del ML Práctico
+
+```
+          DESCRIPTIVO
+         /     |     \
+        /      |      \
+       /       |       \
+  PREDICTIVO ─────── CAUSAL
+      ↓                ↓
+   "¿Qué pasará?"  "¿Qué debo hacer?"
+```
+
+**La mayoría del ML se enfoca en Predictivo.**  
+**Los mejores data scientists dominan los 3.**
+
+- **Descriptivo:** Entender qué pasó (EDA, dashboards)
+- **Predictivo:** Anticipar qué pasará (forecasting, clasificación)
+- **Causal:** Decidir qué hacer para cambiar outcomes (intervenciones, policy)
+
+**Este análisis es primariamente causal con elementos descriptivos.**
+
+Si trabajas en:
+- **Product analytics:** Necesitas causal (A/B test interpretation)
+- **Growth:** Necesitas causal (uplift modeling, attribution)
+- **Strategy:** Necesitas causal (escenarios "what-if")
+- **Forecasting puro:** Predictivo es suficiente
 
 ---
 
