@@ -1436,29 +1436,49 @@ pip install -r requirements.txt
 ### Generar Análisis
 
 ```bash
-# Ejecutar notebook completo
-jupyter notebook causal_analysis.ipynb
+# Ejecutar notebook principal de inferencia causal
+jupyter notebook notebooks/causal_analysis.ipynb
 
-# Las figuras se generarán en el directorio figures/
+# Las figuras se generarán en output/figures/
 ```
 
 ### Estructura del Proyecto
 
 ```
 .
-├── answers-2020.csv           # Datos encuesta 2020
-├── answers-2021.csv           # Datos encuesta 2021
-├── answers-2022.csv           # Datos encuesta 2022
-├── causal_analysis.ipynb      # Notebook principal
-├── requirements.txt           # Dependencias Python
-├── figures/                   # Visualizaciones generadas
-│   ├── 01_experiencia.png
-│   ├── 02_ingles.png
-│   ├── 03_genero.png
-│   ├── 04_ciudades.png
-│   ├── 05_lenguajes.png
-│   └── 06_modelo_multivariado.png
-└── README.md                  # Este archivo
+├── data/                          # Datos de entrada
+│   ├── answers-2020.csv           # Encuesta 2020
+│   ├── answers-2021.csv           # Encuesta 2021
+│   ├── answers-2022.csv           # Encuesta 2022
+│   ├── ingles_gdl.csv             # Análisis inglés Guadalajara
+│   └── options/                   # Tablas de lookup
+│       ├── activity_options.csv
+│       ├── cert_options.csv
+│       ├── front_options.csv
+│       ├── infra_options.csv
+│       ├── lang_options.csv
+│       └── mobile_options.csv
+├── notebooks/                     # Jupyter notebooks
+│   ├── causal_analysis.ipynb      # Notebook principal
+│   └── salarios.ipynb             # Análisis exploratorio
+├── output/                        # Artefactos generados
+│   ├── figures/                   # Visualizaciones (PNG)
+│   ├── simulation_results/        # CSVs de simulación
+│   ├── output_model_summary.txt
+│   └── output_multivariate_top20.csv
+├── docs/                          # Documentación y writeups
+│   ├── CAUSAL_ANALYSIS_SUMMARY.md
+│   ├── SIMULATION_FINDINGS.md
+│   ├── SPECIFICATION.md
+│   └── ig_scripts/                # Guiones para Instagram
+├── redesign-2026/                 # Rediseño de encuesta 2026
+│   ├── REDESIGN_2026.md           # Documento de justificación
+│   ├── question_inventory_2026.csv # 62 ítems bilingüe
+│   ├── simulation_old_vs_new.py   # Script de simulación
+│   └── slidev-deck/               # Presentación Slidev
+│       └── slides.md
+├── README.md                      # Este archivo
+└── requirements.txt               # Dependencias Python
 ```
 
 ---

@@ -1,0 +1,15 @@
+Metric,Old Design,New Design
+Predictors (k),90,72
+Usable N,5066,5695
+R²,0.3403,0.4895
+Adjusted R²,0.3283,0.4829
+ESR,22928.0,20158.0
+Survey items,130,62
+Est. completion (min),30,14
+R² per item,0.00262,0.00789
+R² per minute,0.01134,0.03496
+Mean VIF,1.35,2.58
+VIF > 5 count,1,8
+VIF > 10 count,0,0
+Mean bootstrap CV,5.166,0.69
+Tech block mean sparsity,91.6%,93.3%
