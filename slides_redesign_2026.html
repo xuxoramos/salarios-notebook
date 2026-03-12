@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Software Guru — Data Team">
+  <title>Salary Survey Redesign 2026</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.1.0/dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Salary Survey Redesign 2026</h1>
+  <p class="subtitle">Product Owner Briefing</p>
+  <p class="author">Software Guru — Data Team</p>
+  <p class="date">March 2026</p>
+</section>
+
+<section>
+<section id="salary-survey-redesign-2026"
+class="title-slide slide level1">
+<h1>Salary Survey Redesign 2026</h1>
+<p><strong>Product Owner Briefing</strong></p>
+<p>Software Guru — Data Team | March 2026</p>
+<aside class="notes">
+<p>This presentation covers the rationale, structural changes,
+simulation evidence, and implementation roadmap for the 2026 Salary
+Survey redesign.</p>
+</aside>
+</section>
+<section id="why-redesign-now" class="slide level2">
+<h2>Why Redesign Now?</h2>
+<div>
+<ul>
+<li class="fragment">BP2C just completed its redesign (45 Qs, Six-Lever
+Framework)</li>
+<li class="fragment">The two surveys <strong>overlap</strong>: benefits,
+remote work, org type asked from the same perspective</li>
+<li class="fragment">Respondents who take both: <em>“Didn’t I already
+answer this?”</em></li>
+<li class="fragment">The Salary Survey’s ~130-item checkbox design
+produces <strong>diminishing analytical returns</strong></li>
+</ul>
+</div>
+<aside class="notes">
+<p>The BP2C redesign creates a natural window to also redesign the
+Salary Survey. The overlap problem is both a brand confusion issue and a
+data quality issue.</p>
+</aside>
+</section>
+<section id="three-goals" class="slide level2">
+<h2>Three Goals</h2>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 30%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Goal</th>
+<th>One-liner</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Product separation</strong></td>
+<td>No structural duplication with BP2C</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Policy impact</strong></td>
+<td>Findings AMITI can carry to policymakers</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>BP2C hook</strong></td>
+<td>Create demand for certification without cannibalizing it</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<h3 id="the-governing-rule">The governing rule</h3>
+<blockquote>
+<p><strong>Salary Survey</strong> = X-ray of the <strong>MARKET</strong>
+(supply, structure, prices)</p>
+<p><strong>BP2C</strong> = X-ray of the <strong>EMPLOYER</strong>
+(culture, enablement, justice)</p>
+</blockquote>
+</div>
+</section>
+<section id="what-were-removing" class="slide level2">
+<h2>What We’re Removing</h2>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 36%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Block</th>
+<th>Items</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Benefits (<code>ben_*</code>)</td>
+<td>18</td>
+<td>Employer attributes → BP2C</td>
+</tr>
+<tr class="even">
+<td>COVID-era (<code>covid_*</code>)</td>
+<td>5</td>
+<td>Outdated</td>
+</tr>
+<tr class="odd">
+<td>Tech checkboxes (<code>lang_*</code>, <code>cert_*</code>,
+<code>act_*</code>, etc.)</td>
+<td>~133</td>
+<td>Sparse, low signal</td>
+</tr>
+<tr class="even">
+<td>Redundant compensation</td>
+<td>5</td>
+<td>Replaced by clearer fields</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>~165 items removed total</strong></p>
+<aside class="notes">
+<p>The benefits block was never in the causal model. COVID questions are
+6 years old. The tech checkboxes consumed 40% of respondent time but
+contributed &lt;5% of explanatory power.</p>
+</aside>
+</div>
+</section>
+<section id="what-were-adding" class="slide level2">
+<h2>What We’re Adding</h2>
+<div>
+<ul>
+<li class="fragment"><strong>12 redesigned fields</strong> —
+compensation disambiguation, seniority level, company size, industry,
+English behavioral anchor</li>
+<li class="fragment"><strong>13 tech stack fields</strong> — role-first
+architecture replacing ~100 checkboxes</li>
+<li class="fragment"><strong>25 new policy questions</strong> — 6 blocks
+for AMITI advocacy</li>
+</ul>
+</div>
+<div class="fragment">
+<p><strong>62 total items</strong> (down from ~130)</p>
+</div>
+</section>
+<section id="the-biggest-gap-seniority_level" class="slide level2">
+<h2>The Biggest Gap: <code>seniority_level</code></h2>
+<p>The old survey had <code>profile</code> (godin / independiente /
+emprendedor / directivo)</p>
+<div class="fragment">
+<p><strong>Problems:</strong></p>
+<div>
+<ul>
+<li class="fragment">Mixes employment type with org level</li>
+<li class="fragment">“Godin” is Mexican slang — won’t work for
+LatAm</li>
+<li class="fragment">No way to distinguish a Junior from a Senior
+developer</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<p><strong>New:</strong> Jr / Mid / Sr / Staff / Lead / Director+ /
+C-Level</p>
+</div>
+<div class="fragment">
+<p><strong>Simulation result:</strong> This single field adds
+<strong>+12.4 percentage points of R²</strong></p>
+<aside class="notes">
+<p>seniority_level is the single most impactful change in the entire
+redesign. Every compensation study in the world includes it. We
+didn’t.</p>
+</aside>
+</div>
+</section>
+<section id="tech-stack-from-checkboxes-to-role-first"
+class="slide level2">
+<h2>Tech Stack: From Checkboxes to Role-First</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<h3 id="old-design">Old Design</h3>
+<ul>
+<li>20 language checkboxes</li>
+<li>8+ framework checkboxes</li>
+<li>15 database checkboxes</li>
+<li>27 certification checkboxes</li>
+<li>26 activity checkboxes</li>
+<li><strong>~100 binary items</strong></li>
+<li>8–12 min to complete</li>
+</ul>
+</div><div class="column" style="width:10%;">
+<p>→</p>
+</div><div class="column" style="width:45%;">
+<h3 id="new-design">New Design</h3>
+<ul>
+<li>1 primary role</li>
+<li>1 primary language</li>
+<li>1 primary framework</li>
+<li>1 primary database</li>
+<li>1 primary cloud</li>
+<li><strong>13 structured items</strong></li>
+<li>2–3 min to complete</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>Single-select gives clean, non-overlapping groups. “Python developers
+earn X” is a real statement. “People who checked Python among other
+things earn X” is confounded.</p>
+</aside>
+</section>
+<section id="new-policy-blocks-for-amiti" class="slide level2">
+<h2>New Policy Blocks (for AMITI)</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 14%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Block</th>
+<th style="text-align: center;">Qs</th>
+<th>What it enables</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Labor Formality</td>
+<td style="text-align: center;">3</td>
+<td>First-ever tech-sector informality rate</td>
+</tr>
+<tr class="even">
+<td>Cross-Border Dynamics</td>
+<td style="text-align: center;">4</td>
+<td>Quantify the “Deel economy” and brain drain</td>
+</tr>
+<tr class="odd">
+<td>Purchasing Power</td>
+<td style="text-align: center;">3</td>
+<td>City-by-city real wages index</td>
+</tr>
+<tr class="even">
+<td>Education ROI</td>
+<td style="text-align: center;">4</td>
+<td>Degree premium with modern controls</td>
+</tr>
+<tr class="odd">
+<td>AI Impact</td>
+<td style="text-align: center;">4</td>
+<td>First LatAm AI adoption benchmark</td>
+</tr>
+<tr class="even">
+<td>Gender Pipeline</td>
+<td style="text-align: center;">4</td>
+<td>Diagnose pipeline vs. discrimination</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p>Each block → pre-drafted advocacy position for AMITI</p>
+<aside class="notes">
+<p>These blocks produce findings only institutions can act on. They are
+framed as AMITI advocacy ammunition, not neutral academic
+observations.</p>
+</aside>
+</div>
+</section>
+<section id="bp2c-hook-the-satisfaction-gap" class="slide level2">
+<h2>BP2C Hook: The Satisfaction Gap</h2>
+<p>Three outcome-only questions added to the Salary Survey:</p>
+<div>
+<ul>
+<li class="fragment"><strong>eNPS</strong> (0–10): “How likely to
+recommend your employer?”</li>
+<li class="fragment"><strong>leave_reason</strong>: “Why would you
+leave?”</li>
+<li class="fragment"><strong>job_search</strong>: “Are you actively
+looking?”</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="the-narrative-engine">The narrative engine</h3>
+<blockquote>
+<p><em>“43% of tech professionals earning &gt;$60K still report eNPS
+below 6.<em> </em>High salary alone does not predict
+satisfaction.”</em></p>
+</blockquote>
+<p>. . .</p>
+<p>The Salary Survey shows <strong>what</strong> → BP2C explains
+<strong>why</strong></p>
+<aside class="notes">
+<p>These are outcome variables, not diagnostics. BP2C’s Six Levers are
+the diagnostic. This asymmetry is the commercial engine.</p>
+</aside>
+</div>
+</section>
+<section id="simulation-evidence" class="slide level2">
+<h2>Simulation Evidence</h2>
+<p>Monte Carlo simulation: n=6,000, calibrated to 2020–2022 real effect
+sizes</p>
+<div class="fragment">
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Old</th>
+<th>New</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Survey items</td>
+<td>130</td>
+<td>62</td>
+<td>−52%</td>
+</tr>
+<tr class="even">
+<td>Completion time</td>
+<td>30 min</td>
+<td>14 min</td>
+<td>−53%</td>
+</tr>
+<tr class="odd">
+<td><strong>R²</strong></td>
+<td><strong>0.340</strong></td>
+<td><strong>0.490</strong></td>
+<td><strong>+44%</strong></td>
+</tr>
+<tr class="even">
+<td>Usable responses</td>
+<td>5,066</td>
+<td>5,695</td>
+<td>+629</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>Both designs face the identical DGP. The R² improvement comes
+entirely from better question design, not more data.</p>
+</aside>
+</div>
+</section>
+<section id="information-efficiency" class="slide level2">
+<h2>Information Efficiency</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Old</th>
+<th>New</th>
+<th style="text-align: center;">Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>R² per survey item</td>
+<td>0.003</td>
+<td>0.008</td>
+<td style="text-align: center;"><strong>+202%</strong></td>
+</tr>
+<tr class="even">
+<td>R² per minute</td>
+<td>0.011</td>
+<td>0.035</td>
+<td style="text-align: center;"><strong>+208%</strong></td>
+</tr>
+<tr class="odd">
+<td>Effective info (R² × N)</td>
+<td>1,724</td>
+<td>2,788</td>
+<td style="text-align: center;"><strong>+62%</strong></td>
+</tr>
+<tr class="even">
+<td>Coeff. stability (bootstrap)</td>
+<td>5.17</td>
+<td>0.69</td>
+<td style="text-align: center;"><strong>−87%</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>Every minute of respondent time delivers 3× more analytical
+signal</strong></p>
+<aside class="notes">
+<p>The coefficient stability improvement means our published findings
+will be more reproducible year over year. Less sampling noise in the
+estimates.</p>
+</aside>
+</div>
+</section>
+<section id="where-the-r²-comes-from" class="slide level2">
+<h2>Where the R² Comes From</h2>
+<p>Starting from old-equivalent baseline (R² = 0.268):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Block added</th>
+<th style="text-align: center;">ΔR²</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>seniority_level</strong></td>
+<td style="text-align: center;"><strong>+12.4 pp</strong></td>
+</tr>
+<tr class="even">
+<td>company_size</td>
+<td style="text-align: center;">+2.4 pp</td>
+</tr>
+<tr class="odd">
+<td>english_use</td>
+<td style="text-align: center;">+1.8 pp</td>
+</tr>
+<tr class="even">
+<td>primary_role</td>
+<td style="text-align: center;">+1.7 pp</td>
+</tr>
+<tr class="odd">
+<td>industry</td>
+<td style="text-align: center;">+1.5 pp</td>
+</tr>
+<tr class="even">
+<td>primary_language</td>
+<td style="text-align: center;">+1.1 pp</td>
+</tr>
+<tr class="odd">
+<td>cert_depth</td>
+<td style="text-align: center;">+0.9 pp</td>
+</tr>
+<tr class="even">
+<td>Others</td>
+<td style="text-align: center;">+0.5 pp</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong><code>seniority_level</code> &gt; all tech questions
+combined</strong></p>
+</div>
+</section>
+<section id="respondent-experience" class="slide level2">
+<h2>Respondent Experience</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="old-2535-min">Old (25–35 min)</h3>
+<ol type="1">
+<li>Demographics <em>(2 min)</em></li>
+<li>Professional <em>(3 min)</em></li>
+<li>Compensation <em>(2 min)</em></li>
+<li><strong>100+ checkboxes</strong> <em>(8–12 min)</em> ← fatigue
+zone</li>
+<li>Benefits <em>(3 min)</em></li>
+<li>COVID <em>(2 min)</em></li>
+</ol>
+<p><strong>85% completion</strong> (estimated)</p>
+</div><div class="column" style="width:50%;">
+<h3 id="new-1215-min">New (12–15 min)</h3>
+<ol type="1">
+<li>Demographics <em>(2 min)</em></li>
+<li>Professional + seniority <em>(3 min)</em></li>
+<li>Compensation <em>(2 min)</em></li>
+<li><strong>13 structured tech Qs</strong> <em>(2–3 min)</em></li>
+<li>Policy blocks <em>(4–5 min)</em></li>
+<li>BP2C hook <em>(1 min)</em></li>
+</ol>
+<p><strong>95% completion</strong> (estimated)</p>
+</div>
+</div>
+</section>
+<section id="implementation-roadmap" class="slide level2">
+<h2>Implementation Roadmap</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>What</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1. Instrument design</strong></td>
+<td>Finalize wording, user-test with 10–15 IT pros</td>
+<td>Pre-launch</td>
+</tr>
+<tr class="even">
+<td><strong>2. Data collection</strong></td>
+<td>Target 5,000+ MX (or 3,000+/country if LatAm)</td>
+<td>4–6 weeks</td>
+</tr>
+<tr class="odd">
+<td><strong>3. Analysis</strong></td>
+<td>Reproduce 2020–2022 model + new blocks</td>
+<td>Post-collection</td>
+</tr>
+<tr class="even">
+<td><strong>4. Publication</strong></td>
+<td>Public report + private AMITI Brief</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<h3 id="key-decision-pending">Key decision pending</h3>
+<p><strong>Geographic scope:</strong> Mexico-only or expand to Colombia,
+Argentina, Brazil?</p>
+<aside class="notes">
+<p>LatAm expansion transforms the product from a national report into a
+regional benchmark. But it requires 3,000+ per country and Portuguese
+localization for Brazil.</p>
+</aside>
+</div>
+</section>
+<section id="what-product-owners-need-to-decide" class="slide level2">
+<h2>What Product Owners Need to Decide</h2>
+<div>
+<ol type="1">
+<li class="fragment"><strong>Geographic scope</strong> — Mexico-only or
+LatAm expansion?</li>
+<li class="fragment"><strong>Employer tagging</strong> — opt-in company
+name field for cross-survey linking?</li>
+<li class="fragment"><strong>Distribution channels</strong> — which
+community partnerships to activate?</li>
+<li class="fragment"><strong>AMITI Brief</strong> — approve the private
+deliverable concept?</li>
+<li class="fragment"><strong>Naming</strong> — “Salary Survey” or
+rebrand (Radiografía del Talento Tech)?</li>
+</ol>
+</div>
+<aside class="notes">
+<p>These are the blocking decisions. The instrument design, question
+inventory CSV, and simulation evidence are ready. We need product
+direction on these five items.</p>
+</aside>
+</section>
+<section id="resources" class="slide level2">
+<h2>Resources</h2>
+<ul>
+<li><strong>REDESIGN_2026.md</strong> — Full rationale (all 3 goals, all
+sections)</li>
+<li><strong>question_inventory_2026.csv</strong> — 62-item question list
+(bilingual, with skip logic)</li>
+<li><strong>SIMULATION_FINDINGS.md</strong> — Detailed simulation
+analysis</li>
+<li><strong>simulation_old_vs_new.py</strong> — Reproducible simulation
+script</li>
+<li><strong>simulation_results/</strong> — Raw CSV outputs</li>
+</ul>
+<p>All on branch <code>redesign-2026</code></p>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<div>
+<ul>
+<li class="fragment"><strong>52% fewer questions</strong>, <strong>44%
+more explanatory power</strong></li>
+<li class="fragment">One missing field (<code>seniority_level</code>)
+was costing us 12.4 pp of R²</li>
+<li class="fragment">3× information density per minute of respondent
+time</li>
+<li class="fragment">25 new policy questions enable AMITI advocacy — a
+new revenue channel</li>
+<li class="fragment">3 BP2C hook questions create commercial demand
+without cannibalizing</li>
+<li class="fragment">Respondent experience improves from 30 min checkbox
+gauntlet to 14 min structured flow</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="next-step">Next step</h3>
+<p>Review the question inventory CSV and schedule the user-testing
+round</p>
+<aside class="notes">
+<p>The question inventory CSV is designed to be opened in Excel by
+product owners. Every row has bilingual wording, field type, options,
+skip logic, and a reference back to the rationale document.</p>
+</aside>
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@5.1.0/dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@5.1.0/plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@5.1.0/plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+
+        height: 720,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
