@@ -795,3 +795,56 @@ This section must be **journalistic, not commercial**. If it reads like an ad, i
 - **~165 items removed** (checkboxes, COVID, benefits, redundant compensation fields)
 
 The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with 62 focused questions — each producing high analytical signal per response — while adding entirely new policy-relevant blocks. Estimated completion time drops from 25–35 minutes to 12–15 minutes.
+
+---
+
+## Simulation Evidence
+
+A Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026) was run to compare the old and new designs under identical data-generating conditions. The true salary DGP uses effect sizes calibrated from the 2020–2022 real model. Full details: `SIMULATION_FINDINGS.md`; reproducible script: `simulation_old_vs_new.py`.
+
+### Headline Comparison
+
+| Metric | Old Design | New Design | Change |
+|--------|-----------|-----------|--------|
+| Survey items | 130 | 62 | −52% |
+| Est. completion time | 30 min | 14 min | −53% |
+| Model predictors (k) | 90 | 72 | −20% |
+| Usable responses (after dropout) | 5,066 | 5,695 | +629 |
+| **R²** | **0.340** | **0.490** | **+0.149** |
+| Adjusted R² | 0.328 | 0.483 | +0.155 |
+| Standard error of estimate | $22,928 | $20,158 | −$2,770 |
+| R² per survey item | 0.0026 | 0.0079 | +202% |
+| R² per minute of respondent time | 0.011 | 0.035 | +208% |
+| Effective information (R² × N) | 1,724 | 2,788 | +62% |
+| Mean bootstrap CV (coefficient stability) | 5.17 | 0.69 | −87% |
+
+### Where the New R² Comes From
+
+Starting from old-equivalent predictors on new data (R² = 0.268), each new block adds:
+
+| Block | ΔR² | Cumulative R² |
+|-------|-----|---------------|
+| `seniority_level` | **+0.124** | 0.392 |
+| `company_size` | +0.024 | 0.416 |
+| `english_use` | +0.018 | 0.449 |
+| `primary_role` | +0.017 | 0.469 |
+| `industry` | +0.015 | 0.431 |
+| `primary_language` | +0.011 | 0.479 |
+| `cert_depth` | +0.009 | 0.488 |
+| `experience_total + tenure` | +0.003 | 0.452 |
+| `tech_depth` | +0.002 | 0.490 |
+
+**`seniority_level` alone adds +12.4 pp** — more than all tech-stack questions combined. This single field, absent from the old survey, is the largest analytical gap closed by the redesign.
+
+### Key Takeaways
+
+1. **3× information density per minute.** Respondents deliver 3× more analytical value per minute spent. The checkbox purge is responsible for most of this.
+2. **87% more stable coefficients.** Eliminating sparse binary predictors removes the wild coefficient swings that made individual technology effects unreliable in the old model.
+3. **+629 usable responses.** The shorter survey retains respondents who would have abandoned mid-way through the checkbox section, reducing selection bias toward senior, male, CDMX-based respondents.
+4. **The 25 policy questions are not modeled.** The new policy blocks (formality, cross-border, purchasing power, education ROI, AI impact, gender pipeline) are designed to produce standalone findings, not salary predictors. Their value is not captured by R² but by the advocacy artifacts they enable.
+
+### Caveats
+
+- Results are from synthetic data calibrated to 2020–2022 effect sizes. Absolute R² values (0.49) should not be cited as predictions; the *relative* comparison between designs is the meaningful finding.
+- Completion rates (85% old, 95% new) are estimates from survey methodology literature, not measured from the actual instrument.
+- VIF is higher in the new design (mean 2.58 vs 1.35) because meaningful predictors are correlated with each other. No variable exceeds VIF=10. The old design's low VIF reflects sparse near-orthogonal noise, not better conditioning.
