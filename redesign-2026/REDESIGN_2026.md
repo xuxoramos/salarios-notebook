@@ -290,17 +290,7 @@ Instead of asking everyone about every technology, ask what they *primarily* use
 
 **Why:** Categories are stable across years (unlike specific cert names). `cert_count` tests whether more certs = more salary or it plateaus. 3 questions replace 27 checkboxes.
 
-#### 1.6.6 Step 5: Optional Granular Tech Detail
-
-If Software Guru still wants the specific technology data for descriptive reports ("Top 10 languages in Mexico"), add an optional free-response at the end:
-
-| ID | Question | Type | Options |
-|---|---|---|---|
-| `all_technologies` | (Opcional) Enlista todas las tecnologías que usas regularmente | Free text / tag input | Open |
-
-This gives granular data for descriptive sections without burdening the analytical core. Parse post-hoc with text matching.
-
-#### 1.6.7 Impact Summary
+#### 1.6.6 Impact Summary
 
 | Metric | Current | Redesigned |
 |---|---|---|

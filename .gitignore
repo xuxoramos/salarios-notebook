@@ -6,3 +6,4 @@ custom
 # Slidev build artifacts
 redesign-2026/slidev-deck/node_modules/
 redesign-2026/slidev-deck/dist/
+*.pdf
