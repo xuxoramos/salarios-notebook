@@ -26,7 +26,7 @@ warnings.filterwarnings("ignore")
 
 np.random.seed(2026)
 
-OUT_DIR = "simulation_results"
+OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "output", "simulation_results")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 N = 6000  # matches real ~5,798

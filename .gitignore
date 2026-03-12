@@ -1,6 +1,8 @@
 .venv
 .ipynb_checkpoints
-tablas/*.csv
 custom
 .DS_Store
 
+# Slidev build artifacts
+redesign-2026/slidev-deck/node_modules/
+redesign-2026/slidev-deck/dist/
