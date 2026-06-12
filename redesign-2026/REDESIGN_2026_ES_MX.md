@@ -4,7 +4,7 @@
 
 Software Guru publica dos productos de encuesta dirigidos al mercado laboral de TI en México (y cada vez más en América Latina):
 
-1. **Best Place to Code (BP2C):** Encuesta de satisfacción del empleador que funciona como programa de certificación. Pregunta a los empleados sobre el *comportamiento de su empleador* — cultura, beneficios, habilitación, justicia. En 2026 se relanza con un instrumento rediseñado de 45 preguntas organizado alrededor de seis palancas independientes (Fundamentos del Empleador, Habilitación de IA, Gestión de Tecnoansiedad, Justicia Algorítmica, Agencia del Empleado, Confianza en el Futuro).
+1. **Best Place to Create (BP2C):** Encuesta de satisfacción del empleador que funciona como programa de certificación. Pregunta a los empleados sobre el *comportamiento de su empleador* — cultura, beneficios, habilitación, justicia. En 2026 se relanza con un instrumento rediseñado de 45 preguntas organizado alrededor de seis palancas independientes (Fundamentos del Empleador, Habilitación de IA, Gestión de Tecnoansiedad, Justicia Algorítmica, Agencia del Empleado, Confianza en el Futuro).
 
 2. **Encuesta de Salarios:** Encuesta individual de profesionales de TI que captura demografía, compensación, habilidades y arreglos de trabajo. Ha operado al menos desde 2020, recolectando ~5,798 respuestas útiles entre 2020–2022. El producto analítico principal ha sido un modelo causal que explica el salario mensual bruto (salarymx) con 42 predictores, con R²=38.74%.
 
@@ -58,7 +58,7 @@ El rediseño de BP2C ya acotó su alcance a seis palancas sustentadas en teoría
 **Implementación:**
 - Eliminar todas las columnas `ben_*` del instrumento.
 - Archivar los datos históricos de beneficios en los archivos de respuestas existentes (no borrar de los CSV 2020–2022).
-- En el reporte publicado, indicar: *"Para análisis de beneficios a nivel empleador, ver el reporte de certificación Best Place to Code."*
+- En el reporte publicado, indicar: *"Para análisis de beneficios a nivel empleador, ver el reporte de certificación Best Place to Create."*
 
 #### 1.2.2 Apoyo del Empleador en COVID (`covid_apoyo`)
 
@@ -479,16 +479,47 @@ El reencuadre clave: la adopción de IA no es una amenaza a gestionar — es una
 - **Recomendar a miembros AMITI:** Benchmark de adopción de IA contra la mediana. Empresas debajo de la mediana se están rezagando — AMITI puede ofrecer assessment de readiness como servicio.
 - **Presentar a socios internacionales:** "El workforce mexicano tiene X% de uso diario de IA — mayor que [comparativo]. La fuerza laboral está lista para operaciones de nearshoring con IA".
 
-### 2.7 Nuevo Bloque: Pipeline de Género y Diversidad
+### 2.7 Nuevo Bloque: Género y Diversidad (Tres Capas)
 
-**Preguntas:**
+Este bloque responde a dos peticiones de liderazgo: (1) revelar los *mecanismos* detrás de la brecha de género no explicada con preguntas hechas a **todos los géneros**, y (2) dar espacio a experiencias específicas de mujeres y de personas de género alternativo mediante dos **secciones exclusivas y opcionales**. La estructura es deliberada: solo la Capa A entra a la regresión salarial; las Capas B y C son descriptivas y protegidas.
+
+#### Capa A — Mecanismos de la brecha (todos los géneros, alimenta el modelo)
+
+Estos nueve ítems se preguntan a todas las personas y son el centro analítico. Convierten la brecha de género cruda en un conjunto descomponible de mecanismos (negociación, transparencia, promoción, patrocinio, carga de cuidado, interrupción de carrera, edad de inicio), habilitando una descomposición tipo Oaxaca–Blinder: cuánto de la brecha de −$12,442 es *explicado* vs. *no explicado*.
 
 | ID | Pregunta | Tipo | Opciones |
 |----|----------|------|---------|
 | `first_code_age` | ¿A qué edad escribiste tu primera línea de código o programa? | Numérico | (años) |
 | `childhood_computer` | ¿Tenías acceso a una computadora en casa durante tu infancia (antes de los 15 años)? | Selección única | Sí, propia / Sí, compartida / No |
+| `negotiated_salary` | ¿Negociaste tu salario al aceptar tu empleo actual? | Selección única | Sí / No / No tuve oportunidad |
+| `pay_transparency` | ¿Sabes cuánto ganan tus colegas en un rol equivalente? | Selección única | Sí, abiertamente / Aproximadamente / No |
+| `promoted_2y` | ¿Has sido promovido/a en los últimos 2 años? | Selección única | Sí / No |
+| `has_sponsor` | ¿Cuentas con un mentor o patrocinador que impulse tu carrera? | Selección única | Sí / No |
+| `caregiving_load` | ¿Tienes responsabilidades de cuidado (hijos, familiares) que afecten tu disponibilidad laboral? | Selección única | Sí, principalmente yo / Sí, compartidas / No |
+| `career_interruption` | ¿Has pausado o reducido tu carrera por responsabilidades personales o familiares? | Selección única | Sí / No |
 | `discrimination_exp` | ¿Has experimentado discriminación en procesos de contratación o promoción en el sector tecnológico? | Selección única | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
-| `identity_visibility` | ¿Te sientes cómodo/a siendo visible con tu identidad (género, orientación, etnia) en tu lugar de trabajo? | Likert 1–5 | 1=Nada cómodo ... 5=Totalmente cómodo |
+
+#### Capa B — Experiencia de mujeres (exclusiva, opcional, lógica de salto `gender = mujer`)
+
+Se muestra solo a quienes se identifican como mujeres. Solo descriptiva — **no** entra a la regresión (la submuestra es muy pequeña para un grupo de comparación válido y conlleva riesgo de reidentificación). Cada ítem ofrece "Prefiero no contestar", y las celdas publicadas por debajo del umbral de divulgación se suprimen.
+
+| ID | Pregunta | Tipo | Opciones |
+|----|----------|------|---------|
+| `women_maternity` | ¿Cómo calificarías el trato de tu empleador respecto a maternidad y reincorporación laboral? | Selección única | Muy negativo … Muy positivo / No aplica / Prefiero no contestar |
+| `women_only_team` | ¿Eres la única mujer o una de muy pocas en tu equipo? | Selección única | Sí, la única / Una de pocas / No / Prefiero no contestar |
+| `women_harassment` | ¿Te has sentido insegura o has vivido acoso en tu entorno laboral en tech? | Selección única | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
+| `women_network` | ¿Tienes acceso a redes o comunidades de mujeres en tech (Women Who Code, Laboratoria, etc.)? | Selección única | Sí, activamente / Sí, pero no participo / No / No las conozco |
+
+#### Capa C — Experiencia de género alternativo (exclusiva, opcional, lógica de salto `gender = no binario/otro`)
+
+Se muestra solo a quienes se identifican como no binarie o de otro género. Mismos resguardos que la Capa B: solo descriptiva, "Prefiero no contestar" en cada ítem, supresión de celdas por debajo del umbral. `identity_visibility` se mueve aquí desde la antigua 2.7.
+
+| ID | Pregunta | Tipo | Opciones |
+|----|----------|------|---------|
+| `identity_visibility` | ¿Te sientes cómodo/a siendo visible con tu identidad (género, orientación, etnia) en tu lugar de trabajo? | Likert 1–5 | 1=Nada cómodo … 5=Totalmente cómodo |
+| `altg_misgendering` | ¿Con qué frecuencia experimentas misgendering o falta de respeto a tu identidad en el trabajo? | Selección única | Frecuentemente / A veces / Rara vez / Nunca / Prefiero no contestar |
+| `altg_inclusive_policy` | ¿Tu empleador ofrece políticas inclusivas (pronombres, seguro médico inclusivo, instalaciones, apoyo a transición)? | Selección única | Sí, varias / Algunas / Ninguna / No sé / Prefiero no contestar |
+| `altg_discrimination` | ¿Has experimentado discriminación específicamente por tu identidad o expresión de género u orientación? | Selección única | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 
 **Justificación de advocacy para AMITI:**
 
@@ -509,6 +540,8 @@ La interacción `first_code_age` × `gender` es el diagnóstico clave. Si las mu
 - **Presentar a inversionistas:** "Empresas con diversidad de género arriba de la mediana (medible vía BP2C) tienen X% menor rotación y Y% más pool de candidatos" — dato ESG para inversión.
 
 **Nota de tamaño de muestra:** Con 5% de participación femenina, el poder estadístico es limitado. El rediseño debe incluir canales de distribución específicos (Women Who Code México, redes de egresadas Laboratoria, etc.) para elevar la tasa femenina a 15–20%.
+
+**Regla de manejo de datos para las secciones exclusivas (B y C):** estas capas están diseñadas para *dar voz*, no para generar estadística. Nunca se usan como predictores. Cualquier cifra publicada a partir de ellas se reporta solo en agregado, con supresión de celdas por debajo del umbral de divulgación, y se distribuyen principalmente a través de comunidades de mujeres en tech y de personas LGBTQ+ en tech, donde la base de respuestas es suficiente para proteger a quienes contestan.
 
 ### 2.8 Expansión Geográfica a América Latina
 
@@ -576,6 +609,40 @@ Cada sección sigue un formato estándar:
 
 ---
 
+## Fundamento Teórico y Empírico
+
+Los nuevos bloques no son improvisados. Cada pregunta se ancla a un resultado establecido en economía laboral o investigación organizacional, para poder defender el análisis frente a la crítica obvia de "solo preguntas lo que quieres oír". El bloque de género (Sección 2.7, Capa A) es la parte analíticamente novedosa y políticamente sensible, así que carga el mayor fundamento: está diseñado para soportar una descomposición de Oaxaca–Blinder, el método estándar para separar una brecha salarial bruta en un componente *explicado* (diferencias en características medibles) y uno *no explicado* (el residual que suele leerse como discriminación más factores no observados).
+
+### Método: descomponer la brecha
+
+| Concepto | Pregunta(s) que fundamenta | Fuente |
+|----------|----------------------------|--------|
+| Descomposición de brecha salarial (explicado vs. no explicado) | Toda la Capa A; el desglose de los −$12,442 | Oaxaca, Ronald (1973), "Male-Female Wage Differentials in Urban Labor Markets," *International Economic Review* 14(3): 693–709. [10.2307/2525981](https://doi.org/10.2307/2525981) |
+| Descomposición de forma reducida vs. estructural | Diseño de la regresión de Capa A | Blinder, Alan S. (1973), "Wage Discrimination: Reduced Form and Structural Estimates," *Journal of Human Resources* 8(4): 436–455. [10.2307/144855](https://doi.org/10.2307/144855) |
+
+### Mecanismos detrás de la brecha
+
+| Mecanismo | Pregunta(s) que fundamenta | Fuente |
+|-----------|----------------------------|--------|
+| Lo que queda sin explicar tras capital humano: ocupación, industria, horas, interrupciones laborales | `caregiving_load`, `career_interruption`, controles de rol/seniority | Blau, Francine D., y Lawrence M. Kahn (2017), "The Gender Wage Gap: Extent, Trends, and Explanations," *Journal of Economic Literature* 55(3): 789–865. [10.1257/jel.20160995](https://doi.org/10.1257/jel.20160995) |
+| Pago no lineal por horas largas/inflexibles como el "último capítulo" de la brecha | `caregiving_load`, ítems de remoto/flexibilidad | Goldin, Claudia (2014), "A Grand Gender Convergence: Its Last Chapter," *American Economic Review* 104(4): 1091–1119. [10.1257/aer.104.4.1091](https://doi.org/10.1257/aer.104.4.1091) |
+| Primas salariales de empresa, sorting y negociación (las mujeres capturan ~90% de las primas que capturan los hombres; sorting + negociación ≈ un quinto de la brecha) | `negotiated_salary`, `pay_transparency` | Card, David, Ana Rute Cardoso, y Patrick Kline (2016), "Bargaining, Sorting, and the Gender Wage Gap: Quantifying the Impact of Firms on the Relative Pay of Women," *Quarterly Journal of Economics* 131(2): 633–686. [10.1093/qje/qjv038](https://doi.org/10.1093/qje/qjv038) |
+| Brecha en la iniciativa de negociar: las mujeres enfrentan una penalización social por pedir | `negotiated_salary` | Bowles, Hannah Riley, Linda Babcock, y Lei Lai (2007), "Social incentives for gender differences in the propensity to initiate negotiations: Sometimes it does hurt to ask," *Organizational Behavior and Human Decision Processes* 103(1): 84–103. [10.1016/j.obhdp.2006.09.001](https://doi.org/10.1016/j.obhdp.2006.09.001) |
+| Penalización por maternidad (~20% de brecha de ingresos de largo plazo, transmitida entre generaciones) | `caregiving_load`, `career_interruption`, ítems de maternidad de Capa B | Kleven, Henrik, Camille Landais, y Jakob Egholt Søgaard (2019), "Children and Gender Inequality: Evidence from Denmark," *American Economic Journal: Applied Economics* 11(4): 181–209. [10.1257/app.20180010](https://doi.org/10.1257/app.20180010) |
+| Patrocinio vs. mentoría: las mujeres reciben exceso de mentoría y déficit de patrocinio, lo que frena la promoción | `has_sponsor`, `promoted_2y` | Ibarra, Herminia, Nancy M. Carter, y Christine Silva (2010), "Why Men Still Get More Promotions Than Women," *Harvard Business Review*, septiembre 2010. [hbr.org](https://hbr.org/2010/09/why-men-still-get-more-promotions-than-women) |
+
+### Trabajo remoto y transfronterizo
+
+| Concepto | Pregunta(s) que fundamenta | Fuente |
+|----------|----------------------------|--------|
+| El trabajo remoto eleva la productividad y reduce la rotación, pero puede bajar la tasa de promoción | Ítems transfronterizos / remoto de la Sección 2.3 | Bloom, Nicholas, James Liang, John Roberts, y Zhichun Jenny Ying (2015), "Does Working from Home Work? Evidence from a Chinese Experiment," *Quarterly Journal of Economics* 130(1): 165–218. [10.1093/qje/qju032](https://doi.org/10.1093/qje/qju032) |
+
+**Cronología del pipeline (`first_code_age`, `childhood_computer`).** Estos dos ítems no tienen un único artículo canónico que citar, pero operacionalizan la idea central del marco Oaxaca–Blinder de arriba: si el componente *explicado* de la brecha proviene de un déficit de experiencia que se origina en el acceso durante la infancia y no en el mercado laboral, la palanca de política es el acceso temprano a STEM, no la regulación salarial. La interacción `first_code_age × gender` es la prueba.
+
+**Bloques que descansan en marcos estándar (no citados aquí por separado).** El bloque de formalidad laboral (2.2) sigue las convenciones de medición de empleo informal de la OIT, y el bloque de ROI educativo (2.5) sigue la tradición de la función de ingresos de Mincer. Son decisiones de marco más que afirmaciones empíricas específicas, así que se anotan aquí sin una cita dedicada para no atribuir una fuente que los datos aún no respaldan.
+
+---
+
 ## Objetivo 3: Gancho Comercial para BP2C
 
 ### 3.1 Justificación
@@ -594,9 +661,11 @@ La solución es diseñar la Encuesta de Salarios para que sus *hallazgos apunten
 
 | ID | Pregunta | Tipo | Opciones |
 |----|----------|------|---------|
-| `enps` | Del 0 al 10, ¿qué tan probable es que recomiendes a tu empleador a un amigo? | Escala NPS | 0–10 |
+| `enps` | Del 1 al 10, ¿qué tan probable es que recomiendes a tu empleador a un amigo? | Escala NPS | 1–10 |
 | `leave_reason` | ¿Cuál sería la razón principal por la que dejarías tu empleo actual? | Selección única | Salario / Crecimiento profesional / Cultura organizacional / Liderazgo / Flexibilidad / Otro |
 | `job_search` | ¿Estás buscando activamente otro empleo? | Selección única | Sí / No, pero estoy abierto/a / No |
+
+**Armonización de escala:** `enps` usa una escala **1–10** para coincidir con el ítem del Tier de Resultado de BP2C ("Recomendaría esta empresa a un amigo", 1–10). Mantener ambos instrumentos en la misma escala es lo que hace válida la comparación de eNPS entre encuestas en §3.3. (El eNPS de la Encuesta de Salarios era antes 0–10; aquí se realinea a 1–10.)
 
 **Por qué solo estas tres:**
 
@@ -626,7 +695,7 @@ Vincular requiere saber en qué empresa trabaja la persona. La encuesta de salar
 2. **Cluster por dominio:** Si se recolectan correos, agrupar por dominio. Es implícito y menos transparente — no recomendado.
 3. **Matching BP2C:** Preguntar "¿Tu empleador está inscrito en BP2C?" (Sí/No/No sé). Es el enfoque más ligero — no revela empleador pero permite comparar certificados vs. no certificados.
 
-**Recomendación:** Opción 3 (awareness de BP2C) como implementación mínima viable. Opción 1 (opt-in de empleador) como objetivo aspiracional si la tasa de respuesta lo permite.
+**Decisión — implementar la Opción 3 como el campo `bp2c_enrolled`:** *"¿Tu empleador está certificado o inscrito en Best Place to Create (BP2C) de Software Guru?"* — Sí / No / No sé. Esta única bandera ligera no lleva **ningún PII** (sin nombre de empleador) y aun así habilita una comparación de "premio de certificación" a nivel poblacional: distribuciones de salario, eNPS y `job_search` para personas en empleadores certificados vs. no certificados vs. no sé. La Opción 1 (etiquetado opt-in de empleador) queda como objetivo aspiracional si la tasa de respuesta lo permite.
 
 ### 3.4 La Narrativa de "Palancas Faltantes"
 
@@ -653,6 +722,29 @@ Esta sección presenta:
 4. Descripción no promocional del marco BP2C como complemento
 
 Debe ser **periodística, no comercial**. Si suena a anuncio, se pierde credibilidad. El gancho funciona porque la encuesta es un recurso comunitario gratuito y confiable. Esa confianza es el activo comercial.
+
+### 3.6 Alineación con el Relanzamiento "Observatorio" de BP2C
+
+Marketing relanza BP2C (31 de julio) como el **Observatorio del Trabajo Técnico**: un producto de tres niveles (Reporte de Palancas → certificación → reporte público anual) posicionado como la voz de autoridad en LATAM sobre cómo cambia el trabajo técnico en la era de la IA. Este rediseño está **alineado y es complementario**, no compite. Las dos encuestas son las dos mitades de ese observatorio:
+
+| Dimensión | Encuesta de Salarios (este doc) | BP2C / Observatorio |
+|---|---|---|
+| Unidad de análisis | Individuo / mercado | Empresa / empleador |
+| Reporte público | Compensación, geografía, formalidad, IA en el individuo | Calidad del lugar de trabajo, las 6 Palancas, retención |
+| Rol en el lanzamiento | Radiografía del mercado que hace creíble la autoridad LATAM a escala | Radiografía del empleador que ancla el lanzamiento |
+
+Puntos de refuerzo ya integrados en este rediseño:
+
+- **El rebrand coincide.** Ya usamos "Best Place to Create" (se conserva BP2C) en todo el documento — la opción que recomienda marketing.
+- **Tesis de IA compartida.** El argumento de marketing (AI brain fry, métricas rotas, retención-no-dinero, 53% buscando empleo) es la versión del lado empleador de nuestro bloque de IA individual (§2.6) y los mecanismos de género/retención.
+- **El gancho cross-survey está listo.** `bp2c_enrolled` + el eNPS armonizado a 1–10 (§3.2–3.3) son lo que habilita el titular de "premium por certificación" del Observatorio.
+
+Coordinación a gestionar (no son bloqueantes):
+
+1. **Dos reportes públicos de LATAM** deben nombrarse/delimitarse para que se lean como complementarios, no redundantes (mercado vs. empleador).
+2. **Tiempos.** El lanzamiento de BP2C va sobre una fecha dura (31 de julio) con piloto en mayo–junio; un dato de salarios solo aparece en ese reporte de lanzamiento si se agenda ahora, de lo contrario contribuye a la siguiente ola.
+3. **Mantener el eNPS en 1–10** en ambos instrumentos para que la comparación cross-survey siga siendo válida.
+4. **Datos de Get on Board** (vacantes/aplicaciones) deben alimentar el Observatorio como señales de lugar de trabajo/demanda, enmarcados para no invadir el terreno de compensación de la encuesta de salarios.
 
 ---
 
@@ -747,7 +839,7 @@ Debe ser **periodística, no comercial**. Si suena a anuncio, se pierde credibil
 | 36 | `cert_count` | (nuevo) | Número de certificaciones (Sec 1.6.5) |
 | 37 | `all_technologies` | `dsc_*` + `dataeng_*` + restantes | Texto libre opcional (Sec 1.6.6) |
 
-### Preguntas Nuevas de Política y Gancho (Secciones 2.2–2.7, 3.2)
+### Preguntas Nuevas de Política y Gancho (Secciones 2.2–2.7, 3.2–3.3)
 
 | Bloque | # Qs | IDs |
 |-------|-------|-----|
@@ -756,7 +848,10 @@ Debe ser **periodística, no comercial**. Si suena a anuncio, se pierde credibil
 | Poder adquisitivo (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
 | ROI educativo (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
 | Impacto IA (2.6) | 4 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_salary_impact` |
-| Pipeline género y diversidad (2.7) | 4 | `first_code_age`, `childhood_computer`, `discrimination_exp`, `identity_visibility` |
+| Género — Capa A mecanismos, todos los géneros (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
+| Género — Capa B solo mujeres, exclusiva/opcional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
+| Género — Capa C solo género alternativo, exclusiva/opcional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
+| Vínculo BP2C entre encuestas (3.3) | 1 | `bp2c_enrolled` |
 | Gancho BP2C (3.2) | 3 | `enps`, `leave_reason`, `job_search` |
 
 ### Preguntas Eliminadas
@@ -777,14 +872,16 @@ Debe ser **periodística, no comercial**. Si suena a anuncio, se pierde credibil
 
 ### Cambio Neto
 
-**Total final: 62 ítems**
+**Total final: 76 ítems definidos** (la exposición por persona es menor — ver nota)
 - 12 retenidos (sin cambios o ajustes menores)
 - 12 rediseñados desde campos existentes (Sec 1.5)
 - 13 del rediseño de stack tecnológico (Sec 1.6)
-- 25 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2)
+- 39 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2–3.3), incluido el bloque de género de 17 ítems (9 para todos los géneros en la Capa A + 4 solo mujeres en la Capa B + 4 solo género alternativo en la Capa C) y la bandera de vínculo `bp2c_enrolled`
 - **~165 ítems eliminados** (casillas, COVID, beneficios, campos redundantes)
 
-La encuesta rediseñada reemplaza un instrumento de ~130 ítems dominado por casillas dispersos con 62 preguntas enfocadas — cada una con alta señal analítica por respuesta — mientras agrega bloques nuevos relevantes para política. El tiempo estimado baja de 25–35 minutos a 12–15 minutos.
+**Exposición por persona:** Las Capas B y C son ramas de lógica de salto mutuamente excluyentes, por lo que cada persona ve a lo sumo una de ellas. Una persona responde aproximadamente **64–66** ítems (los 9 ítems compartidos de la Capa A más una rama exclusiva), no los 76. Las secciones exclusivas son opcionales.
+
+La encuesta rediseñada reemplaza un instrumento de ~130 ítems dominado por casillas dispersos con un conjunto enfocado de preguntas de alta señal — cada una con alta señal analítica por respuesta — mientras agrega bloques nuevos relevantes para política. Como las dos secciones exclusivas de género son ramas de lógica de salto, cada persona responde aproximadamente 64–66 ítems. El tiempo estimado se mantiene en el rango de 12–15 minutos; quien llena una sección exclusiva agrega cerca de 1–2 minutos.
 
 ---
 
@@ -796,45 +893,58 @@ Se ejecutó una simulación Monte Carlo (n=6,000 personas encuestadas sintético
 
 | Métrica | Diseño Antiguo | Diseño Nuevo | Cambio |
 |--------|-----------|-----------|--------|
-| Ítems de encuesta | 130 | 62 | −52% |
+| Ítems de encuesta | 130 | 76 | −42% |
 | Tiempo estimado de llenado | 30 min | 14 min | −53% |
-| Predictores del modelo (k) | 90 | 72 | −20% |
-| Respuestas útiles (post abandono) | 5,066 | 5,695 | +629 |
-| **R²** | **0.340** | **0.490** | **+0.149** |
-| R² ajustada | 0.328 | 0.483 | +0.155 |
-| Error estándar de estimación | $22,928 | $20,158 | −$2,770 |
-| R² por ítem | 0.0026 | 0.0079 | +202% |
-| R² por minuto del encuestado | 0.011 | 0.035 | +208% |
-| Información efectiva (R² × N) | 1,724 | 2,788 | +62% |
-| CV medio bootstrap (estabilidad coef.) | 5.17 | 0.69 | −87% |
+| Predictores del modelo (k) | 90 | 81 | −10% |
+| Respuestas útiles (post abandono) | 5,098 | 5,689 | +591 |
+| **R²** | **0.330** | **0.517** | **+0.187** |
+| R² ajustada | 0.318 | 0.510 | +0.192 |
+| Error estándar de estimación | $23,602 | $20,068 | −$3,534 |
+| R² por ítem | 0.0025 | 0.0068 | +168% |
+| R² por minuto del encuestado | 0.011 | 0.037 | +235% |
+| Información efectiva (R² × N) | 1,683 | 2,940 | +75% |
+| CV medio bootstrap (estabilidad coef.) | 3.46 | 0.44 | −87% |
 
 ### De Dónde Viene la Nueva R²
 
-Partiendo de los predictores equivalentes al diseño anterior (R² = 0.268), cada bloque nuevo agrega:
+Partiendo de los predictores equivalentes al diseño anterior (R² = 0.260), cada bloque nuevo agrega:
 
 | Bloque | ΔR² | R² acumulada |
 |-------|-----|---------------|
-| `seniority_level` | **+0.124** | 0.392 |
-| `company_size` | +0.024 | 0.416 |
-| `english_use` | +0.018 | 0.449 |
-| `primary_role` | +0.017 | 0.469 |
-| `industry` | +0.015 | 0.431 |
-| `primary_language` | +0.011 | 0.479 |
-| `cert_depth` | +0.009 | 0.488 |
-| `experience_total + tenure` | +0.003 | 0.452 |
-| `tech_depth` | +0.002 | 0.490 |
+| `seniority_level` | **+0.131** | 0.391 |
+| `company_size` | +0.022 | 0.413 |
+| `primary_role` | +0.019 | 0.459 |
+| `industry` | +0.013 | 0.426 |
+| `english_use` | +0.012 | 0.438 |
+| `primary_language` | +0.012 | 0.471 |
+| `gender_mechanisms (Capa A)` | **+0.039** | 0.517 |
+| `cert_depth` | +0.007 | 0.477 |
+| `experience_total + tenure` | +0.002 | 0.439 |
+| `tech_depth` | +0.001 | 0.478 |
 
-**`seniority_level` por sí solo suma +12.4 pp** — más que todas las preguntas de stack tecnológico juntas. Este campo, ausente en el encuesta vieja, es el mayor hueco analítico que cierra el rediseño.
+**`seniority_level` por sí solo suma +13.1 pp** — más que todas las preguntas de stack tecnológico juntas. Este campo, ausente en el encuesta vieja, es el mayor hueco analítico que cierra el rediseño. **Los mecanismos de la Capa A de género son el segundo bloque más grande (+3.9 pp)** — suben la R² y permiten al modelo descomponer la brecha de género (abajo).
+
+### Descomposición de la Brecha de Género (Capa A)
+
+Los mecanismos de la Capa A para todos los géneros (negociación, transparencia salarial, promoción, patrocinio, carga de cuidado, interrupción de carrera, experiencia de discriminación, acceso temprano) permiten al modelo separar la brecha cruda en parte explicada y parte no explicada:
+
+| Componente | MXN/mes | % de la brecha cruda |
+|-----------|---------|----------------------|
+| Brecha cruda (`is_female` solo) | −13,705 | 100% |
+| Explicada por mecanismos de Capa A | −6,223 | 45% |
+| Brecha no explicada restante | −7,482 | 55% |
+
+**La Capa A explica ~45% de la brecha cruda de género.** El 55% restante es el residual que sobrevive a los controles — la cifra más relevante para el advocacy contra la discriminación. Sin la Capa A la encuesta solo podía reportar la brecha cruda; con ella, la brecha se vuelve una descomposición.
 
 ### Hallazgos Clave
 
 1. **3× densidad de información por minuto.** Las personas entregan 3× más valor analítico por minuto. La eliminación de casillas es la principal responsable.
 2. **87% más estabilidad de coeficientes.** Eliminar predictores binarios dispersos reduce los swings de coeficientes que hacían poco confiables los efectos por tecnología.
 3. **+629 respuestas útiles.** El encuesta más corto retiene personas que antes abandonaban a mitad de la sección de casillas, reduciendo sesgo de selección hacia senior, hombres, CDMX.
-4. **Las 25 preguntas de política no se modelan.** Los nuevos bloques (formalidad, transfronterizo, poder adquisitivo, ROI educativo, IA, pipeline de género) están diseñados para hallazgos propios, no predictores salariales. Su valor no se refleja en R² sino en los artefactos de advocacy que habilitan.
+4. **Las preguntas de política no se modelan.** Los nuevos bloques (formalidad, transfronterizo, poder adquisitivo, ROI educativo, IA, género) están diseñados para hallazgos propios, no predictores salariales — con una excepción: los mecanismos de la Capa A de género (negociación, transparencia, promoción, patrocinio, carga de cuidado), que para todos los géneros *sí* entran al modelo para descomponer la brecha. Las Capas exclusivas B y C nunca lo hacen. Su valor no se refleja en R² sino en los artefactos de advocacy que habilitan.
 
 ### Caveats
 
-- Los resultados son de datos sintéticos calibrados a efectos 2020–2022. Los valores absolutos de R² (0.49) no deben citarse como predicción; lo importante es la comparación relativa entre diseños.
+- Los resultados son de datos sintéticos calibrados a efectos 2020–2022. Los valores absolutos de R² (0.52) no deben citarse como predicción; lo importante es la comparación relativa entre diseños.
 - Las tasas de completitud (85% viejo, 95% nuevo) son estimaciones de literatura de metodología de encuestas, no mediciones del instrumento real.
 - El VIF es mayor en el diseño nuevo (media 2.58 vs 1.35) porque predictores relevantes se correlacionan entre sí. Ninguna variable supera VIF=10. El VIF bajo del diseño viejo refleja ruido disperso casi ortogonal, no mejor condicionamiento.

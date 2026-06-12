@@ -4,7 +4,7 @@
 
 Software Guru publishes two survey products aimed at the Mexican (and increasingly Latin American) IT labor market:
 
-1. **Best Place to Code (BP2C):** An employer satisfaction survey that functions as a certification program. It asks employees about their *employer's behavior* — culture, benefits, enablement, fairness. In 2026 it is being relaunched with a redesigned 45-question instrument organized around six independent levers (Employer Fundamentals, AI Enablement, Techno-Anxiety Management, Algorithmic Justice, Employee Agency, Future Confidence).
+1. **Best Place to Create (BP2C):** An employer satisfaction survey that functions as a certification program. It asks employees about their *employer's behavior* — culture, benefits, enablement, fairness. In 2026 it is being relaunched with a redesigned 45-question instrument organized around six independent levers (Employer Fundamentals, AI Enablement, Techno-Anxiety Management, Algorithmic Justice, Employee Agency, Future Confidence).
 
 2. **Salary Survey:** An individual-level survey of IT professionals capturing demographics, compensation, skills, and work arrangements. It has run since at least 2020, collecting ~5,798 usable responses across 2020–2022. The primary analytical output has been a causal model explaining monthly gross salary (salarymx) with 42 predictors at R²=38.74%.
 
@@ -58,7 +58,7 @@ The BP2C redesign already tightened its scope to six theory-grounded levers abou
 **Implementation:**
 - Drop all `ben_*` columns from the survey instrument.
 - Archive the historical benefits data in the existing answer files (do not delete from 2020–2022 CSVs).
-- In the published report, note: *"For employer-level benefits analysis, see the Best Place to Code certification report."*
+- In the published report, note: *"For employer-level benefits analysis, see the Best Place to Create certification report."*
 
 #### 1.2.2 COVID Employer Support (`covid_apoyo`)
 
@@ -478,16 +478,47 @@ The key reframe: AI adoption is not a threat to be managed — it is a **competi
 - **Recommend to AMITI members:** Benchmark their AI adoption rate against the survey median. Companies below the median are falling behind — AMITI can offer a "readiness assessment" as a member service.
 - **Present to international partners:** "Mexico's developer workforce has X% daily AI tool usage — higher than [comparison]. The workforce is AI-ready for nearshoring operations." This is an investment attraction data point.
 
-### 2.7 New Block: Gender & Diversity Pipeline
+### 2.7 New Block: Gender & Diversity (Three Layers)
 
-**Questions:**
+This block answers two leadership asks: (1) surface the *mechanisms* behind the unexplained gender gap with questions asked of **all genders**, and (2) give space to experiences specific to women and to alternative-gender respondents through two **optional, exclusive sections**. The structure is deliberate — only Layer A feeds the salary regression; Layers B and C are descriptive and protected.
+
+#### Layer A — Gap mechanisms (all genders, feeds the model)
+
+These nine items are asked of everyone and are the analytical centerpiece. They convert the raw gender gap into a decomposable set of mechanisms (negotiation, transparency, advancement, sponsorship, care load, career interruption, pipeline timing), enabling an Oaxaca–Blinder–style decomposition: how much of the −$12,442 gap is *explained* vs. *unexplained*.
 
 | ID | Question | Type | Options |
 |----|----------|------|---------|
 | `first_code_age` | ¿A qué edad escribiste tu primera línea de código o programa? | Numeric | (years) |
 | `childhood_computer` | ¿Tenías acceso a una computadora en casa durante tu infancia (antes de los 15 años)? | Single | Sí, propia / Sí, compartida / No |
+| `negotiated_salary` | ¿Negociaste tu salario al aceptar tu empleo actual? | Single | Sí / No / No tuve oportunidad |
+| `pay_transparency` | ¿Sabes cuánto ganan tus colegas en un rol equivalente? | Single | Sí, abiertamente / Aproximadamente / No |
+| `promoted_2y` | ¿Has sido promovido/a en los últimos 2 años? | Single | Sí / No |
+| `has_sponsor` | ¿Cuentas con un mentor o patrocinador que impulse tu carrera? | Single | Sí / No |
+| `caregiving_load` | ¿Tienes responsabilidades de cuidado (hijos, familiares) que afecten tu disponibilidad laboral? | Single | Sí, principalmente yo / Sí, compartidas / No |
+| `career_interruption` | ¿Has pausado o reducido tu carrera por responsabilidades personales o familiares? | Single | Sí / No |
 | `discrimination_exp` | ¿Has experimentado discriminación en procesos de contratación o promoción en el sector tecnológico? | Single | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
-| `identity_visibility` | ¿Te sientes cómodo/a siendo visible con tu identidad (género, orientación, etnia) en tu lugar de trabajo? | Likert 1–5 | 1=Nada cómodo ... 5=Totalmente cómodo |
+
+#### Layer B — Women's experience (exclusive, optional, skip logic `gender = mujer`)
+
+Shown only to respondents who identify as women. Descriptive only — **not** entered into the regression (the subsample is too small for a valid comparison group and carries re-identification risk). Every item offers "Prefiero no contestar," and published cells below the disclosure threshold are suppressed.
+
+| ID | Question | Type | Options |
+|----|----------|------|---------|
+| `women_maternity` | ¿Cómo calificarías el trato de tu empleador respecto a maternidad y reincorporación laboral? | Single | Muy negativo … Muy positivo / No aplica / Prefiero no contestar |
+| `women_only_team` | ¿Eres la única mujer o una de muy pocas en tu equipo? | Single | Sí, la única / Una de pocas / No / Prefiero no contestar |
+| `women_harassment` | ¿Te has sentido insegura o has vivido acoso en tu entorno laboral en tech? | Single | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
+| `women_network` | ¿Tienes acceso a redes o comunidades de mujeres en tech (Women Who Code, Laboratoria, etc.)? | Single | Sí, activamente / Sí, pero no participo / No / No las conozco |
+
+#### Layer C — Alternative-gender experience (exclusive, optional, skip logic `gender = no binario/otro`)
+
+Shown only to respondents who identify as non-binary or another gender. Same guardrails as Layer B: descriptive only, "Prefiero no contestar" on every item, cell suppression below threshold. `identity_visibility` moves here from the old 2.7.
+
+| ID | Question | Type | Options |
+|----|----------|------|---------|
+| `identity_visibility` | ¿Te sientes cómodo/a siendo visible con tu identidad (género, orientación, etnia) en tu lugar de trabajo? | Likert 1–5 | 1=Nada cómodo … 5=Totalmente cómodo |
+| `altg_misgendering` | ¿Con qué frecuencia experimentas misgendering o falta de respeto a tu identidad en el trabajo? | Single | Frecuentemente / A veces / Rara vez / Nunca / Prefiero no contestar |
+| `altg_inclusive_policy` | ¿Tu empleador ofrece políticas inclusivas (pronombres, seguro médico inclusivo, instalaciones, apoyo a transición)? | Single | Sí, varias / Algunas / Ninguna / No sé / Prefiero no contestar |
+| `altg_discrimination` | ¿Has experimentado discriminación específicamente por tu identidad o expresión de género u orientación? | Single | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 
 **AMITI advocacy rationale:**
 
@@ -508,6 +539,8 @@ The `first_code_age` × `gender` interaction is the key diagnostic. If women sys
 - **Present to investors:** "Companies with above-median gender diversity (measurable via BP2C) have X% lower attrition and Y% broader candidate pools" — an ESG-aligned investment data point.
 
 **Note on sample size:** With 5% female representation, statistical power for subgroup analyses is limited. The survey redesign should include targeted distribution channels (Women Who Code Mexico, Laboratoria alumnae networks, etc.) to boost female response rates to at least 15–20%.
+
+**Data-handling rule for the exclusive sections (B and C):** these layers are designed to *give voice*, not to power statistics. They are never used as regressors. Any published figure derived from them is reported only in aggregate, with cells below the disclosure threshold suppressed, and they are distributed primarily through women-in-tech and LGBTQ+-in-tech communities where the response base is large enough to protect respondents.
 
 ### 2.8 Geographic Expansion to Latin America
 
@@ -575,6 +608,40 @@ Each section follows a standard format:
 
 ---
 
+## Theoretical & Empirical Grounding
+
+The new blocks are not improvised. Each question maps to an established result in labor economics or organizational research, so that the analysis can be defended against the obvious "you're just asking what you want to hear" critique. The gender block (Section 2.7, Layer A) is the analytically novel and politically sensitive part, so it carries the heaviest grounding: it is engineered to support an Oaxaca–Blinder decomposition, the standard method for splitting a raw wage gap into an *explained* component (differences in measured characteristics) and an *unexplained* component (the residual usually read as discrimination plus unmeasured factors).
+
+### Method: decomposing the gap
+
+| Concept | Question(s) it grounds | Source |
+|---------|------------------------|--------|
+| Wage-gap decomposition (explained vs. unexplained) | All of Layer A; the −$12,442 split | Oaxaca, Ronald (1973), "Male-Female Wage Differentials in Urban Labor Markets," *International Economic Review* 14(3): 693–709. [10.2307/2525981](https://doi.org/10.2307/2525981) |
+| Reduced-form vs. structural decomposition | Layer A regression design | Blinder, Alan S. (1973), "Wage Discrimination: Reduced Form and Structural Estimates," *Journal of Human Resources* 8(4): 436–455. [10.2307/144855](https://doi.org/10.2307/144855) |
+
+### Mechanisms behind the gap
+
+| Mechanism | Question(s) it grounds | Source |
+|-----------|------------------------|--------|
+| What stays unexplained after human capital: occupation, industry, hours, work interruptions | `caregiving_load`, `career_interruption`, role/seniority controls | Blau, Francine D., and Lawrence M. Kahn (2017), "The Gender Wage Gap: Extent, Trends, and Explanations," *Journal of Economic Literature* 55(3): 789–865. [10.1257/jel.20160995](https://doi.org/10.1257/jel.20160995) |
+| Nonlinear pay for long/inflexible hours as the "last chapter" of the gap | `caregiving_load`, remote/flexibility items | Goldin, Claudia (2014), "A Grand Gender Convergence: Its Last Chapter," *American Economic Review* 104(4): 1091–1119. [10.1257/aer.104.4.1091](https://doi.org/10.1257/aer.104.4.1091) |
+| Firm pay premiums, sorting, and bargaining (women capture ~90% of the premiums men do; sorting + bargaining ≈ one-fifth of the gap) | `negotiated_salary`, `pay_transparency` | Card, David, Ana Rute Cardoso, and Patrick Kline (2016), "Bargaining, Sorting, and the Gender Wage Gap: Quantifying the Impact of Firms on the Relative Pay of Women," *Quarterly Journal of Economics* 131(2): 633–686. [10.1093/qje/qjv038](https://doi.org/10.1093/qje/qjv038) |
+| Negotiation initiation gap: women face a social penalty for asking | `negotiated_salary` | Bowles, Hannah Riley, Linda Babcock, and Lei Lai (2007), "Social incentives for gender differences in the propensity to initiate negotiations: Sometimes it does hurt to ask," *Organizational Behavior and Human Decision Processes* 103(1): 84–103. [10.1016/j.obhdp.2006.09.001](https://doi.org/10.1016/j.obhdp.2006.09.001) |
+| Child penalty (~20% long-run earnings gap, intergenerationally transmitted) | `caregiving_load`, `career_interruption`, Layer B maternity items | Kleven, Henrik, Camille Landais, and Jakob Egholt Søgaard (2019), "Children and Gender Inequality: Evidence from Denmark," *American Economic Journal: Applied Economics* 11(4): 181–209. [10.1257/app.20180010](https://doi.org/10.1257/app.20180010) |
+| Sponsorship vs. mentorship: women are over-mentored and under-sponsored, which suppresses promotion | `has_sponsor`, `promoted_2y` | Ibarra, Herminia, Nancy M. Carter, and Christine Silva (2010), "Why Men Still Get More Promotions Than Women," *Harvard Business Review*, September 2010. [hbr.org](https://hbr.org/2010/09/why-men-still-get-more-promotions-than-women) |
+
+### Remote and cross-border work
+
+| Concept | Question(s) it grounds | Source |
+|---------|------------------------|--------|
+| Remote work raises productivity and cuts attrition but can lower promotion rates | Section 2.3 cross-border / remote items | Bloom, Nicholas, James Liang, John Roberts, and Zhichun Jenny Ying (2015), "Does Working from Home Work? Evidence from a Chinese Experiment," *Quarterly Journal of Economics* 130(1): 165–218. [10.1093/qje/qju032](https://doi.org/10.1093/qje/qju032) |
+
+**Pipeline timing (`first_code_age`, `childhood_computer`).** These two items have no single canonical paper to cite, but they operationalize the central insight of the Oaxaca–Blinder framework above: if the *explained* component of the gap is driven by an experience deficit that originates in childhood access rather than in the labor market, the policy lever is early STEM access, not pay regulation. The `first_code_age × gender` interaction is the test.
+
+**Blocks resting on standard frameworks (not separately cited here).** The labor-formality block (2.2) follows ILO informal-employment measurement conventions, and the education-ROI block (2.5) follows the Mincerian earnings-function tradition. These are framework choices rather than specific empirical claims, so they are noted here without a dedicated citation to avoid attaching a source the data does not yet support.
+
+---
+
 ## Goal 3: BP2C Commercial Hook
 
 ### 3.1 Rationale
@@ -593,9 +660,11 @@ The solution is to design the Salary Survey so that its *findings naturally poin
 
 | ID | Question | Type | Options |
 |----|----------|------|---------|
-| `enps` | Del 0 al 10, ¿qué tan probable es que recomiendes a tu empleador a un amigo? | NPS scale | 0–10 |
+| `enps` | Del 1 al 10, ¿qué tan probable es que recomiendes a tu empleador a un amigo? | NPS scale | 1–10 |
 | `leave_reason` | ¿Cuál sería la razón principal por la que dejarías tu empleo actual? | Single | Salario / Crecimiento profesional / Cultura organizacional / Liderazgo / Flexibilidad / Otro |
 | `job_search` | ¿Estás buscando activamente otro empleo? | Single | Sí / No, pero estoy abierto/a / No |
+
+**Scale harmonization:** `enps` uses a **1–10** scale to match the BP2C Outcome Tier item ("I would recommend this company to a friend," 1–10). Keeping the two instruments on the same scale is what makes the cross-survey eNPS comparison in §3.3 valid. (The Salary Survey eNPS was previously 0–10; it is realigned to 1–10 here.)
 
 **Why only these three:**
 
@@ -625,13 +694,13 @@ Linking requires knowing which company a respondent works for. The Salary Survey
 2. **Domain-based clustering:** If collecting email addresses, cluster by email domain. This is implicit and less transparent — not recommended.
 3. **BP2C participant matching:** Ask "Is your employer enrolled in BP2C?" (Y/N/Don't know). This is the lightest touch — it doesn't reveal the employer but enables the certified/non-certified comparison.
 
-**Recommendation:** Option 3 (BP2C enrollment awareness) as the minimum viable implementation. Option 1 (opt-in employer tagging) as the aspirational target if response rates support it.
+**Decision — implement Option 3 as the field `bp2c_enrolled`:** *"¿Tu empleador está certificado o inscrito en Best Place to Create (BP2C) de Software Guru?"* — Sí / No / No sé. This single soft flag carries **zero PII** (no employer name), yet enables a population-level "certification premium" comparison: salary, eNPS, and `job_search` distributions for respondents at certified vs. non-certified vs. don't-know employers. Option 1 (opt-in employer tagging) remains the aspirational target if response rates ever support it.
 
 ### 3.4 The "Missing Levers" Narrative
 
 The causal model explains 38.74% of salary variance with 42 predictors. In the published report, explicitly frame the unexplained 61.26% as a feature, not a bug:
 
-> *"Our model captures demographic, geographic, technical, and structural factors that explain 39% of salary variation. The remaining 61% reflects individual negotiation, employer-specific culture, career development opportunities, and organizational enablement — dimensions that the Best Place to Code certification is designed to measure."*
+> *"Our model captures demographic, geographic, technical, and structural factors that explain 39% of salary variation. The remaining 61% reflects individual negotiation, employer-specific culture, career development opportunities, and organizational enablement — dimensions that the Best Place to Create certification is designed to measure."*
 
 This narrative positions the two products as two halves of a complete picture:
 - **Salary Survey:** What the market pays (structural, external)
@@ -653,6 +722,29 @@ This section presents:
 4. A non-promotional description of the BP2C framework as the complement
 
 This section must be **journalistic, not commercial**. If it reads like an ad, it destroys the survey's credibility. The hook works precisely because the Salary Survey is a trusted, free community resource. That trust is the commercial asset.
+
+### 3.6 Alignment with the BP2C "Observatorio" Rollout
+
+Marketing is relaunching BP2C (July 31) as the **Observatorio del Trabajo Técnico**: a three-level product (Lever Report → certification → public annual report) positioned as LATAM's authority on how technical work is changing in the AI era. This redesign is **aligned and complementary**, not competing. The two surveys are the two halves of that observatory:
+
+| Dimension | Salary Survey (this doc) | BP2C / Observatorio |
+|---|---|---|
+| Unit of analysis | Individual / market | Company / employer |
+| Public report | Compensation, geography, formality, AI-on-the-individual | Workplace quality, the Six Levers, retention |
+| Role in the launch | Market X-ray that makes the LATAM-authority claim credible at scale | Employer X-ray that anchors the launch |
+
+Reinforcing points already built into this redesign:
+
+- **Rebrand matches.** We already use "Best Place to Create" (BP2C kept) throughout — the option marketing recommends.
+- **Shared AI thesis.** The marketing case (AI brain fry, broken metrics, retention-not-money, 53% job-hunting) is the employer-side framing of our individual-side AI block (§2.6) and gender/retention mechanisms.
+- **Cross-survey hook is ready.** `bp2c_enrolled` + the harmonized 1–10 eNPS (§3.2–3.3) are what enable the Observatorio's "certification premium" headline.
+
+Coordination to manage (not blockers):
+
+1. **Two public LATAM reports** must be named/scoped so they read as complementary, not redundant (market vs. employer).
+2. **Timing.** The BP2C launch is on a hard July 31 runway with a May–June pilot; a salary data point only appears in that launch report if scheduled now, otherwise it contributes to the next wave.
+3. **Keep eNPS at 1–10** on both instruments so the cross-survey comparison stays valid.
+4. **Get on Board data** (vacancies/applications) should feed the Observatorio as workplace/demand signals, framed so it does not shadow the salary product's compensation turf.
 
 ---
 
@@ -747,7 +839,7 @@ This section must be **journalistic, not commercial**. If it reads like an ad, i
 | 36 | `cert_count` | (new) | Number of certifications (Sec 1.6.5) |
 | 37 | `all_technologies` | `dsc_*` + `dataeng_*` + remaining | Optional free-text for granular data (Sec 1.6.6) |
 
-### New Policy & Hook Questions (Sections 2.2–2.7, 3.2)
+### New Policy & Hook Questions (Sections 2.2–2.7, 3.2–3.3)
 
 | Block | # Qs | IDs |
 |-------|-------|-----|
@@ -756,7 +848,10 @@ This section must be **journalistic, not commercial**. If it reads like an ad, i
 | Purchasing power (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
 | Education ROI (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
 | AI impact (2.6) | 4 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_salary_impact` |
-| Gender & diversity pipeline (2.7) | 4 | `first_code_age`, `childhood_computer`, `discrimination_exp`, `identity_visibility` |
+| Gender — Layer A mechanisms, all genders (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
+| Gender — Layer B women-only, exclusive/optional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
+| Gender — Layer C alt-gender-only, exclusive/optional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
+| BP2C cross-survey link (3.3) | 1 | `bp2c_enrolled` |
 | BP2C hook (3.2) | 3 | `enps`, `leave_reason`, `job_search` |
 
 ### Removed Questions
@@ -777,14 +872,16 @@ This section must be **journalistic, not commercial**. If it reads like an ad, i
 
 ### Net Change
 
-**Total final question count: 62 items**
+**Total final question count: 76 defined items** (per-respondent exposure is lower — see note)
 - 12 retained (unchanged or minor option updates)
 - 12 redesigned from existing fields (Sec 1.5)
 - 13 tech stack redesign (Sec 1.6)
-- 25 new policy & hook questions (Secs 2.2–2.7, 3.2)
+- 39 new policy & hook questions (Secs 2.2–2.7, 3.2–3.3), including the 17-item gender block (9 all-gender Layer A + 4 women-only Layer B + 4 alt-gender-only Layer C) and the `bp2c_enrolled` link flag
+
+**Per-respondent exposure:** Layers B and C are mutually exclusive skip-logic branches, so any single respondent sees at most one of them. A respondent therefore answers roughly **64–66** items (the 9 shared Layer-A gender items plus one exclusive branch), not all 76. The exclusive sections are optional.
 - **~165 items removed** (checkboxes, COVID, benefits, redundant compensation fields)
 
-The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with 62 focused questions — each producing high analytical signal per response — while adding entirely new policy-relevant blocks. Estimated completion time drops from 25–35 minutes to 12–15 minutes.
+The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with a focused set of high-signal questions — each producing strong analytical signal per response — while adding entirely new policy-relevant blocks. Because the two exclusive gender sections are skip-logic branches, any single respondent answers roughly 64–66 items. Estimated completion time stays in the 12–15 minute range; respondents who fill an exclusive section add about 1–2 minutes.
 
 ---
 
@@ -796,45 +893,58 @@ A Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026) was run to c
 
 | Metric | Old Design | New Design | Change |
 |--------|-----------|-----------|--------|
-| Survey items | 130 | 62 | −52% |
+| Survey items | 130 | 76 | −42% |
 | Est. completion time | 30 min | 14 min | −53% |
-| Model predictors (k) | 90 | 72 | −20% |
-| Usable responses (after dropout) | 5,066 | 5,695 | +629 |
-| **R²** | **0.340** | **0.490** | **+0.149** |
-| Adjusted R² | 0.328 | 0.483 | +0.155 |
-| Standard error of estimate | $22,928 | $20,158 | −$2,770 |
-| R² per survey item | 0.0026 | 0.0079 | +202% |
-| R² per minute of respondent time | 0.011 | 0.035 | +208% |
-| Effective information (R² × N) | 1,724 | 2,788 | +62% |
-| Mean bootstrap CV (coefficient stability) | 5.17 | 0.69 | −87% |
+| Model predictors (k) | 90 | 81 | −10% |
+| Usable responses (after dropout) | 5,098 | 5,689 | +591 |
+| **R²** | **0.330** | **0.517** | **+0.187** |
+| Adjusted R² | 0.318 | 0.510 | +0.192 |
+| Standard error of estimate | $23,602 | $20,068 | −$3,534 |
+| R² per survey item | 0.0025 | 0.0068 | +168% |
+| R² per minute of respondent time | 0.011 | 0.037 | +235% |
+| Effective information (R² × N) | 1,683 | 2,940 | +75% |
+| Mean bootstrap CV (coefficient stability) | 3.46 | 0.44 | −87% |
 
 ### Where the New R² Comes From
 
-Starting from old-equivalent predictors on new data (R² = 0.268), each new block adds:
+Starting from old-equivalent predictors on new data (R² = 0.260), each new block adds:
 
 | Block | ΔR² | Cumulative R² |
 |-------|-----|---------------|
-| `seniority_level` | **+0.124** | 0.392 |
-| `company_size` | +0.024 | 0.416 |
-| `english_use` | +0.018 | 0.449 |
-| `primary_role` | +0.017 | 0.469 |
-| `industry` | +0.015 | 0.431 |
-| `primary_language` | +0.011 | 0.479 |
-| `cert_depth` | +0.009 | 0.488 |
-| `experience_total + tenure` | +0.003 | 0.452 |
-| `tech_depth` | +0.002 | 0.490 |
+| `seniority_level` | **+0.131** | 0.391 |
+| `company_size` | +0.022 | 0.413 |
+| `primary_role` | +0.019 | 0.459 |
+| `industry` | +0.013 | 0.426 |
+| `english_use` | +0.012 | 0.438 |
+| `primary_language` | +0.012 | 0.471 |
+| `gender_mechanisms (Layer A)` | **+0.039** | 0.517 |
+| `cert_depth` | +0.007 | 0.477 |
+| `experience_total + tenure` | +0.002 | 0.439 |
+| `tech_depth` | +0.001 | 0.478 |
 
-**`seniority_level` alone adds +12.4 pp** — more than all tech-stack questions combined. This single field, absent from the old survey, is the largest analytical gap closed by the redesign.
+**`seniority_level` alone adds +13.1 pp** — more than all tech-stack questions combined. This single field, absent from the old survey, is the largest analytical gap closed by the redesign. **The Layer A gender mechanisms are the second-largest block (+3.9 pp)** — they both lift R² and let the model decompose the gender gap (below).
+
+### Decomposing the Gender Gap (Layer A)
+
+The all-gender Layer A mechanisms (negotiation, pay transparency, promotion, sponsorship, care load, career interruption, discrimination experience, early access) let the model split the raw gender gap into explained and unexplained parts:
+
+| Component | MXN/month | % of raw gap |
+|-----------|-----------|--------------|
+| Raw gap (`is_female` only) | −13,705 | 100% |
+| Explained by Layer A mechanisms | −6,223 | 45% |
+| Unexplained gap remaining | −7,482 | 55% |
+
+**Layer A accounts for ~45% of the raw gender gap.** The remaining 55% is the residual that survives controls — the figure most relevant to discrimination advocacy. Without Layer A the survey could only report the raw gap; with it, the gap becomes a decomposition.
 
 ### Key Takeaways
 
 1. **3× information density per minute.** Respondents deliver 3× more analytical value per minute spent. The checkbox purge is responsible for most of this.
 2. **87% more stable coefficients.** Eliminating sparse binary predictors removes the wild coefficient swings that made individual technology effects unreliable in the old model.
 3. **+629 usable responses.** The shorter survey retains respondents who would have abandoned mid-way through the checkbox section, reducing selection bias toward senior, male, CDMX-based respondents.
-4. **The 25 policy questions are not modeled.** The new policy blocks (formality, cross-border, purchasing power, education ROI, AI impact, gender pipeline) are designed to produce standalone findings, not salary predictors. Their value is not captured by R² but by the advocacy artifacts they enable.
+4. **The policy questions are not modeled.** The new policy blocks (formality, cross-border, purchasing power, education ROI, AI impact, gender) are designed to produce standalone findings, not salary predictors — with one exception: the all-gender Layer A mechanisms (negotiation, transparency, promotion, sponsorship, care load) *do* enter the model to decompose the gender gap. The exclusive Layers B and C never do. Their value is not captured by R² but by the advocacy artifacts they enable.
 
 ### Caveats
 
-- Results are from synthetic data calibrated to 2020–2022 effect sizes. Absolute R² values (0.49) should not be cited as predictions; the *relative* comparison between designs is the meaningful finding.
+- Results are from synthetic data calibrated to 2020–2022 effect sizes. Absolute R² values (0.52) should not be cited as predictions; the *relative* comparison between designs is the meaningful finding.
 - Completion rates (85% old, 95% new) are estimates from survey methodology literature, not measured from the actual instrument.
 - VIF is higher in the new design (mean 2.58 vs 1.35) because meaningful predictors are correlated with each other. No variable exceeds VIF=10. The old design's low VIF reflects sparse near-orthogonal noise, not better conditioning.

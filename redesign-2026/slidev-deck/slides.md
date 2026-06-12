@@ -27,7 +27,7 @@ transition: fade-out
 
 <v-clicks>
 
-- BP2C acaba de completar su rediseño (45 preguntas, Marco de 6 Palancas)
+- BP2C (ahora **Best Place to Create**) acaba de completar su rediseño (45 preguntas, Marco de 6 Palancas)
 - Las dos encuestas **se traslapan**: beneficios, trabajo remoto, tipo de organización — misma perspectiva
 - Los encuestados que contestan ambas: *"¿No ya contesté esto?"*
 - El diseño de ~130 checkboxes produce **rendimientos analíticos decrecientes**
@@ -101,14 +101,14 @@ layoutClass: gap-8
 - Arquitectura rol-primero que reemplaza ~100 checkboxes
 
 **25 preguntas nuevas de política pública**
-- 6 bloques para advocacy de AMITI + 3 gancho BP2C
+- 6 bloques para advocacy de AMITI + gancho y vínculo con BP2C
 
 </v-clicks>
 
 <v-click>
 
 <div class="mt-4 p-3 bg-blue-600 text-white rounded-lg text-center text-lg font-bold">
-62 ítems totales (antes eran ~130)
+76 ítems definidos · ≈64–66 por persona (antes eran ~130)
 </div>
 
 </v-click>
@@ -133,7 +133,7 @@ La encuesta anterior tenía `profile`: godín / independiente / emprendedor / di
 <v-click>
 
 <div class="mt-6 p-4 bg-amber-600 text-white rounded-lg text-center">
-<div class="text-3xl font-bold">+12.4 puntos porcentuales de R²</div>
+<div class="text-3xl font-bold">+13.1 puntos porcentuales de R²</div>
 <div class="text-sm mt-1">con este solo campo — más que todas las preguntas de tecnología juntas</div>
 </div>
 
@@ -211,7 +211,7 @@ layoutClass: gap-8
 | 💰 Poder Adquisitivo | 3 | Índice de salarios reales ciudad por ciudad |
 | 🎓 ROI Educativo | 4 | Prima de título con controles modernos |
 | 🤖 Impacto de IA | 4 | Primer benchmark de adopción IA en LatAm |
-| ⚖️ Pipeline de Género | 4 | Diagnóstico: pipeline vs. discriminación |
+| ⚖️ Género y Diversidad | 17 | 9 mecanismos a todos los géneros + 2 secciones exclusivas |
 
 <v-click>
 
@@ -223,15 +223,36 @@ Cada bloque → posición de advocacy pre-redactada para que AMITI lleve a STPS,
 
 ---
 
-# Gancho BP2C: La Brecha de Satisfacción
-
-Tres preguntas **solo de resultado** agregadas:
+# Género y Diversidad: Tres Capas
 
 <v-clicks>
 
-- **eNPS** (0–10): "¿Qué tan probable es que recomiendes a tu empleador?"
+- **Capa A — todos los géneros (9 ítems, alimenta el modelo):** negociación, transparencia salarial, promociones, patrocinio, carga de cuidado, interrupción de carrera, edad de inicio. En simulación explica **~45% de la brecha cruda** (−$13,705 → −$7,482 no explicado).
+- **Capa B — solo mujeres (exclusiva, opcional):** maternidad, ser la única en el equipo, seguridad/acoso, redes de mujeres en tech.
+- **Capa C — solo género alternativo (exclusiva, opcional):** visibilidad, misgendering, políticas inclusivas, discriminación por identidad.
+
+</v-clicks>
+
+<v-click>
+
+<div class="mt-4 p-3 bg-gray-600 text-white rounded-lg text-center text-sm">
+Solo la Capa A entra a la regresión. B y C son descriptivas, con "prefiero no contestar" en cada ítem y supresión de celdas pequeñas.
+</div>
+
+</v-click>
+
+---
+
+# Gancho BP2C: La Brecha de Satisfacción
+
+Tres preguntas **solo de resultado** + una bandera de vínculo:
+
+<v-clicks>
+
+- **eNPS** (1–10): "¿Qué tan probable es que recomiendes a tu empleador?" — *misma escala que BP2C*
 - **leave_reason**: "¿Cuál sería la razón principal por la que te irías?"
 - **job_search**: "¿Estás buscando trabajo activamente?"
+- **bp2c_enrolled**: "¿Tu empleador está inscrito en Best Place to Create?" (Sí/No/No sé) — sin PII, permite comparar certificados vs. no certificados
 
 </v-clicks>
 
@@ -258,18 +279,43 @@ Un salario alto por sí solo no predice satisfacción."
 
 ---
 
+# Alineación con el Relanzamiento de BP2C
+
+Marketing relanza BP2C como el **Observatorio del Trabajo Técnico** (31 de julio). Las dos encuestas son las dos mitades del observatorio:
+
+<v-clicks>
+
+- **Encuesta de Salarios** = radiografía del **MERCADO** (compensación, geografía, formalidad, IA en el individuo)
+- **BP2C** = radiografía del **EMPLEADOR** (6 Palancas, calidad del lugar de trabajo, retención)
+- Rebrand ya coincide: **Best Place to Create**
+- Gancho listo: `bp2c_enrolled` + eNPS 1–10 → titular de "premium por certificación"
+
+</v-clicks>
+
+<v-click>
+
+<div class="mt-6 p-4 bg-gray-600 text-white rounded-lg">
+<div class="text-base">
+A coordinar: <b>dos reportes públicos</b> deben leerse como complementarios · <b>tiempos</b> (piloto mayo–junio, lanzamiento 31 jul) · mantener <b>eNPS 1–10</b> en ambos · datos de <b>Get on Board</b> como señal de empleador, no de salario.
+</div>
+</div>
+
+</v-click>
+
+---
+
 # Simulación: Resultados Principales
 
 Monte Carlo · n=6,000 · Calibrado con tamaños de efecto reales 2020–2022
 
 | Métrica | Anterior | Nuevo | Cambio |
 |---------|--------:|------:|-------:|
-| Ítems de encuesta | 130 | 62 | **−52%** |
+| Ítems de encuesta | 130 | 76 | **−42%** |
 | Tiempo de llenado | 30 min | 14 min | **−53%** |
-| Predictores del modelo | 90 | 72 | −20% |
-| Respuestas utilizables | 5,066 | 5,695 | +629 |
-| **R²** | **0.340** | **0.490** | **+44%** |
-| R² ajustada | 0.328 | 0.483 | +47% |
+| Predictores del modelo | 90 | 81 | −10% |
+| Respuestas utilizables | 5,098 | 5,689 | +591 |
+| **R²** | **0.330** | **0.517** | **+57%** |
+| R² ajustada | 0.318 | 0.510 | +60% |
 
 ---
 
@@ -277,10 +323,10 @@ Monte Carlo · n=6,000 · Calibrado con tamaños de efecto reales 2020–2022
 
 | Métrica | Anterior | Nuevo | Mejora |
 |---------|--------:|------:|:------:|
-| R² por ítem | 0.003 | 0.008 | **+202%** |
-| R² por minuto | 0.011 | 0.035 | **+208%** |
-| Info efectiva (R² × N) | 1,724 | 2,788 | **+62%** |
-| Estabilidad de coef. (CV) | 5.17 | 0.69 | **−87%** |
+| R² por ítem | 0.003 | 0.007 | **+168%** |
+| R² por minuto | 0.011 | 0.037 | **+235%** |
+| Info efectiva (R² × N) | 1,683 | 2,940 | **+75%** |
+| Estabilidad de coef. (CV) | 3.46 | 0.44 | **−87%** |
 
 <v-click>
 
@@ -296,18 +342,18 @@ Cada minuto del encuestado entrega 3× más señal analítica
 
 # ¿De dónde viene la R²?
 
-Partiendo de la línea base equivalente al diseño anterior (R² = 0.268):
+Partiendo de la línea base equivalente al diseño anterior (R² = 0.260):
 
 | Bloque agregado | ΔR² | Notas |
 |-----------------|-----:|-------|
-| **seniority_level** | **+12.4 pp** | **> todas las Qs de tech juntas** |
-| company_size | +2.4 pp | Ausente en encuesta anterior |
-| english_use | +1.8 pp | 1 pregunta, alta señal |
-| primary_role | +1.7 pp | Reemplaza 26 checkboxes |
-| industry | +1.5 pp | Ausente en encuesta anterior |
-| primary_language | +1.1 pp | Reemplaza 20 checkboxes |
-| cert_depth | +0.9 pp | Reemplaza 27 checkboxes |
-| Otros | +0.5 pp | experience_total, tenure, tech_depth |
+| **seniority_level** | **+13.1 pp** | **> todas las Qs de tech juntas** |
+| **gender_mechanisms (Capa A)** | **+3.9 pp** | **2º bloque; descompone la brecha** |
+| company_size | +2.2 pp | Ausente en encuesta anterior |
+| primary_role | +1.9 pp | Reemplaza 26 checkboxes |
+| industry | +1.3 pp | Ausente en encuesta anterior |
+| english_use | +1.2 pp | 1 pregunta, alta señal |
+| primary_language | +1.2 pp | Reemplaza 20 checkboxes |
+| Otros | +1.0 pp | cert_depth, experience, tenure, tech_depth |
 
 ---
 layout: two-cols
@@ -432,7 +478,7 @@ class: text-center
 | Archivo | Propósito |
 |---------|-----------|
 | `REDESIGN_2026.md` | Justificación completa (3 objetivos) |
-| `question_inventory_2026.csv` | 62 ítems bilingüe |
+| `question_inventory_2026.csv` | 76 ítems bilingüe |
 | `SIMULATION_FINDINGS.md` | Análisis detallado de simulación |
 | `simulation_old_vs_new.py` | Script de simulación reproducible |
 | `simulation_results/` | CSVs de resultados crudos |

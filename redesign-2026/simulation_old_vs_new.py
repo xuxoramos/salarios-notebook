@@ -112,6 +112,23 @@ primary_lang_years = np.minimum(experience_tech, np.random.exponential(4, N).cli
 tech_breadth = np.random.choice(range(1, 8), N, p=[0.15, 0.25, 0.25, 0.15, 0.10, 0.05, 0.05])
 
 # ────────────────────────────────────────────────────────────────
+# Gender Layer A mechanism block (Oaxaca-Blinder gap decomposition)
+# ────────────────────────────────────────────────────────────────
+# All-gender mechanism questions (inventory orders 56-64). These are
+# partly driven by gender and carry real salary signal, so they let the
+# model decompose the raw gender gap into "explained" channels.
+# Ordinal items coded low->high; binaries 0/1.
+first_code_age = (np.random.normal(16, 4, N) + is_female * 1.5).clip(6, 40).round(0)        # women start later (access)
+childhood_computer = np.clip(np.round(np.random.normal(1.0, 0.7, N) - is_female * 0.4), 0, 2)  # 0=No,1=shared,2=own
+negotiated_salary = np.clip(np.round(np.random.normal(1.0, 0.8, N) - is_female * 0.5), 0, 2)    # 0=no chance,1=no,2=yes
+pay_transparency = np.clip(np.round(np.random.normal(1.0, 0.7, N) - is_female * 0.2), 0, 2)     # 0=no,1=approx,2=open
+promoted_2y = np.random.binomial(1, (0.35 - is_female * 0.08).clip(0.05, 0.95), N)               # promoted last 2y
+has_sponsor = np.random.binomial(1, (0.40 - is_female * 0.10).clip(0.05, 0.95), N)               # mentor/sponsor
+caregiving_load = np.clip(np.round(np.random.normal(0.6, 0.7, N) + is_female * 0.6), 0, 2)        # 0=no,1=shared,2=primary
+career_interruption = np.random.binomial(1, (0.18 + is_female * 0.12).clip(0.02, 0.95), N)        # paused career
+discrimination_exp = np.clip(np.round(np.random.normal(0.4, 0.6, N) + is_female * 0.7), 0, 2)     # 0=no,1=once,2=frequent
+
+# ────────────────────────────────────────────────────────────────
 # PART 1: True salary DGP
 # ────────────────────────────────────────────────────────────────
 base = 25000  # base intercept
@@ -122,7 +139,16 @@ salary = (
     + 7305 * english                                            # +$7,305/level (multivariate)
     + 3000 * english_use_score                                  # behavioral anchor adds signal
     + is_remote * 12213                                         # +$12,213 remote (multivariate)
-    + is_female * -12442                                        # -$12,442 gender gap
+    + is_female * -6000                                         # direct (unexplained) gender gap; rest flows via Layer A
+    + first_code_age * -250                                     # Layer A: later first code -> lower pay
+    + childhood_computer * 1500                                 # Layer A: early computer access
+    + negotiated_salary * 2800                                  # Layer A: salary negotiation
+    + pay_transparency * 900                                    # Layer A: pay-info access
+    + promoted_2y * 6500                                        # Layer A: recent advancement
+    + has_sponsor * 4200                                        # Layer A: sponsorship
+    + caregiving_load * -3200                                   # Layer A: caregiving load
+    + career_interruption * -5500                               # Layer A: career interruption
+    + discrimination_exp * -1600                                # Layer A: discrimination experience
     + np.array([city_premium[c] for c in city])
     + np.array([seniority_premium[s] for s in seniority_level])
     + np.array([company_size_premium[s] for s in company_size])
@@ -274,6 +300,15 @@ new_X = pd.DataFrame({
     "cert_count": cert_count.astype(float),
     "primary_lang_years": primary_lang_years,
     "tech_breadth": tech_breadth.astype(float),
+    "first_code_age": first_code_age,
+    "childhood_computer": childhood_computer,
+    "negotiated_salary": negotiated_salary,
+    "pay_transparency": pay_transparency,
+    "promoted_2y": promoted_2y.astype(float),
+    "has_sponsor": has_sponsor.astype(float),
+    "caregiving_load": caregiving_load,
+    "career_interruption": career_interruption.astype(float),
+    "discrimination_exp": discrimination_exp,
 })
 new_X = pd.concat([new_X, new_city_dummies, new_seniority_dummies, new_company_dummies,
                     new_industry_dummies, new_role_dummies, new_lang_dummies,
@@ -522,7 +557,7 @@ print("=" * 70)
 
 # Survey items (not predictors — respondent-facing questions)
 old_items = 130  # ~18 Ben + 5 COVID + ~80 tech checkboxes + 27 certs + ~26 acts + ~14 core
-new_items = 62
+new_items = 76
 
 old_minutes = 30  # estimated
 new_minutes = 14  # estimated from REDESIGN_2026.md
@@ -576,6 +611,9 @@ blocks = {
     "work_arrangement (expanded)": new_X_complete.filter(like="work_"),
     "cert_depth (has + count)": new_X_complete[["has_certs", "cert_count"]],
     "tech_depth (lang_yrs + breadth)": new_X_complete[["primary_lang_years", "tech_breadth"]],
+    "gender_mechanisms (Layer A)": new_X_complete[["first_code_age", "childhood_computer",
+        "negotiated_salary", "pay_transparency", "promoted_2y", "has_sponsor",
+        "caregiving_load", "career_interruption", "discrimination_exp"]],
 }
 
 incremental_results = []
@@ -601,6 +639,46 @@ for block_name, block_df in blocks.items():
 
 print(f"\nTotal R² gained from new predictors: {prev_r2 - base_r2:+.4f} "
       f"({base_r2:.4f} → {prev_r2:.4f})")
+
+# ────────────────────────────────────────────────────────────────
+# PART 10b: Gender gap decomposition (what Layer A is for)
+# ────────────────────────────────────────────────────────────────
+print()
+print("=" * 70)
+print("GENDER GAP DECOMPOSITION (Layer A mechanisms)")
+print("=" * 70)
+
+mech_cols = ["first_code_age", "childhood_computer", "negotiated_salary",
+             "pay_transparency", "promoted_2y", "has_sponsor",
+             "caregiving_load", "career_interruption", "discrimination_exp"]
+
+# Raw gap: salary ~ is_female alone
+Xg0 = np.column_stack([np.ones(new_n), new_X_complete[["is_female"]].values.astype(float)])
+cg0, _, _, _ = lstsq(Xg0, new_y_complete, rcond=None)
+raw_gap = cg0[1]
+
+# Adjusted gap: salary ~ is_female + Layer A mechanisms
+Xg1 = np.column_stack([np.ones(new_n),
+        new_X_complete[["is_female"] + mech_cols].values.astype(float)])
+cg1, _, _, _ = lstsq(Xg1, new_y_complete, rcond=None)
+adj_gap = cg1[1]
+
+explained = raw_gap - adj_gap
+print(f"\n  Raw gender gap (is_female only):        {raw_gap:>12,.0f}")
+print(f"  Adjusted gap (+ Layer A mechanisms):    {adj_gap:>12,.0f}")
+print(f"  Explained by Layer A mechanisms:        {explained:>12,.0f} "
+      f"({explained/raw_gap*100:.0f}% of raw gap)")
+print(f"  Unexplained gap remaining:              {adj_gap:>12,.0f} "
+      f"({adj_gap/raw_gap*100:.0f}% of raw gap)")
+
+decomposition_df = pd.DataFrame({
+    "Component": ["Raw gap (is_female only)", "Adjusted gap (+ Layer A)",
+                  "Explained by Layer A", "Unexplained remaining"],
+    "MXN": [round(raw_gap), round(adj_gap), round(explained), round(adj_gap)],
+    "Pct_of_raw": [100, round(adj_gap/raw_gap*100), round(explained/raw_gap*100),
+                   round(adj_gap/raw_gap*100)],
+})
+decomposition_df.to_csv(os.path.join(OUT_DIR, "gender_gap_decomposition.csv"), index=False)
 
 # ────────────────────────────────────────────────────────────────
 # PART 11: Save results to CSV
@@ -641,6 +719,7 @@ print("=" * 70)
 print(f"Results saved to {OUT_DIR}/")
 print("  comparison_summary.csv  — side-by-side metrics")
 print("  incremental_r2.csv      — R² gain per new block")
+print("  gender_gap_decomposition.csv — raw vs adjusted gender gap (Layer A)")
 print("  old_vif.csv             — VIF values for old design")
 print("  new_vif.csv             — VIF values for new design")
 print("=" * 70)
