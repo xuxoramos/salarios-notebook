@@ -108,7 +108,7 @@ layoutClass: gap-8
 <v-click>
 
 <div class="mt-4 p-3 bg-blue-600 text-white rounded-lg text-center text-lg font-bold">
-76 ítems definidos · ≈64–66 por persona (antes eran ~130)
+77 ítems definidos · ≈64–66 por persona (antes eran ~130)
 </div>
 
 </v-click>
@@ -310,7 +310,7 @@ Monte Carlo · n=6,000 · Calibrado con tamaños de efecto reales 2020–2022
 
 | Métrica | Anterior | Nuevo | Cambio |
 |---------|--------:|------:|-------:|
-| Ítems de encuesta | 130 | 76 | **−42%** |
+| Ítems de encuesta | 130 | 77 | **−41%** |
 | Tiempo de llenado | 30 min | 14 min | **−53%** |
 | Predictores del modelo | 90 | 81 | −10% |
 | Respuestas utilizables | 5,098 | 5,689 | +591 |
@@ -478,7 +478,7 @@ class: text-center
 | Archivo | Propósito |
 |---------|-----------|
 | `REDESIGN_2026.md` | Justificación completa (3 objetivos) |
-| `question_inventory_2026.csv` | 76 ítems bilingüe |
+| `question_inventory_2026.csv` | 77 ítems bilingüe |
 | `SIMULATION_FINDINGS.md` | Análisis detallado de simulación |
 | `simulation_old_vs_new.py` | Script de simulación reproducible |
 | `simulation_results/` | CSVs de resultados crudos |

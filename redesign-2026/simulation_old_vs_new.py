@@ -557,7 +557,7 @@ print("=" * 70)
 
 # Survey items (not predictors — respondent-facing questions)
 old_items = 130  # ~18 Ben + 5 COVID + ~80 tech checkboxes + 27 certs + ~26 acts + ~14 core
-new_items = 76
+new_items = 77
 
 old_minutes = 30  # estimated
 new_minutes = 14  # estimated from REDESIGN_2026.md

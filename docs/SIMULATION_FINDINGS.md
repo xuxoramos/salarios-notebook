@@ -1,7 +1,7 @@
 # Simulation Results: Old Survey vs. 2026 Redesign
 
 **Date:** 2026-03-11
-**Updated:** 2026-06-12 (Layer A gender mechanisms added as model predictors; new design now 76 items)
+**Updated:** 2026-06-14 (AI role-transition items added: `ai_role_status` + `ai_specialization` replace `ai_salary_impact`; new design now 77 items)
 **Method:** Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026)
 **Script:** `simulation_old_vs_new.py`
 **Outputs:** `simulation_results/` (CSVs with full numbers)
@@ -14,7 +14,7 @@ The redesigned 2026 survey achieves **higher explanatory power with fewer questi
 
 | Metric | Old Design | New Design | Change |
 |--------|-----------|-----------|--------|
-| Survey items | 130 | 76 | −42% |
+| Survey items | 130 | 77 | −41% |
 | Est. completion time | 30 min | 14 min | −53% |
 | Model predictors (k) | 90 | 81 | −10% |
 | Usable responses (after dropout) | 5,098 | 5,689 | +591 |
@@ -22,7 +22,7 @@ The redesigned 2026 survey achieves **higher explanatory power with fewer questi
 | Adjusted R² | 0.3181 | 0.5097 | +0.192 |
 | Standard error of estimate | $23,602 | $20,068 | −$3,534 |
 
-The redesign explains **57% more salary variance** than the old design while asking **42% fewer questions** and completing in **half the time**.
+The redesign explains **57% more salary variance** than the old design while asking **41% fewer questions** and completing in **half the time**.
 
 ---
 

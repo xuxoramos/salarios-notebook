@@ -251,7 +251,7 @@ The current tech blocks are the longest part of the survey (~100+ binary checkbo
 | `primary_role` | ¿Cuál es tu rol o actividad principal? | Single | Backend Dev / Frontend Dev / Fullstack Dev / Mobile Dev / Data Science-ML / Data Engineering / DevOps-Infra-SRE / InfoSec / Architecture / PM / QA-Testing / UXD / Direction-Strategy / AI-ML Engineering / Support / Other |
 | `secondary_role` | ¿Tienes un rol secundario? | Single | Same options + "No tengo rol secundario" |
 
-**Why:** The causal model needs **one** role per person to estimate role effects cleanly. Multi-select forces overlapping dummy variables. 2 questions replace 26 checkboxes.
+**Why:** The causal model needs **one** role per person to estimate role effects cleanly. Multi-select forces overlapping dummy variables. 2 questions replace 26 checkboxes. AI sub-roles are deliberately kept out of this list and captured instead by the gated `ai_specialization` item (Sec 2.6), so the role taxonomy stays current without fragmenting `primary_role` into sparse cells.
 
 #### 1.6.3 Step 2: Replace Individual Tech Lists with Primary Stack
 
@@ -453,7 +453,10 @@ AMITI already runs education partnership programs with ANUIES (the national univ
 | `ai_tools_use` | ¿Utilizas herramientas de IA (Copilot, ChatGPT, etc.) como parte regular de tu trabajo? | Single | Sí, diariamente / Sí, semanalmente / Ocasionalmente / No |
 | `ai_task_change` | ¿Han cambiado las tareas que realizas debido a herramientas de IA? | Single | Sí, hago tareas de mayor nivel / Sí, hago las mismas tareas más rápido / Sí, algunas tareas ya no las hago / No ha cambiado |
 | `ai_skill_confidence` | ¿Qué tan confiado/a estás en que tus habilidades actuales seguirán siendo relevantes en 3 años? | Likert 1–5 | 1=Nada confiado ... 5=Totalmente confiado |
-| `ai_salary_impact` | ¿Consideras que tu uso de herramientas de IA ha contribuido a mejorar tu compensación? | Single | Sí, directamente / Probablemente sí / No creo / Definitivamente no |
+| `ai_role_status` | ¿Tu rol actual es un rol de IA? | Single | No / Sí, cambié a un rol nuevo de IA / Sí, mi rol tradicional se transformó hacia IA |
+| `ai_specialization` (gated) | ¿Cuál es tu especialización principal de IA? | Single | ML-AI Engineer / GenAI-LLM-Agent Engineer / MLOps-AI Platform Engineer / AI Product Manager / Responsible AI-Governance |
+
+**Role-transition design (grounded in 2025 industry data):** `ai_role_status` distinguishes the three phenomena the AI boom produced — net-new AI roles, traditional roles transformed toward AI, and unchanged roles. `ai_specialization` is a gated single-select shown only to AI-role respondents (or those who picked AI-ML Engineering in `primary_role`), so it captures the role taxonomy without exploding `primary_role` into sparse buckets. The five-category taxonomy (ML/AI Engineer; GenAI/LLM/Agent Engineer; MLOps/AI Platform; AI Product Manager; Responsible AI/Governance) follows Gartner's AI Engineering and AI TRiSM frameworks and the WEF *Future of Jobs Report 2025*, which ranks AI and machine-learning specialists among the fastest-growing roles and AI/big-data as the No. 1 rising skill set through 2030. The split between net-new and transformed roles operationalizes McKinsey's *State of AI* (Nov 2025) finding that AI hiring concentrates in existing software- and data-engineering roles rather than exotic new titles — i.e. most AI roles are *converted*, not created.
 
 **Separation from BP2C (Goal 1 compliance):**
 
@@ -471,7 +474,7 @@ The key reframe: AI adoption is not a threat to be managed — it is a **competi
 
 - **Employer investment ROI:** If the data shows that developers whose employers provide AI training (detectable via `recent_training` cross-tabulated with `ai_tools_use`) have higher `ai_skill_confidence` and lower `job_search` intent, AMITI can argue: "Companies investing in AI training retain developers X% longer. A tax credit for AI reskilling programs benefits the entire sector."
 - **Adoption velocity as a competitiveness metric:** Cross-tabulate `ai_tools_use` by `orgtype`, `city`, and `employer_hq` to map where AI adoption is fastest and slowest. AMITI can present this to SE: "Mexico's AI adoption rate among developers is X% vs. Y% in Brazil/India — here's what's needed to close the gap."
-- **Productivity gains and capture:** `ai_salary_impact` measures whether productivity gains from AI translate into worker compensation or are captured entirely by employers. If gains are not shared, AMITI can proactively recommend profit-sharing norms before regulation is imposed externally.
+- **Conversion vs. hiring:** `ai_role_status` measures how many AI roles are internal transformations of existing staff versus net-new hires. Cross-tabulated with `recent_training`, if most are conversions AMITI gains a reskilling-policy argument: "X% of AI roles are reconverted talent, not new hires — a tax credit for AI reskilling scales the domestic AI workforce faster than importing it."
 
 **AMITI-actionable recommendations:**
 - **Propose to STPS/SE:** A tax deduction for AI reskilling programs (modeled on the existing STPS training incentive, expanded for AI-specific content). The data quantifies the training gap and the retention ROI.
@@ -847,7 +850,7 @@ Coordination to manage (not blockers):
 | Cross-border dynamics (2.3) | 4 | `employer_hq`, `payment_currency`, `cross_border_contract`, `cross_border_tax` |
 | Purchasing power (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
 | Education ROI (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
-| AI impact (2.6) | 4 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_salary_impact` |
+| AI impact (2.6) | 5 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
 | Gender — Layer A mechanisms, all genders (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
 | Gender — Layer B women-only, exclusive/optional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
 | Gender — Layer C alt-gender-only, exclusive/optional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
@@ -872,13 +875,13 @@ Coordination to manage (not blockers):
 
 ### Net Change
 
-**Total final question count: 76 defined items** (per-respondent exposure is lower — see note)
+**Total final question count: 77 defined items** (per-respondent exposure is lower — see note)
 - 12 retained (unchanged or minor option updates)
 - 12 redesigned from existing fields (Sec 1.5)
 - 13 tech stack redesign (Sec 1.6)
-- 39 new policy & hook questions (Secs 2.2–2.7, 3.2–3.3), including the 17-item gender block (9 all-gender Layer A + 4 women-only Layer B + 4 alt-gender-only Layer C) and the `bp2c_enrolled` link flag
+- 40 new policy & hook questions (Secs 2.2–2.7, 3.2–3.3), including the 17-item gender block (9 all-gender Layer A + 4 women-only Layer B + 4 alt-gender-only Layer C) and the `bp2c_enrolled` link flag
 
-**Per-respondent exposure:** Layers B and C are mutually exclusive skip-logic branches, so any single respondent sees at most one of them. A respondent therefore answers roughly **64–66** items (the 9 shared Layer-A gender items plus one exclusive branch), not all 76. The exclusive sections are optional.
+**Per-respondent exposure:** Layers B and C are mutually exclusive skip-logic branches, so any single respondent sees at most one of them. A respondent therefore answers roughly **64–66** items (the 9 shared Layer-A gender items plus one exclusive branch), not all 77. The exclusive sections are optional. `ai_specialization` is gated, so it adds to exposure only for AI-role respondents.
 - **~165 items removed** (checkboxes, COVID, benefits, redundant compensation fields)
 
 The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with a focused set of high-signal questions — each producing strong analytical signal per response — while adding entirely new policy-relevant blocks. Because the two exclusive gender sections are skip-logic branches, any single respondent answers roughly 64–66 items. Estimated completion time stays in the 12–15 minute range; respondents who fill an exclusive section add about 1–2 minutes.
@@ -893,7 +896,7 @@ A Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026) was run to c
 
 | Metric | Old Design | New Design | Change |
 |--------|-----------|-----------|--------|
-| Survey items | 130 | 76 | −42% |
+| Survey items | 130 | 77 | −41% |
 | Est. completion time | 30 min | 14 min | −53% |
 | Model predictors (k) | 90 | 81 | −10% |
 | Usable responses (after dropout) | 5,098 | 5,689 | +591 |

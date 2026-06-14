@@ -251,7 +251,7 @@ Los bloques de tecnología actuales son la parte más larga del encuesta (~100+ 
 | `primary_role` | ¿Cuál es tu rol o actividad principal? | Selección única | Backend Dev / Frontend Dev / Fullstack Dev / Mobile Dev / Data Science-ML / Data Engineering / DevOps-Infra-SRE / InfoSec / Architecture / PM / QA-Testing / UXD / Direction-Strategy / AI-ML Engineering / Support / Other |
 | `secondary_role` | ¿Tienes un rol secundario? | Selección única | Mismas opciones + "No tengo rol secundario" |
 
-**Por qué:** El modelo causal necesita **un** rol por persona para estimar efectos limpios. Selección múltiple obliga a dummies traslapadas. 2 preguntas reemplazan 26 casillas.
+**Por qué:** El modelo causal necesita **un** rol por persona para estimar efectos limpios. Selección múltiple obliga a dummies traslapadas. 2 preguntas reemplazan 26 casillas. Los subroles de IA se mantienen deliberadamente fuera de esta lista y se capturan en el ítem `ai_specialization` con lógica de salto (Sec 2.6), para que la taxonomía de roles esté al día sin fragmentar `primary_role` en celdas dispersas.
 
 #### 1.6.3 Paso 2: Reemplazar Listas por Stack Principal
 
@@ -454,7 +454,10 @@ AMITI ya corre programas de colaboración con ANUIES. Las variables `education` 
 | `ai_tools_use` | ¿Utilizas herramientas de IA (Copilot, ChatGPT, etc.) como parte regular de tu trabajo? | Selección única | Sí, diariamente / Sí, semanalmente / Ocasionalmente / No |
 | `ai_task_change` | ¿Han cambiado las tareas que realizas debido a herramientas de IA? | Selección única | Sí, hago tareas de mayor nivel / Sí, hago las mismas tareas más rápido / Sí, algunas tareas ya no las hago / No ha cambiado |
 | `ai_skill_confidence` | ¿Qué tan confiado/a estás en que tus habilidades actuales seguirán siendo relevantes en 3 años? | Likert 1–5 | 1=Nada confiado ... 5=Totalmente confiado |
-| `ai_salary_impact` | ¿Consideras que tu uso de herramientas de IA ha contribuido a mejorar tu compensación? | Selección única | Sí, directamente / Probablemente sí / No creo / Definitivamente no |
+| `ai_role_status` | ¿Tu rol actual es un rol de IA? | Selección única | No / Sí, cambié a un rol nuevo de IA / Sí, mi rol tradicional se transformó hacia IA |
+| `ai_specialization` (con salto) | ¿Cuál es tu especialización principal de IA? | Selección única | ML-AI Engineer / GenAI-LLM-Agent Engineer / MLOps-AI Platform Engineer / AI Product Manager / Responsible AI-Governance |
+
+**Diseño de transición de rol (con base en data de industria 2025):** `ai_role_status` distingue los tres fenómenos que produjo el boom de IA — roles de IA nuevos, roles tradicionales transformados hacia IA, y roles sin cambio. `ai_specialization` es una selección única con lógica de salto, mostrada solo a quienes tienen rol de IA (o eligieron AI-ML Engineering en `primary_role`), de modo que captura la taxonomía de roles sin fragmentar `primary_role` en categorías dispersas. La taxonomía de cinco categorías (ML/AI Engineer; GenAI/LLM/Agent Engineer; MLOps/AI Platform; AI Product Manager; Responsible AI/Governance) sigue los marcos de Gartner (AI Engineering y AI TRiSM) y el WEF *Future of Jobs Report 2025*, que ubica a los especialistas en IA y machine learning entre los roles de mayor crecimiento y a IA/big-data como la habilidad #1 en ascenso hacia 2030. La división entre roles nuevos y transformados operacionaliza el hallazgo de McKinsey *State of AI* (nov 2025): la contratación de IA se concentra en roles ya existentes de ingeniería de software y datos, no en títulos exóticos — es decir, la mayoría de los roles de IA son *reconvertidos*, no creados.
 
 **Separación de BP2C (cumplimiento Objetivo 1):**
 
@@ -472,7 +475,7 @@ El reencuadre clave: la adopción de IA no es una amenaza a gestionar — es una
 
 - **ROI de inversión del empleador:** Si los datos muestran que devs cuyos empleadores ofrecen capacitación en IA (detectable vía `recent_training` cruzado con `ai_tools_use`) tienen mayor `ai_skill_confidence` y menor intención de búsqueda (`job_search`), AMITI puede argumentar: "La capacitación en IA retiene desarrolladores X% más. Un crédito fiscal para reskilling en IA beneficia al sector".
 - **Velocidad de adopción como métrica competitiva:** Cruzar `ai_tools_use` por `orgtype`, `city` y `employer_hq` para mapear dónde la adopción es rápida o lenta. AMITI puede presentar a SE: "La adopción de IA en México es X% vs. Y% en Brasil/India — esto se necesita para cerrar la brecha".
-- **Captura de productividad:** `ai_salary_impact` mide si las ganancias de productividad se traducen en compensación o se quedan en el empleador. Si no se comparten, AMITI puede recomendar normas de profit-sharing antes de regulación externa.
+- **Reconversión vs. contratación:** `ai_role_status` mide cuántos roles de IA son transformaciones internas de personal existente frente a contrataciones nuevas. Cruzado con `recent_training`, si la mayoría son reconversiones AMITI gana un argumento de política de reskilling: "X% de los roles de IA son talento reconvertido, no contrataciones nuevas — un crédito fiscal para reskilling en IA escala el workforce de IA doméstico más rápido que importarlo".
 
 **Recomendaciones accionables para AMITI:**
 - **Proponer a STPS/SE:** Deducción fiscal para programas de reskilling en IA (basado en incentivo STPS, ampliado a contenido IA). La data cuantifica la brecha de capacitación y el ROI de retención.
@@ -847,7 +850,7 @@ Coordinación a gestionar (no son bloqueantes):
 | Dinámicas transfronterizas (2.3) | 4 | `employer_hq`, `payment_currency`, `cross_border_contract`, `cross_border_tax` |
 | Poder adquisitivo (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
 | ROI educativo (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
-| Impacto IA (2.6) | 4 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_salary_impact` |
+| Impacto IA (2.6) | 5 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
 | Género — Capa A mecanismos, todos los géneros (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
 | Género — Capa B solo mujeres, exclusiva/opcional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
 | Género — Capa C solo género alternativo, exclusiva/opcional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
@@ -872,14 +875,14 @@ Coordinación a gestionar (no son bloqueantes):
 
 ### Cambio Neto
 
-**Total final: 76 ítems definidos** (la exposición por persona es menor — ver nota)
+**Total final: 77 ítems definidos** (la exposición por persona es menor — ver nota)
 - 12 retenidos (sin cambios o ajustes menores)
 - 12 rediseñados desde campos existentes (Sec 1.5)
 - 13 del rediseño de stack tecnológico (Sec 1.6)
-- 39 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2–3.3), incluido el bloque de género de 17 ítems (9 para todos los géneros en la Capa A + 4 solo mujeres en la Capa B + 4 solo género alternativo en la Capa C) y la bandera de vínculo `bp2c_enrolled`
+- 40 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2–3.3), incluido el bloque de género de 17 ítems (9 para todos los géneros en la Capa A + 4 solo mujeres en la Capa B + 4 solo género alternativo en la Capa C) y la bandera de vínculo `bp2c_enrolled`
 - **~165 ítems eliminados** (casillas, COVID, beneficios, campos redundantes)
 
-**Exposición por persona:** Las Capas B y C son ramas de lógica de salto mutuamente excluyentes, por lo que cada persona ve a lo sumo una de ellas. Una persona responde aproximadamente **64–66** ítems (los 9 ítems compartidos de la Capa A más una rama exclusiva), no los 76. Las secciones exclusivas son opcionales.
+**Exposición por persona:** Las Capas B y C son ramas de lógica de salto mutuamente excluyentes, por lo que cada persona ve a lo sumo una de ellas. Una persona responde aproximadamente **64–66** ítems (los 9 ítems compartidos de la Capa A más una rama exclusiva), no los 77. Las secciones exclusivas son opcionales. `ai_specialization` tiene lógica de salto, por lo que solo suma exposición a quienes tienen rol de IA.
 
 La encuesta rediseñada reemplaza un instrumento de ~130 ítems dominado por casillas dispersos con un conjunto enfocado de preguntas de alta señal — cada una con alta señal analítica por respuesta — mientras agrega bloques nuevos relevantes para política. Como las dos secciones exclusivas de género son ramas de lógica de salto, cada persona responde aproximadamente 64–66 ítems. El tiempo estimado se mantiene en el rango de 12–15 minutos; quien llena una sección exclusiva agrega cerca de 1–2 minutos.
 
@@ -893,7 +896,7 @@ Se ejecutó una simulación Monte Carlo (n=6,000 personas encuestadas sintético
 
 | Métrica | Diseño Antiguo | Diseño Nuevo | Cambio |
 |--------|-----------|-----------|--------|
-| Ítems de encuesta | 130 | 76 | −42% |
+| Ítems de encuesta | 130 | 77 | −41% |
 | Tiempo estimado de llenado | 30 min | 14 min | −53% |
 | Predictores del modelo (k) | 90 | 81 | −10% |
 | Respuestas útiles (post abandono) | 5,098 | 5,689 | +591 |
