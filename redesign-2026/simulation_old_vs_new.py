@@ -560,7 +560,7 @@ old_items = 130  # ~18 Ben + 5 COVID + ~80 tech checkboxes + 27 certs + ~26 acts
 new_items = 77
 
 old_minutes = 30  # estimated
-new_minutes = 14  # estimated from REDESIGN_2026.md
+new_minutes = 14  # estimated from SALARIOS_REDESIGN_2026.md
 
 print(f"\n{'Metric':<40} {'Old':>12} {'New':>12} {'Improvement':>15}")
 print("-" * 80)

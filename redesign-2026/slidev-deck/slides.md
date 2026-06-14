@@ -477,7 +477,7 @@ class: text-center
 
 | Archivo | Propósito |
 |---------|-----------|
-| `REDESIGN_2026.md` | Justificación completa (3 objetivos) |
+| `SALARIOS_REDESIGN_2026.md` | Justificación completa (3 objetivos) |
 | `salarios_question_inventory_2026.csv` | 77 ítems bilingüe |
 | `SIMULATION_FINDINGS.md` | Análisis detallado de simulación |
 | `simulation_old_vs_new.py` | Script de simulación reproducible |

@@ -1472,7 +1472,7 @@ jupyter notebook notebooks/causal_analysis.ipynb
 │   ├── SPECIFICATION.md
 │   └── ig_scripts/                # Guiones para Instagram
 ├── redesign-2026/                 # Rediseño de encuesta 2026
-│   ├── REDESIGN_2026.md           # Documento de justificación
+│   ├── SALARIOS_REDESIGN_2026.md   # Documento de justificación
 │   ├── salarios_question_inventory_2026.csv # 77 ítems bilingüe
 │   ├── simulation_old_vs_new.py   # Script de simulación
 │   └── slidev-deck/               # Presentación Slidev
