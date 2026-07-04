@@ -97,10 +97,10 @@ layoutClass: gap-8
 - Tamaño de empresa, vertical de industria
 - Ancla conductual de inglés
 
-**13 campos de stack tecnológico**
+**12 campos de stack tecnológico**
 - Arquitectura rol-primero que reemplaza ~100 checkboxes
 
-**25 preguntas nuevas de política pública**
+**44 preguntas nuevas de política pública**
 - 6 bloques para advocacy de AMITI + gancho y vínculo con BP2C
 
 </v-clicks>
@@ -108,7 +108,7 @@ layoutClass: gap-8
 <v-click>
 
 <div class="mt-4 p-3 bg-blue-600 text-white rounded-lg text-center text-lg font-bold">
-77 ítems definidos · ≈64–66 por persona (antes eran ~130)
+80 ítems definidos · ≈67–70 por persona (antes eran ~130)
 </div>
 
 </v-click>
@@ -126,7 +126,7 @@ La encuesta anterior tenía `profile`: godín / independiente / emprendedor / di
 - "Godín" es slang mexicano — no funciona para expansión a LatAm
 - No hay forma de distinguir a un Junior de un Senior
 
-**Nuevo campo:** Jr / Mid / Sr / Staff / Lead / Director+ / C-Level
+**Nuevo campo:** Jr / Mid / Sr / Staff / Manager / Director+ / C-Level
 
 </v-clicks>
 
@@ -210,8 +210,8 @@ layoutClass: gap-8
 | 🌎 Cross-Border | 4 | Cuantificar "economía Deel" + fuga de talento |
 | 💰 Poder Adquisitivo | 3 | Índice de salarios reales ciudad por ciudad |
 | 🎓 ROI Educativo | 4 | Prima de título con controles modernos |
-| 🤖 Impacto de IA | 4 | Primer benchmark de adopción IA en LatAm |
-| ⚖️ Género y Diversidad | 17 | 9 mecanismos a todos los géneros + 2 secciones exclusivas |
+| 🤖 Impacto de IA | 6 | Primer benchmark de adopción IA en LatAm |
+| ⚖️ Género y Diversidad | 19 | 10 mecanismos a todos los géneros + 2 secciones exclusivas |
 
 <v-click>
 
@@ -227,8 +227,8 @@ Cada bloque → posición de advocacy pre-redactada para que AMITI lleve a STPS,
 
 <v-clicks>
 
-- **Capa A — todos los géneros (9 ítems, alimenta el modelo):** negociación, transparencia salarial, promociones, patrocinio, carga de cuidado, interrupción de carrera, edad de inicio. En simulación explica **~45% de la brecha cruda** (−$13,705 → −$7,482 no explicado).
-- **Capa B — solo mujeres (exclusiva, opcional):** maternidad, ser la única en el equipo, seguridad/acoso, redes de mujeres en tech.
+- **Capa A — todos los géneros (10 ítems, alimenta el modelo):** negociación, transparencia salarial, promociones, patrocinio, carga de cuidado, interrupción de carrera, uso de licencia parental, edad de inicio. En simulación explica **~45% de la brecha cruda** (−$13,705 → −$7,482 no explicado).
+- **Capa B — solo mujeres (exclusiva, opcional):** maternidad, ser la única en el equipo, seguridad/acoso, redes de mujeres en tech, programas institucionales de liderazgo femenino.
 - **Capa C — solo género alternativo (exclusiva, opcional):** visibilidad, misgendering, políticas inclusivas, discriminación por identidad.
 
 </v-clicks>
@@ -310,12 +310,12 @@ Monte Carlo · n=6,000 · Calibrado con tamaños de efecto reales 2020–2022
 
 | Métrica | Anterior | Nuevo | Cambio |
 |---------|--------:|------:|-------:|
-| Ítems de encuesta | 130 | 77 | **−41%** |
+| Ítems de encuesta | 130 | 80 | **−38%** |
 | Tiempo de llenado | 30 min | 14 min | **−53%** |
-| Predictores del modelo | 90 | 81 | −10% |
+| Predictores del modelo | 90 | 79 | −12% |
 | Respuestas utilizables | 5,098 | 5,689 | +591 |
-| **R²** | **0.330** | **0.517** | **+57%** |
-| R² ajustada | 0.318 | 0.510 | +60% |
+| **R²** | **0.330** | **0.516** | **+56%** |
+| R² ajustada | 0.318 | 0.509 | +60% |
 
 ---
 
@@ -323,10 +323,10 @@ Monte Carlo · n=6,000 · Calibrado con tamaños de efecto reales 2020–2022
 
 | Métrica | Anterior | Nuevo | Mejora |
 |---------|--------:|------:|:------:|
-| R² por ítem | 0.003 | 0.007 | **+168%** |
+| R² por ítem | 0.003 | 0.007 | **+154%** |
 | R² por minuto | 0.011 | 0.037 | **+235%** |
-| Info efectiva (R² × N) | 1,683 | 2,940 | **+75%** |
-| Estabilidad de coef. (CV) | 3.46 | 0.44 | **−87%** |
+| Info efectiva (R² × N) | 1,683 | 2,935 | **+74%** |
+| Estabilidad de coef. (CV) | 3.46 | 0.43 | **−87%** |
 
 <v-click>
 
@@ -390,7 +390,7 @@ layoutClass: gap-8
 **95% de completitud** (estimado)
 
 <div class="mt-2 text-sm text-green-400 font-bold">
-+629 respuestas utilizables más
++591 respuestas utilizables más
 </div>
 
 ---
@@ -437,11 +437,11 @@ class: text-center
 
 <div class="grid grid-cols-3 gap-6 mt-8 text-left">
 <div class="p-4 bg-blue-600 text-white rounded-lg">
-<div class="text-2xl font-bold">−52%</div>
+<div class="text-2xl font-bold">−38%</div>
 <div class="text-sm">menos preguntas</div>
 </div>
 <div class="p-4 bg-green-600 text-white rounded-lg">
-<div class="text-2xl font-bold">+44%</div>
+<div class="text-2xl font-bold">+56%</div>
 <div class="text-sm">más poder explicativo</div>
 </div>
 <div class="p-4 bg-amber-600 text-white rounded-lg">
@@ -449,11 +449,11 @@ class: text-center
 <div class="text-sm">info por minuto</div>
 </div>
 <div class="p-4 bg-purple-600 text-white rounded-lg">
-<div class="text-2xl font-bold">+12.4pp</div>
+<div class="text-2xl font-bold">+13.1pp</div>
 <div class="text-sm">solo de seniority_level</div>
 </div>
 <div class="p-4 bg-red-600 text-white rounded-lg">
-<div class="text-2xl font-bold">25</div>
+<div class="text-2xl font-bold">44</div>
 <div class="text-sm">preguntas de política nueva</div>
 </div>
 <div class="p-4 bg-teal-600 text-white rounded-lg">
@@ -478,7 +478,7 @@ class: text-center
 | Archivo | Propósito |
 |---------|-----------|
 | `SALARIOS_REDESIGN_2026.md` | Justificación completa (3 objetivos) |
-| `salarios_question_inventory_2026.csv` | 77 ítems bilingüe |
+| `salarios_question_inventory_2026.csv` | 80 ítems bilingüe |
 | `SIMULATION_FINDINGS.md` | Análisis detallado de simulación |
 | `simulation_old_vs_new.py` | Script de simulación reproducible |
 | `simulation_results/` | CSVs de resultados crudos |

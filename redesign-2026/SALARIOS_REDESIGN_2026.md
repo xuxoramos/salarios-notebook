@@ -139,7 +139,7 @@ Several retained questions have analytical weaknesses that accumulate into measu
 
 **Current fields removed or replaced:**
 - `salarymx` → replaced by `base_salary` + `total_cash_annual`
-- `salaryusd` → dropped (redundant with `payment_currency` from Section 2.3; all respondents report in local currency, normalize during analysis)
+- `salaryusd` → dropped (redundant with `payment_currency`, now moved into this section; all respondents report in local currency, normalize during analysis)
 - `extramx` / `extrausd` → dropped (captured by `total_cash_annual`)
 - `variation` → replaced by `salary_change` + `salary_change_reason`
 
@@ -149,11 +149,12 @@ Several retained questions have analytical weaknesses that accumulate into measu
 |---|---|---|---|
 | `base_salary` | ¿Cuál es tu salario mensual bruto BASE (antes de impuestos, sin incluir bonos ni compensación variable)? | Numeric | (local currency) |
 | `total_cash_annual` | ¿Cuál fue tu compensación total en efectivo en los últimos 12 meses (incluyendo salario, bonos, aguinaldo, y cualquier otra compensación en efectivo)? | Numeric | (local currency) |
-| `has_equity` | ¿Recibes compensación en acciones, opciones, o RSUs? | Single | Sí / No |
+| `has_equity` | ¿Recibes compensación en acciones, opciones o RSUs de tu empleador actual? | Single | Sí / No |
+| `payment_currency` | ¿En qué moneda recibes tu compensación principal? | Single | MXN / USD / EUR / BRL / COP / ARS / Otra |
 | `salary_change` | Comparado con hace 12 meses, tu compensación total... | Single | Aumentó >20% / Aumentó 10–20% / Aumentó 1–9% / Se mantuvo igual / Disminuyó |
 | `salary_change_reason` | ¿A qué se debió el cambio principal? | Single | Promoción / Cambio de empresa / Ajuste anual / Cambio a moneda extranjera / Recorte / Otro / No cambió |
 
-**Why:** `base_salary` is unambiguous and comparable across respondents. `total_cash_annual` captures the full picture (what `salarymx + extramx + aguinaldo + bonos` approximated). `has_equity` identifies the hidden salary tier increasingly common in tech. `salary_change_reason` decomposes salary growth into market forces vs. individual actions — AMITI can tell whether salary growth is market-driven or mobility-driven.
+**Why:** `base_salary` is unambiguous and comparable across respondents. `total_cash_annual` captures the full picture (what `salarymx + extramx + aguinaldo + bonos` approximated). `has_equity` (explicitly scoped to the *current employer*) identifies the hidden salary tier increasingly common in tech. `payment_currency` sits here as a compensation attribute (moved up from the cross-border block) and still joins with `employer_hq` for the cross-border decomposition (Sec 2.3). `salary_change_reason` decomposes salary growth into market forces vs. individual actions — AMITI can tell whether salary growth is market-driven or mobility-driven.
 
 #### 1.5.2 Experience: Disambiguate Tech vs. Total
 
@@ -181,9 +182,9 @@ Several retained questions have analytical weaknesses that accumulate into measu
 
 | ID | Question | Type | Options |
 |---|---|---|---|
-| `seniority_level` | ¿Cuál es tu nivel dentro de tu organización? | Single | Junior / Mid / Senior / Staff-Principal / Lead-Manager / Director+ / Founder-C-Level / No aplica (freelance, estudiante) |
+| `seniority_level` | ¿Cuál es tu nivel dentro de tu organización? | Single | Junior / Mid / Senior / Staff-Principal / Manager / Director+ / Founder-C-Level / No aplica (freelance, estudiante) |
 
-**Why:** Seniority level is one of the strongest salary predictors in every developer survey globally, and the current survey doesn't capture it. A 3-year developer at "Senior" level earns differently from a 3-year developer at "Mid" level. This single field replaces `profile` with vastly more analytical value.
+**Why:** Seniority level is one of the strongest salary predictors in every developer survey globally, and the current survey doesn't capture it. A 3-year developer at "Senior" level earns differently from a 3-year developer at "Mid" level. This single field replaces `profile` with vastly more analytical value. It is also a **pure level ladder** that carries the *management* dimension for every discipline: rather than adding discipline-specific manager roles to `primary_role`, a design manager is `UX-UI Design` × `Manager`, a head of data science is `Data Scientist-ML` × `Director+`, and a VP of AI is `AI-ML Engineer` × `Director+`. The `Manager / Director+ / Founder-C-Level` rungs give management coverage across all roles with zero extra options.
 
 #### 1.5.4 Add Company Size
 
@@ -248,10 +249,11 @@ The current tech blocks are the longest part of the survey (~100+ binary checkbo
 
 | ID | Question | Type | Options |
 |---|---|---|---|
-| `primary_role` | ¿Cuál es tu rol o actividad principal? | Single | Backend Dev / Frontend Dev / Fullstack Dev / Mobile Dev / Data Science-ML / Data Engineering / DevOps-Infra-SRE / InfoSec / Architecture / PM / QA-Testing / UXD / Direction-Strategy / AI-ML Engineering / Support / Other |
+| `primary_role` | ¿Cuál es tu rol o actividad principal? | Single | Software Engineer (Backend/Frontend/Fullstack) / Mobile Engineer / Data Engineer / Data Scientist-ML / Data Analyst / AI-ML Engineer / DevOps-SRE-Infra / Security-InfoSec / Architecture / QA-Testing / UX-UI Design / Product Manager / Project Manager / Program Manager / Support / Other |
 | `secondary_role` | ¿Tienes un rol secundario? | Single | Same options + "No tengo rol secundario" |
+| `has_second_job` | ¿Tienes un segundo empleo remunerado además de tu trabajo principal? | Single | Sí / No |
 
-**Why:** The causal model needs **one** role per person to estimate role effects cleanly. Multi-select forces overlapping dummy variables. 2 questions replace 26 checkboxes. AI sub-roles are deliberately kept out of this list and captured instead by the gated `ai_specialization` item (Sec 2.6), so the role taxonomy stays current without fragmenting `primary_role` into sparse cells.
+**Why:** The causal model needs **one** role per person to estimate role effects cleanly. Multi-select forces overlapping dummy variables. 2 questions replace 26 checkboxes. `primary_role` is now a **pure discipline** list: the three dev variants are merged into `Software Engineer` (the discipline is still proxied by `primary_framework`), `Data Analyst` is added, the ambiguous `PM` is disambiguated into `Product Manager` / `Project Manager` / `Program Manager`, and management is **not** modeled as a role — it is captured for every discipline by `seniority_level` (Sec 1.5.3), which is why the engineering-only "Engineering Manager" bucket was dropped. AI sub-roles are likewise kept out and captured by the gated `ai_specialization` item (Sec 2.6). `has_second_job` is a deliberately blunt Yes/No flag directly under `secondary_role`: it captures the existence of *pluriempleo* (a real labor-structure signal in LatAm) without asking for details, since second jobs are culturally sensitive and often penalized by the primary employer.
 
 #### 1.6.3 Step 2: Replace Individual Tech Lists with Primary Stack
 
@@ -259,22 +261,21 @@ Instead of asking everyone about every technology, ask what they *primarily* use
 
 | ID | Question | Type | Options |
 |---|---|---|---|
-| `primary_language` | ¿Cuál es tu lenguaje de programación principal? | Single | JavaScript-TypeScript / Python / Java / C# / Go / Rust / PHP / Ruby / Kotlin / Swift / C-C++ / Scala / Elixir / Other |
+| `primary_language` | ¿Cuál es tu lenguaje de programación principal? | Single | JavaScript-TypeScript / Python / Java / C# / Go / Rust / PHP / Ruby / Kotlin / Swift / C-C++ / Scala / Elixir / Ninguno en particular (asistido por IA) / Other |
 | `primary_framework` | ¿Cuál es tu framework o plataforma principal? | Single | React / Angular / Vue / Next.js / Spring / Django-FastAPI / .NET / Rails / Flutter / Laravel / Node.js-Express / None / Other |
 | `primary_database` | ¿Cuál es tu base de datos principal? | Single | PostgreSQL / MySQL / SQL Server / MongoDB / Redis / DynamoDB / Firebase / Oracle / Other |
 | `primary_cloud` | ¿Cuál es tu plataforma de nube principal? | Single | AWS / Azure / GCP / On-premise / No uso nube / Other |
 
-**Why:** Single-select gives clean, non-overlapping groups for salary comparison. "Python developers earn X" is a real statement; "people who checked Python among other things earn X" is confounded by what else they checked. 4 questions replace ~60 checkboxes (`lang_*` + `front_*` + `mobile_*` + `db_*` + partial `infra_*`).
+**Why:** Single-select gives clean, non-overlapping groups for salary comparison. "Python developers earn X" is a real statement; "people who checked Python among other things earn X" is confounded by what else they checked. 4 questions replace ~60 checkboxes (`lang_*` + `front_*` + `mobile_*` + `db_*` + partial `infra_*`). This whole stack block (plus `primary_lang_years`, `stack_change`, and `vibe_coding_share`) is **gated on a technical `primary_role`**, so managers, PMs, UX, and support skip it. `primary_language` also gains a *"Ninguno en particular (asistido por IA)"* option so language-agnostic respondents — increasingly common as AI-assisted coding loosens the tie between a person and a single language — aren't forced into a false primary.
 
 #### 1.6.4 Step 3: Add Depth (What Checkboxes Miss)
 
 | ID | Question | Type | Options |
 |---|---|---|---|
 | `primary_lang_years` | ¿Cuántos años llevas usando tu lenguaje principal? | Numeric | (years) |
-| `tech_breadth` | ¿En cuántas de las siguientes áreas trabajas regularmente? (Backend, Frontend, Mobile, Data, Infra/DevOps, Security, AI/ML) | Numeric | 1–7 count |
 | `stack_change` | ¿Has cambiado significativamente tu stack tecnológico en los últimos 2 años? | Single | Sí, completamente / Sí, parcialmente / No |
 
-**Why:** `primary_lang_years` provides depth signal destroyed by binary checkboxes. `tech_breadth` explicitly captures the generalist-vs-specialist axis. `stack_change` measures technology mobility — do people who switch stacks earn more or less?
+**Why:** `primary_lang_years` provides depth signal destroyed by binary checkboxes. `stack_change` measures technology mobility — do people who switch stacks earn more or less? (An earlier `tech_breadth` generalist-vs-specialist count was dropped: the axis did not surface anything statistically significant and `secondary_role` already captures the meaningful cross-discipline signal.)
 
 #### 1.6.5 Step 4: Slim Down Certifications
 
@@ -285,16 +286,15 @@ Instead of asking everyone about every technology, ask what they *primarily* use
 | ID | Question | Type | Options |
 |---|---|---|---|
 | `has_certs` | ¿Tienes alguna certificación técnica vigente? | Single | Sí / No |
-| `cert_category` | ¿En qué categoría(s)? (selecciona las que apliquen, máx 3) | Multi-select | Cloud (AWS/Azure/GCP) / Agile-PM (Scrum/PMP) / Security (CISSP/CEH) / Kubernetes-DevOps / Data (Databricks/Snowflake) / Other |
-| `cert_count` | ¿Cuántas certificaciones tienes? | Numeric | (count) |
+| `cert_category` | ¿En qué categoría(s)? (selecciona las que apliquen) | Multi-select | Cloud (AWS/Azure/GCP) / Scrum-Agile / PMP / Kubernetes (CKA/CKAD) / Security (CISSP/CompTIA) / Data (Databricks/Snowflake) / Other |
 
-**Why:** Categories are stable across years (unlike specific cert names). `cert_count` tests whether more certs = more salary or it plateaus. 3 questions replace 27 checkboxes.
+**Why:** Categories are stable across years (unlike specific cert names) and are tightened to the most common cert families in the market plus Other. `has_certs` gates `cert_category`. (The earlier `cert_count` numeric was dropped per feedback: low signal for the respondent burden.) 2 questions replace 27 checkboxes.
 
 #### 1.6.6 Impact Summary
 
 | Metric | Current | Redesigned |
 |---|---|---|
-| Tech-related items | ~100+ checkboxes | 13 structured questions + 1 optional |
+| Tech-related items | ~100+ checkboxes | 11 structured questions + 1 optional |
 | Response time (tech section) | 8–12 min | 2–3 min |
 | Analytical signal per question | Low (sparse binary) | High (single primary + depth) |
 | Year-over-year comparability | Breaks frequently | Stable (categories, not products) |
@@ -363,9 +363,9 @@ The critical reframe: **informality is not a compliance problem — it is a comp
 | ID | Question | Type | Options |
 |----|----------|------|---------|
 | `employer_hq` | ¿En qué país tiene su sede principal la empresa para la que trabajas? | Single | México / Estados Unidos / Canadá / Europa / América Latina (otro) / Asia / Otro |
-| `payment_currency` | ¿En qué moneda recibes tu compensación principal? | Single | MXN / USD / EUR / Otra |
 | `cross_border_contract` | ¿Cuál es tu relación laboral con esta empresa extranjera? | Single | Contrato laboral local (a través de entidad mexicana) / Contractor independiente / A través de Employer of Record (Deel, Remote, etc.) / Otro |
-| `cross_border_tax` | ¿Emites facturas (CFDI) a una empresa extranjera como persona física con actividad empresarial? | Single | Sí / No / No aplica |
+
+*(`payment_currency` moved to the Compensation block, Sec 1.5.1, since currency is a compensation attribute; it still joins with `employer_hq` for the decomposition below. The former `cross_border_tax` CFDI item was dropped as MX-specific and hard to localize.)*
 
 **AMITI advocacy rationale:**
 
@@ -395,7 +395,8 @@ The core problem for AMITI members: **foreign employers recruit Mexican talent a
 |----|----------|------|---------|
 | `purchasing_power` | ¿Cómo calificarías tu capacidad para cubrir tus necesidades básicas con tu salario actual? | Likert 1–5 | 1=Con mucha dificultad ... 5=Con mucha holgura |
 | `housing_burden` | ¿Qué porcentaje aproximado de tu ingreso mensual destinas a renta o hipoteca? | Single | 0% (vivienda propia sin hipoteca) / 1–20% / 21–30% / 31–40% / 41–50% / Más del 50% |
-| `financial_savings` | ¿Logras ahorrar al menos el 10% de tu ingreso mensual? | Single | Sí, regularmente / A veces / Rara vez o nunca |
+| `financial_savings` | ¿Qué porcentaje de tu ingreso mensual logras ahorrar? | Single | No logro ahorrar / Menos del 10% / 10–20% / 21–30% / Más del 30% |
+| `investment_instruments` | ¿Inviertes activamente parte de tus ingresos? ¿En qué instrumentos? | Multi-select | No invierto / Cetes o bonos gubernamentales / ETFs / Fondos de inversión / Acciones individuales / Cripto / Bienes raíces |
 
 **AMITI advocacy rationale:**
 
@@ -414,6 +415,7 @@ No one in Latin America publishes a **tech-sector-specific real wages index**. T
 - Construct a city-level purchasing power index: mean `purchasing_power` score by city, weighted by salary band
 - Compare nominal salary rankings vs. purchasing-power-adjusted rankings — highlight cities where the order flips (these are the "hidden value" cities AMITI pitches to investors)
 - Model `financial_savings` as a function of salary, city, housing burden, and family status to identify where the tech middle class is financially fragile (these are the cities where retention risk is highest — AMITI can warn members)
+- Cross `financial_savings` and `investment_instruments` with `first_gen_university` (Sec 2.5) to measure **social mobility**: whether first-generation professionals convert tech salaries into savings and investment (government bonds, ETFs, funds, equities, real estate) at the same rate as peers, or whether family financial obligations absorb the gains
 
 ### 2.5 New Block: Education ROI & Career Pathways
 
@@ -425,6 +427,7 @@ No one in Latin America publishes a **tech-sector-specific real wages index**. T
 | `recent_training` | ¿Has completado alguna capacitación o curso en los últimos 12 meses? | Single | Sí, pagado por mi empleador / Sí, pagado por mí / Sí, gratuito / No |
 | `first_job_degree` | ¿Tu primer empleo en tecnología requirió un título universitario? | Single | Sí, era requisito formal / No, pero lo tenía / No, y no lo tenía |
 | `edu_debt` | ¿Tienes deuda educativa actualmente (crédito educativo, préstamo para estudios)? | Single | Sí / No / Prefiero no contestar |
+| `first_gen_university` | ¿Eres la primera generación de tu familia en cursar estudios universitarios? | Single | Sí / No / No cursé universidad |
 
 **AMITI advocacy rationale:**
 
@@ -433,6 +436,7 @@ AMITI already runs education partnership programs with ANUIES (the national univ
 - **Is a CS degree worth it?** The `edu_relevance` + `first_job_degree` combination directly measures this. If 60% of senior developers say their formal education was "poco relevante" and their first job didn't require a degree, AMITI can take that finding to ANUIES and say: "Curricula need to be redesigned with industry input — here's the data."
 - **Who is reskilling, and who pays?** The `recent_training` question distinguishes employer-funded from self-funded from free training. If most reskilling is self-funded, AMITI can argue for a tax deduction for employer-provided training (similar to the existing STPS training incentive but expanded for tech-specific certifications).
 - **Is education debt a barrier to pipeline growth?** `edu_debt` is a proxy for financial accessibility. If bootcamp graduates carry less debt and earn comparably to CS degree holders, AMITI can promote bootcamp partnerships as a faster, cheaper path to expanding the talent pool.
+- **Is tech a social-mobility engine?** `first_gen_university` flags respondents who are the first in their family to attend university — a large share of LatAm technologists who chose the field precisely for the mobility it offers. Crossed with salary, city, and the savings/investment items (Sec 2.4), this quantifies how effectively the tech sector converts education into first-generation economic mobility, a headline AMITI can take to SEP and development banks.
 
 **AMITI-actionable recommendations:**
 - **Propose to ANUIES (via AMITI education committee):** Curriculum reform priorities based on `edu_relevance` scores by topic area. "Graduates from programs with industry internship components reach $50K MXN median salary 2 years faster — here's the data for your accreditation criteria."
@@ -451,12 +455,15 @@ AMITI already runs education partnership programs with ANUIES (the national univ
 | ID | Question | Type | Options |
 |----|----------|------|---------|
 | `ai_tools_use` | ¿Utilizas herramientas de IA (Copilot, ChatGPT, etc.) como parte regular de tu trabajo? | Single | Sí, diariamente / Sí, semanalmente / Ocasionalmente / No |
+| `vibe_coding_share` (gated) | ¿Qué proporción de tu código generas describiéndole a una IA lo que quieres, en lugar de escribirlo directamente? | Single | Nada / Poco / Aproximadamente la mitad / La mayoría / Casi todo |
 | `ai_task_change` | ¿Han cambiado las tareas que realizas debido a herramientas de IA? | Single | Sí, hago tareas de mayor nivel / Sí, hago las mismas tareas más rápido / Sí, algunas tareas ya no las hago / No ha cambiado |
 | `ai_skill_confidence` | ¿Qué tan confiado/a estás en que tus habilidades actuales seguirán siendo relevantes en 3 años? | Likert 1–5 | 1=Nada confiado ... 5=Totalmente confiado |
 | `ai_role_status` | ¿Tu rol actual es un rol de IA? | Single | No / Sí, cambié a un rol nuevo de IA / Sí, mi rol tradicional se transformó hacia IA |
 | `ai_specialization` (gated) | ¿Cuál es tu especialización principal de IA? | Single | ML-AI Engineer / GenAI-LLM-Agent Engineer / MLOps-AI Platform Engineer / AI Product Manager / Responsible AI-Governance |
 
 **Role-transition design (grounded in 2025 industry data):** `ai_role_status` distinguishes the three phenomena the AI boom produced — net-new AI roles, traditional roles transformed toward AI, and unchanged roles. `ai_specialization` is a gated single-select shown only to AI-role respondents (or those who picked AI-ML Engineering in `primary_role`), so it captures the role taxonomy without exploding `primary_role` into sparse buckets. The five-category taxonomy (ML/AI Engineer; GenAI/LLM/Agent Engineer; MLOps/AI Platform; AI Product Manager; Responsible AI/Governance) follows Gartner's AI Engineering and AI TRiSM frameworks and the WEF *Future of Jobs Report 2025*, which ranks AI and machine-learning specialists among the fastest-growing roles and AI/big-data as the No. 1 rising skill set through 2030. The split between net-new and transformed roles operationalizes McKinsey's *State of AI* (Nov 2025) finding that AI hiring concentrates in existing software- and data-engineering roles rather than exotic new titles — i.e. most AI roles are *converted*, not created.
+
+**Vibe-coding signal:** `vibe_coding_share` (gated on a technical `primary_role`) measures how much of a respondent's code is produced by describing intent to an AI rather than writing it directly. It is the individual-side counterpart to the industry shift, and a check on how far AI-assisted coding loosens the tie between `primary_language`/`primary_framework` and professional identity (paired with the "Ninguno en particular / asistido por IA" option on `primary_language`, Sec 1.6.3).
 
 **Separation from BP2C (Goal 1 compliance):**
 
@@ -487,7 +494,7 @@ This block answers two leadership asks: (1) surface the *mechanisms* behind the 
 
 #### Layer A — Gap mechanisms (all genders, feeds the model)
 
-These nine items are asked of everyone and are the analytical centerpiece. They convert the raw gender gap into a decomposable set of mechanisms (negotiation, transparency, advancement, sponsorship, care load, career interruption, pipeline timing), enabling an Oaxaca–Blinder–style decomposition: how much of the −$12,442 gap is *explained* vs. *unexplained*.
+These ten items are asked of everyone and are the analytical centerpiece. They convert the raw gender gap into a decomposable set of mechanisms (negotiation, transparency, advancement, sponsorship, care load, career interruption, parental-leave uptake, pipeline timing), enabling an Oaxaca–Blinder–style decomposition: how much of the −$12,442 gap is *explained* vs. *unexplained*.
 
 | ID | Question | Type | Options |
 |----|----------|------|---------|
@@ -499,6 +506,7 @@ These nine items are asked of everyone and are the analytical centerpiece. They 
 | `has_sponsor` | ¿Cuentas con un mentor o patrocinador que impulse tu carrera? | Single | Sí / No |
 | `caregiving_load` | ¿Tienes responsabilidades de cuidado (hijos, familiares) que afecten tu disponibilidad laboral? | Single | Sí, principalmente yo / Sí, compartidas / No |
 | `career_interruption` | ¿Has pausado o reducido tu carrera por responsabilidades personales o familiares? | Single | Sí / No |
+| `parental_leave_taken` | Si has tenido hijos, ¿tomaste licencia parental? | Single | Sí, completa / Sí, parcial / No / No aplica |
 | `discrimination_exp` | ¿Has experimentado discriminación en procesos de contratación o promoción en el sector tecnológico? | Single | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 
 #### Layer B — Women's experience (exclusive, optional, skip logic `gender = mujer`)
@@ -511,6 +519,7 @@ Shown only to respondents who identify as women. Descriptive only — **not** en
 | `women_only_team` | ¿Eres la única mujer o una de muy pocas en tu equipo? | Single | Sí, la única / Una de pocas / No / Prefiero no contestar |
 | `women_harassment` | ¿Te has sentido insegura o has vivido acoso en tu entorno laboral en tech? | Single | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 | `women_network` | ¿Tienes acceso a redes o comunidades de mujeres en tech (Women Who Code, Laboratoria, etc.)? | Single | Sí, activamente / Sí, pero no participo / No / No las conozco |
+| `women_leadership_program` | ¿Tu empleador tiene programas formales de mentoría o promoción de mujeres hacia posiciones de liderazgo? | Single | Sí / No / No sé |
 
 #### Layer C — Alternative-gender experience (exclusive, optional, skip logic `gender = no binario/otro`)
 
@@ -819,7 +828,7 @@ Coordination to manage (not blockers):
 | 18 | `experience_tech` | `experience` | Explicit tech-sector years (Sec 1.5.2) |
 | 19 | `experience_total` | (new) | Total career years; delta = career-switcher signal (Sec 1.5.2) |
 | 20 | `tenure_current` | `seniority` | Company tenure replaces role tenure (Sec 1.5.2) |
-| 21 | `seniority_level` | `profile` | Jr/Mid/Sr/Staff/Lead/Director/C-Level (Sec 1.5.3) |
+| 21 | `seniority_level` | `profile` | Jr/Mid/Sr/Staff/Manager/Director/C-Level; carries mgmt level for all disciplines (Sec 1.5.3) |
 | 22 | `company_size` | (new) | Top-5 salary predictor, previously missing (Sec 1.5.4) |
 | 23 | `industry` | (new) | Labor market segmentation by vertical (Sec 1.5.5) |
 | 24 | `english_use` | (new) | Behavioral anchor for English self-assessment (Sec 1.5.6) |
@@ -828,31 +837,33 @@ Coordination to manage (not blockers):
 
 | # | New Field | Replaces | Change |
 |---|-----------|----------|--------|
-| 25 | `primary_role` | `act_*` (26 checkboxes) | Single primary role (Sec 1.6.2) |
+| 25 | `primary_role` | `act_*` (26 checkboxes) | Single primary discipline; mgmt captured via `seniority_level` (Sec 1.6.2) |
 | 26 | `secondary_role` | `act_*` (26 checkboxes) | Optional secondary role (Sec 1.6.2) |
-| 27 | `primary_language` | `lang_*` (20 checkboxes) | Single primary language (Sec 1.6.3) |
-| 28 | `primary_framework` | `front_*` + `mobile_*` | Single primary framework/platform (Sec 1.6.3) |
-| 29 | `primary_database` | `db_*` (~15 checkboxes) | Single primary database (Sec 1.6.3) |
-| 30 | `primary_cloud` | `infra_*` (partial) | Single primary cloud platform (Sec 1.6.3) |
-| 31 | `primary_lang_years` | (new) | Depth signal for primary language (Sec 1.6.4) |
-| 32 | `tech_breadth` | (new) | Generalist vs. specialist axis (Sec 1.6.4) |
+| 27 | `has_second_job` | (new) | Blunt Yes/No pluriempleo flag under secondary_role (Sec 1.6.2) |
+| 28 | `primary_language` | `lang_*` (20 checkboxes) | Single primary language + AI-assisted option (Sec 1.6.3) |
+| 29 | `primary_framework` | `front_*` + `mobile_*` | Single primary framework/platform (Sec 1.6.3) |
+| 30 | `primary_database` | `db_*` (~15 checkboxes) | Single primary database (Sec 1.6.3) |
+| 31 | `primary_cloud` | `infra_*` (partial) | Single primary cloud platform (Sec 1.6.3) |
+| 32 | `primary_lang_years` | (new) | Depth signal for primary language (Sec 1.6.4) |
 | 33 | `stack_change` | (new) | Technology mobility in last 2 years (Sec 1.6.4) |
 | 34 | `has_certs` | `cert_*` (27 checkboxes) | Binary: any cert? (Sec 1.6.5) |
-| 35 | `cert_category` | `cert_*` (27 checkboxes) | Category-level multi-select, max 3 (Sec 1.6.5) |
-| 36 | `cert_count` | (new) | Number of certifications (Sec 1.6.5) |
-| 37 | `all_technologies` | `dsc_*` + `dataeng_*` + remaining | Optional free-text for granular data (Sec 1.6.6) |
+| 35 | `cert_category` | `cert_*` (27 checkboxes) | Category-level multi-select, common families + Other (Sec 1.6.5) |
+| 36 | `all_technologies` | `dsc_*` + `dataeng_*` + remaining | Optional free-text for granular data (Sec 1.6.6) |
+
+*(The stack block 28–33 plus `vibe_coding_share` is gated on a technical `primary_role`. `tech_breadth` and `cert_count` were dropped per Jul-2026 feedback.)*
 
 ### New Policy & Hook Questions (Sections 2.2–2.7, 3.2–3.3)
 
 | Block | # Qs | IDs |
 |-------|-------|-----|
 | Labor formality (2.2) | 3 | `formal_contract`, `social_security`, `retirement_saving` |
-| Cross-border dynamics (2.3) | 4 | `employer_hq`, `payment_currency`, `cross_border_contract`, `cross_border_tax` |
-| Purchasing power (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
-| Education ROI (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
-| AI impact (2.6) | 5 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
-| Gender — Layer A mechanisms, all genders (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
-| Gender — Layer B women-only, exclusive/optional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
+| Cross-border dynamics (2.3) | 2 | `employer_hq`, `cross_border_contract` |
+| Compensation currency (moved 2.3→1.5.1) | 1 | `payment_currency` |
+| Purchasing power (2.4) | 4 | `purchasing_power`, `housing_burden`, `financial_savings`, `investment_instruments` |
+| Education ROI (2.5) | 5 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt`, `first_gen_university` |
+| AI impact (2.6) | 6 | `ai_tools_use`, `vibe_coding_share`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
+| Gender — Layer A mechanisms, all genders (2.7) | 10 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `parental_leave_taken`, `discrimination_exp` |
+| Gender — Layer B women-only, exclusive/optional (2.7) | 5 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network`, `women_leadership_program` |
 | Gender — Layer C alt-gender-only, exclusive/optional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
 | BP2C cross-survey link (3.3) | 1 | `bp2c_enrolled` |
 | BP2C hook (3.2) | 3 | `enps`, `leave_reason`, `job_search` |
@@ -869,22 +880,23 @@ Coordination to manage (not blockers):
 | `seniority` | 1 item (replaced by `tenure_current`) |
 | `profile` | 1 item (replaced by `seniority_level`) |
 | `lang_*` (20), `front_*`, `mobile_*`, `db_*`, `infra_*`, `dsc_*`, `dataeng_*` | ~80 checkboxes (replaced by primary stack, Sec 1.6) |
-| `cert_*` (27) | 27 checkboxes (replaced by `has_certs` + `cert_category` + `cert_count`) |
+| `cert_*` (27) | 27 checkboxes (replaced by `has_certs` + `cert_category`) |
 | `act_*` (26) | 26 checkboxes (replaced by `primary_role` + `secondary_role`) |
 | `remote`, `covid_remoto` | 2 items (replaced by `work_arrangement`) |
+| 2026-dropped items | `tech_breadth`, `cert_count`, `cross_border_tax` (added in the redesign, then removed per Jul-2026 feedback) |
 
 ### Net Change
 
-**Total final question count: 77 defined items** (per-respondent exposure is lower — see note)
+**Total final question count: 80 defined items** (per-respondent exposure is lower — see note)
 - 12 retained (unchanged or minor option updates)
 - 12 redesigned from existing fields (Sec 1.5)
-- 13 tech stack redesign (Sec 1.6)
-- 40 new policy & hook questions (Secs 2.2–2.7, 3.2–3.3), including the 17-item gender block (9 all-gender Layer A + 4 women-only Layer B + 4 alt-gender-only Layer C) and the `bp2c_enrolled` link flag
+- 12 tech stack redesign (Sec 1.6)
+- 44 new policy & hook questions (Secs 2.2–2.7, 3.2–3.3), including the 19-item gender block (10 all-gender Layer A + 5 women-only Layer B + 4 alt-gender-only Layer C) and the `bp2c_enrolled` link flag
 
-**Per-respondent exposure:** Layers B and C are mutually exclusive skip-logic branches, so any single respondent sees at most one of them. A respondent therefore answers roughly **64–66** items (the 9 shared Layer-A gender items plus one exclusive branch), not all 77. The exclusive sections are optional. `ai_specialization` is gated, so it adds to exposure only for AI-role respondents.
+**Per-respondent exposure:** Layers B and C are mutually exclusive skip-logic branches, so any single respondent sees at most one of them. A respondent therefore answers roughly **67–70** items (the 10 shared Layer-A gender items plus one exclusive branch), not all 80. The exclusive sections are optional, and the technical stack block, `vibe_coding_share`, and `ai_specialization` are all gated — so they add to exposure only for the relevant respondents.
 - **~165 items removed** (checkboxes, COVID, benefits, redundant compensation fields)
 
-The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with a focused set of high-signal questions — each producing strong analytical signal per response — while adding entirely new policy-relevant blocks. Because the two exclusive gender sections are skip-logic branches, any single respondent answers roughly 64–66 items. Estimated completion time stays in the 12–15 minute range; respondents who fill an exclusive section add about 1–2 minutes.
+The redesigned survey replaces a ~130-item instrument dominated by sparse checkboxes with a focused set of high-signal questions — each producing strong analytical signal per response — while adding entirely new policy-relevant blocks. Because the two exclusive gender sections are skip-logic branches, any single respondent answers roughly 67–70 items. Estimated completion time stays in the 12–15 minute range; respondents who fill an exclusive section add about 1–2 minutes.
 
 ---
 
@@ -896,17 +908,17 @@ A Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026) was run to c
 
 | Metric | Old Design | New Design | Change |
 |--------|-----------|-----------|--------|
-| Survey items | 130 | 77 | −41% |
+| Survey items | 130 | 80 | −38% |
 | Est. completion time | 30 min | 14 min | −53% |
-| Model predictors (k) | 90 | 81 | −10% |
+| Model predictors (k) | 90 | 79 | −12% |
 | Usable responses (after dropout) | 5,098 | 5,689 | +591 |
-| **R²** | **0.330** | **0.517** | **+0.187** |
-| Adjusted R² | 0.318 | 0.510 | +0.192 |
-| Standard error of estimate | $23,602 | $20,068 | −$3,534 |
-| R² per survey item | 0.0025 | 0.0068 | +168% |
+| **R²** | **0.330** | **0.516** | **+0.186** |
+| Adjusted R² | 0.318 | 0.509 | +0.191 |
+| Standard error of estimate | $23,602 | $20,082 | −$3,520 |
+| R² per survey item | 0.0025 | 0.0065 | +154% |
 | R² per minute of respondent time | 0.011 | 0.037 | +235% |
-| Effective information (R² × N) | 1,683 | 2,940 | +75% |
-| Mean bootstrap CV (coefficient stability) | 3.46 | 0.44 | −87% |
+| Effective information (R² × N) | 1,683 | 2,935 | +74% |
+| Mean bootstrap CV (coefficient stability) | 3.46 | 0.43 | −87% |
 
 ### Where the New R² Comes From
 
@@ -920,10 +932,10 @@ Starting from old-equivalent predictors on new data (R² = 0.260), each new bloc
 | `industry` | +0.013 | 0.426 |
 | `english_use` | +0.012 | 0.438 |
 | `primary_language` | +0.012 | 0.471 |
-| `gender_mechanisms (Layer A)` | **+0.039** | 0.517 |
-| `cert_depth` | +0.007 | 0.477 |
+| `gender_mechanisms (Layer A)` | **+0.039** | 0.516 |
+| `certs (has_certs)` | +0.006 | 0.477 |
 | `experience_total + tenure` | +0.002 | 0.439 |
-| `tech_depth` | +0.001 | 0.478 |
+| `tech_depth (lang_years)` | +0.000 | 0.477 |
 
 **`seniority_level` alone adds +13.1 pp** — more than all tech-stack questions combined. This single field, absent from the old survey, is the largest analytical gap closed by the redesign. **The Layer A gender mechanisms are the second-largest block (+3.9 pp)** — they both lift R² and let the model decompose the gender gap (below).
 
@@ -943,11 +955,11 @@ The all-gender Layer A mechanisms (negotiation, pay transparency, promotion, spo
 
 1. **3× information density per minute.** Respondents deliver 3× more analytical value per minute spent. The checkbox purge is responsible for most of this.
 2. **87% more stable coefficients.** Eliminating sparse binary predictors removes the wild coefficient swings that made individual technology effects unreliable in the old model.
-3. **+629 usable responses.** The shorter survey retains respondents who would have abandoned mid-way through the checkbox section, reducing selection bias toward senior, male, CDMX-based respondents.
+3. **+591 usable responses.** The shorter survey retains respondents who would have abandoned mid-way through the checkbox section, reducing selection bias toward senior, male, CDMX-based respondents.
 4. **The policy questions are not modeled.** The new policy blocks (formality, cross-border, purchasing power, education ROI, AI impact, gender) are designed to produce standalone findings, not salary predictors — with one exception: the all-gender Layer A mechanisms (negotiation, transparency, promotion, sponsorship, care load) *do* enter the model to decompose the gender gap. The exclusive Layers B and C never do. Their value is not captured by R² but by the advocacy artifacts they enable.
 
 ### Caveats
 
 - Results are from synthetic data calibrated to 2020–2022 effect sizes. Absolute R² values (0.52) should not be cited as predictions; the *relative* comparison between designs is the meaningful finding.
 - Completion rates (85% old, 95% new) are estimates from survey methodology literature, not measured from the actual instrument.
-- VIF is higher in the new design (mean 2.58 vs 1.35) because meaningful predictors are correlated with each other. No variable exceeds VIF=10. The old design's low VIF reflects sparse near-orthogonal noise, not better conditioning.
+- VIF is higher in the new design (mean 2.35 vs 1.39) because meaningful predictors are correlated with each other. No variable exceeds VIF=10. The old design's low VIF reflects sparse near-orthogonal noise, not better conditioning.

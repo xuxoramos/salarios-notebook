@@ -1,7 +1,7 @@
 # Simulation Results: Old Survey vs. 2026 Redesign
 
 **Date:** 2026-03-11
-**Updated:** 2026-06-14 (AI role-transition items added: `ai_role_status` + `ai_specialization` replace `ai_salary_impact`; new design now 77 items)
+**Updated:** 2026-07-04 (Jul-2026 feedback: roles consolidated to discipline-only with management via seniority_level; `tech_breadth` and `cert_count` dropped; second-job, vibe-coding, investment, first-gen, parental-leave, and women-leadership items added; new design now 80 items)
 **Method:** Monte Carlo simulation (n=6,000 synthetic respondents, seed=2026)
 **Script:** `simulation_old_vs_new.py`
 **Outputs:** `simulation_results/` (CSVs with full numbers)
@@ -14,15 +14,15 @@ The redesigned 2026 survey achieves **higher explanatory power with fewer questi
 
 | Metric | Old Design | New Design | Change |
 |--------|-----------|-----------|--------|
-| Survey items | 130 | 77 | −41% |
+| Survey items | 130 | 80 | −38% |
 | Est. completion time | 30 min | 14 min | −53% |
-| Model predictors (k) | 90 | 81 | −10% |
+| Model predictors (k) | 90 | 79 | −12% |
 | Usable responses (after dropout) | 5,098 | 5,689 | +591 |
-| **R²** | **0.3301** | **0.5167** | **+0.187** |
-| Adjusted R² | 0.3181 | 0.5097 | +0.192 |
-| Standard error of estimate | $23,602 | $20,068 | −$3,534 |
+| **R²** | **0.3301** | **0.5159** | **+0.186** |
+| Adjusted R² | 0.3181 | 0.5091 | +0.191 |
+| Standard error of estimate | $23,602 | $20,082 | −$3,520 |
 
-The redesign explains **57% more salary variance** than the old design while asking **41% fewer questions** and completing in **half the time**.
+The redesign explains **57% more salary variance** than the old design while asking **38% fewer questions** and completing in **half the time**.
 
 ---
 
@@ -38,10 +38,10 @@ Starting from a baseline of old-equivalent predictors on the new data (R² = 0.2
 | `industry` | +0.013 | 0.426 | 10 |
 | `english_use` (behavioral anchor) | +0.012 | 0.438 | 1 |
 | `primary_language` (single-select) | +0.012 | 0.471 | 14 |
-| `gender_mechanisms` (Layer A) | **+0.039** | 0.517 | 9 |
-| `cert_depth` (has + count) | +0.007 | 0.477 | 2 |
+| `gender_mechanisms` (Layer A) | **+0.039** | 0.516 | 9 |
+| `certs (has_certs)` | +0.006 | 0.477 | 1 |
 | `experience_total + tenure_current` | +0.002 | 0.439 | 2 |
-| `tech_depth` (lang_years + breadth) | +0.001 | 0.478 | 2 |
+| `tech_depth (lang_years)` | +0.000 | 0.477 | 1 |
 | `work_arrangement` (expanded) | +0.000 | 0.471 | 3 |
 
 **Key finding:** `seniority_level` alone adds +13.1 percentage points of R² — more than all tech-stack questions combined. This single field, absent from the old survey, is the largest analytical gap closed by the redesign. The **Layer A gender mechanisms are the second-largest block (+3.9 pp)**: they both lift R² and let the model decompose the gender gap (Section 2.1).
@@ -80,9 +80,9 @@ The redesign's core achievement is doing more with less:
 
 | Metric | Old | New | Improvement |
 |--------|-----|-----|-------------|
-| R² per survey item | 0.0025 | 0.0068 | **+168%** |
+| R² per survey item | 0.0025 | 0.0065 | **+154%** |
 | R² per minute of respondent time | 0.0110 | 0.0369 | **+235%** |
-| Effective information (R² × N) | 1,683 | 2,940 | **+75%** |
+| Effective information (R² × N) | 1,683 | 2,935 | **+74%** |
 
 **R² per minute triples.** Every minute a respondent spends on the new survey generates 3× more analytical signal than the old survey. This is the central design payoff: eliminating the checkbox matrices that consumed 40% of respondent time while contributing <5% of explanatory power.
 
@@ -94,7 +94,7 @@ The redesign's core achievement is doing more with less:
 
 | Metric | Old | New |
 |--------|-----|-----|
-| Mean VIF | 1.39 | 2.37 |
+| Mean VIF | 1.39 | 2.35 |
 | Variables with VIF > 5 | 3 | 9 |
 | Variables with VIF > 10 | 0 | 0 |
 
@@ -107,7 +107,7 @@ The new design's higher VIF reflects real structural relationships between meani
 - `role_Backend`/`role_Fullstack`/`role_Frontend` (VIF 5.6–7.3): mutual exclusivity of single-select one-hot dummies. These are not independence violations; they are artifacts of the encoding.
 - `seniority_Mid`/`seniority_Senior` (VIF ≈ 5.0): similarly, these are structural one-hot effects.
 
-**No variable exceeds VIF = 10** (the standard threshold for concern). The mean VIF of 2.37 is well within acceptable range for a well-specified model.
+**No variable exceeds VIF = 10** (the standard threshold for concern). The mean VIF of 2.35 is well within acceptable range for a well-specified model.
 
 ### The hidden collinearity problem in the old design
 
@@ -130,8 +130,8 @@ The new single-select design eliminates this by construction: each respondent ha
 
 | Aggregate | Old | New |
 |-----------|-----|-----|
-| Mean CV across all predictors | 3.458 | 0.438 |
-| **Stability improvement** | — | **87.3%** |
+| Mean CV across all predictors | 3.458 | 0.433 |
+| **Stability improvement** | — | **87.5%** |
 
 ### Interpretation
 
@@ -206,7 +206,7 @@ These results are from synthetic data. The true DGP used to generate salaries em
 
 ### 9.2 VIF Comparison Requires Nuance
 
-The new design's higher mean VIF (2.37 vs 1.39) is a structural artifact of having more meaningful, correlated predictors where the old design had sparse, near-orthogonal noise. Section 4 explains why this is not a concern. Presenting this as "the new design has worse multicollinearity" would be misleading without context.
+The new design's higher mean VIF (2.35 vs 1.39) is a structural artifact of having more meaningful, correlated predictors where the old design had sparse, near-orthogonal noise. Section 4 explains why this is not a concern. Presenting this as "the new design has worse multicollinearity" would be misleading without context.
 
 ### 9.3 Completion Rate is Assumed
 
@@ -226,7 +226,7 @@ The simulated salaries (mean $97K) are higher than the real survey (mean $47K) b
 
 The 2026 redesign achieves what good survey engineering should: **more signal from less effort**. The core gains are:
 
-1. **+18.7 pp in R²** — led by `seniority_level` (+13.1 pp), the Layer A gender mechanisms (+3.9 pp), `company_size` (+2.2 pp), and `english_use` (+1.2 pp). Most of these were not exotic new questions — they were *obvious omissions* from the old design.
+1. **+18.6 pp in R²** — led by `seniority_level` (+13.1 pp), the Layer A gender mechanisms (+3.9 pp), `company_size` (+2.2 pp), and `english_use` (+1.2 pp). Most of these were not exotic new questions — they were *obvious omissions* from the old design.
 
 2. **3× information density per minute** — respondents deliver 3× more analytical value per minute spent. The checkbox purge is responsible for most of this.
 
@@ -236,6 +236,6 @@ The 2026 redesign achieves what good survey engineering should: **more signal fr
 
 5. **The gender gap becomes a decomposition** — Layer A mechanisms explain ~45% of the raw −$13,705 gap, leaving a −$7,482 unexplained residual for advocacy.
 
-5. **62% more effective information (R² × N)** — combining higher R² with more responses produces a substantially better dataset for every downstream analysis.
+5. **74% more effective information (R² × N)** — combining higher R² with more responses produces a substantially better dataset for every downstream analysis.
 
 The single most impactful change is adding `seniority_level`. If only one thing could be changed about the old survey, this would be it.

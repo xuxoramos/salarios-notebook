@@ -297,9 +297,7 @@ new_X = pd.DataFrame({
     "english_use": english_use_score,
     "is_female": is_female,
     "has_certs": has_certs.astype(float),
-    "cert_count": cert_count.astype(float),
     "primary_lang_years": primary_lang_years,
-    "tech_breadth": tech_breadth.astype(float),
     "first_code_age": first_code_age,
     "childhood_computer": childhood_computer,
     "negotiated_salary": negotiated_salary,
@@ -505,7 +503,7 @@ old_cols_gt90 = (old_sparsity > 0.90).sum()
 old_cols_gt95 = (old_sparsity > 0.95).sum()
 
 # New tech fields: all are either numeric or one-hot with solid representation
-new_tech_cols_num = ["has_certs", "cert_count", "primary_lang_years", "tech_breadth"]
+new_tech_cols_num = ["has_certs", "primary_lang_years"]
 new_tech_cat = pd.concat([new_role_dummies, new_lang_dummies], axis=1)
 new_tech_sparsity = 1 - new_tech_cat.mean()
 new_mean_sparsity = new_tech_sparsity.mean()
@@ -557,7 +555,7 @@ print("=" * 70)
 
 # Survey items (not predictors — respondent-facing questions)
 old_items = 130  # ~18 Ben + 5 COVID + ~80 tech checkboxes + 27 certs + ~26 acts + ~14 core
-new_items = 77
+new_items = 80
 
 old_minutes = 30  # estimated
 new_minutes = 14  # estimated from SALARIOS_REDESIGN_2026.md
@@ -609,8 +607,8 @@ blocks = {
     "primary_role": new_X_complete.filter(like="role_"),
     "primary_language": new_X_complete.filter(like="lang_"),
     "work_arrangement (expanded)": new_X_complete.filter(like="work_"),
-    "cert_depth (has + count)": new_X_complete[["has_certs", "cert_count"]],
-    "tech_depth (lang_yrs + breadth)": new_X_complete[["primary_lang_years", "tech_breadth"]],
+    "certs (has_certs)": new_X_complete[["has_certs"]],
+    "tech_depth (lang_years)": new_X_complete[["primary_lang_years"]],
     "gender_mechanisms (Layer A)": new_X_complete[["first_code_age", "childhood_computer",
         "negotiated_salary", "pay_transparency", "promoted_2y", "has_sponsor",
         "caregiving_load", "career_interruption", "discrimination_exp"]],

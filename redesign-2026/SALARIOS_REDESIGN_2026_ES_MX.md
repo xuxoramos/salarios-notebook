@@ -139,7 +139,7 @@ Varias preguntas retenidas tienen debilidades analíticas que se acumulan en rui
 
 **Campos actuales eliminados o reemplazados:**
 - `salarymx` → reemplazado por `base_salary` + `total_cash_annual`
-- `salaryusd` → eliminado (redundante con `payment_currency` de la Sección 2.3; todos reportan en moneda local, se normaliza en análisis)
+- `salaryusd` → eliminado (redundante con `payment_currency`, ahora movido a esta sección; todos reportan en moneda local, se normaliza en análisis)
 - `extramx` / `extrausd` → eliminados (capturados por `total_cash_annual`)
 - `variation` → reemplazado por `salary_change` + `salary_change_reason`
 
@@ -149,11 +149,12 @@ Varias preguntas retenidas tienen debilidades analíticas que se acumulan en rui
 |---|---|---|---|
 | `base_salary` | ¿Cuál es tu salario mensual bruto BASE (antes de impuestos, sin incluir bonos ni compensación variable)? | Numérico | (moneda local) |
 | `total_cash_annual` | ¿Cuál fue tu compensación total en efectivo en los últimos 12 meses (incluyendo salario, bonos, aguinaldo, y cualquier otra compensación en efectivo)? | Numérico | (moneda local) |
-| `has_equity` | ¿Recibes compensación en acciones, opciones o RSUs? | Selección única | Sí / No |
+| `has_equity` | ¿Recibes compensación en acciones, opciones o RSUs de tu empleador actual? | Selección única | Sí / No |
+| `payment_currency` | ¿En qué moneda recibes tu compensación principal? | Selección única | MXN / USD / EUR / BRL / COP / ARS / Otra |
 | `salary_change` | Comparado con hace 12 meses, tu compensación total... | Selección única | Aumentó >20% / Aumentó 10–20% / Aumentó 1–9% / Se mantuvo igual / Disminuyó |
 | `salary_change_reason` | ¿A qué se debió el cambio principal? | Selección única | Promoción / Cambio de empresa / Ajuste anual / Cambio a moneda extranjera / Recorte / Otro / No cambió |
 
-**Por qué:** `base_salary` es inequívoco y comparable. `total_cash_annual` captura la foto completa (lo que `salarymx + extramx + aguinaldo + bonos` aproximaba). `has_equity` identifica el nivel oculto de compensación cada vez más común en tech. `salary_change_reason` separa crecimiento por mercado vs. acciones individuales — AMITI puede decir si el crecimiento salarial es de mercado o de movilidad.
+**Por qué:** `base_salary` es inequívoco y comparable. `total_cash_annual` captura la foto completa (lo que `salarymx + extramx + aguinaldo + bonos` aproximaba). `has_equity` (acotado explícitamente al *empleador actual*) identifica el nivel oculto de compensación cada vez más común en tech. `payment_currency` vive aquí como atributo de compensación (movido desde el bloque transfronterizo) y aún se cruza con `employer_hq` para la descomposición transfronteriza (Sec 2.3). `salary_change_reason` separa crecimiento por mercado vs. acciones individuales — AMITI puede decir si el crecimiento salarial es de mercado o de movilidad.
 
 #### 1.5.2 Experiencia: Separar Tech vs. Total
 
@@ -181,9 +182,9 @@ Varias preguntas retenidas tienen debilidades analíticas que se acumulan en rui
 
 | ID | Pregunta | Tipo | Opciones |
 |---|---|---|---|
-| `seniority_level` | ¿Cuál es tu nivel dentro de tu organización? | Selección única | Junior / Mid / Senior / Staff-Principal / Lead-Manager / Director+ / Founder-C-Level / No aplica (freelance, estudiante) |
+| `seniority_level` | ¿Cuál es tu nivel dentro de tu organización? | Selección única | Junior / Mid / Senior / Staff-Principal / Manager / Director+ / Founder-C-Level / No aplica (freelance, estudiante) |
 
-**Por qué:** El nivel de seniority es uno de los predictores salariales más fuertes en cualquier encuesta de desarrolladores, y el encuesta actual no lo captura. Un dev con 3 años en "Senior" gana distinto a uno con 3 años en "Mid". Este campo reemplaza `profile` con valor analítico mucho mayor.
+**Por qué:** El nivel de seniority es uno de los predictores salariales más fuertes en cualquier encuesta de desarrolladores, y el encuesta actual no lo captura. Un dev con 3 años en "Senior" gana distinto a uno con 3 años en "Mid". Este campo reemplaza `profile` con valor analítico mucho mayor. Además es una **escalera de nivel pura** que carga la dimensión *gerencial* para toda disciplina: en vez de agregar roles de manager específicos a `primary_role`, un design manager es `UX-UI Design` × `Manager`, un head of data science es `Data Scientist-ML` × `Director+`, y un VP de IA es `AI-ML Engineer` × `Director+`. Los peldaños `Manager / Director+ / Founder-C-Level` dan cobertura gerencial en todos los roles sin opciones extra.
 
 #### 1.5.4 Agregar Tamaño de Empresa
 
@@ -248,10 +249,11 @@ Los bloques de tecnología actuales son la parte más larga del encuesta (~100+ 
 
 | ID | Pregunta | Tipo | Opciones |
 |---|---|---|---|
-| `primary_role` | ¿Cuál es tu rol o actividad principal? | Selección única | Backend Dev / Frontend Dev / Fullstack Dev / Mobile Dev / Data Science-ML / Data Engineering / DevOps-Infra-SRE / InfoSec / Architecture / PM / QA-Testing / UXD / Direction-Strategy / AI-ML Engineering / Support / Other |
+| `primary_role` | ¿Cuál es tu rol o actividad principal? | Selección única | Software Engineer (Backend/Frontend/Fullstack) / Mobile Engineer / Data Engineer / Data Scientist-ML / Data Analyst / AI-ML Engineer / DevOps-SRE-Infra / Security-InfoSec / Architecture / QA-Testing / UX-UI Design / Product Manager / Project Manager / Program Manager / Support / Other |
 | `secondary_role` | ¿Tienes un rol secundario? | Selección única | Mismas opciones + "No tengo rol secundario" |
+| `has_second_job` | ¿Tienes un segundo empleo remunerado además de tu trabajo principal? | Selección única | Sí / No |
 
-**Por qué:** El modelo causal necesita **un** rol por persona para estimar efectos limpios. Selección múltiple obliga a dummies traslapadas. 2 preguntas reemplazan 26 casillas. Los subroles de IA se mantienen deliberadamente fuera de esta lista y se capturan en el ítem `ai_specialization` con lógica de salto (Sec 2.6), para que la taxonomía de roles esté al día sin fragmentar `primary_role` en celdas dispersas.
+**Por qué:** El modelo causal necesita **un** rol por persona para estimar efectos limpios. Selección múltiple obliga a dummies traslapadas. 2 preguntas reemplazan 26 casillas. `primary_role` es ahora una lista de **disciplina pura**: los tres tipos de dev se fusionan en `Software Engineer` (la disciplina se sigue infiriendo por `primary_framework`), se agrega `Data Analyst`, el ambiguo `PM` se desambigua en `Product Manager` / `Project Manager` / `Program Manager`, y la gestión **no** se modela como rol — se captura para toda disciplina vía `seniority_level` (Sec 1.5.3), por eso se eliminó el bucket "Engineering Manager" (que solo cubría ingeniería). Los subroles de IA también se mantienen fuera y se capturan con el ítem con salto `ai_specialization` (Sec 2.6). `has_second_job` es una bandera Sí/No deliberadamente escueta, justo debajo de `secondary_role`: capta la existencia de *pluriempleo* (señal real de estructura laboral en LatAm) sin pedir detalles, ya que el segundo empleo es culturalmente sensible y suele ser penalizado por el empleador principal.
 
 #### 1.6.3 Paso 2: Reemplazar Listas por Stack Principal
 
@@ -259,22 +261,21 @@ En lugar de preguntar por cada tecnología, preguntar por lo que usan *principal
 
 | ID | Pregunta | Tipo | Opciones |
 |---|---|---|---|
-| `primary_language` | ¿Cuál es tu lenguaje de programación principal? | Selección única | JavaScript-TypeScript / Python / Java / C# / Go / Rust / PHP / Ruby / Kotlin / Swift / C-C++ / Scala / Elixir / Other |
+| `primary_language` | ¿Cuál es tu lenguaje de programación principal? | Selección única | JavaScript-TypeScript / Python / Java / C# / Go / Rust / PHP / Ruby / Kotlin / Swift / C-C++ / Scala / Elixir / Ninguno en particular (asistido por IA) / Other |
 | `primary_framework` | ¿Cuál es tu framework o plataforma principal? | Selección única | React / Angular / Vue / Next.js / Spring / Django-FastAPI / .NET / Rails / Flutter / Laravel / Node.js-Express / None / Other |
 | `primary_database` | ¿Cuál es tu base de datos principal? | Selección única | PostgreSQL / MySQL / SQL Server / MongoDB / Redis / DynamoDB / Firebase / Oracle / Other |
 | `primary_cloud` | ¿Cuál es tu plataforma de nube principal? | Selección única | AWS / Azure / GCP / On-premise / No uso nube / Other |
 
-**Por qué:** Selección única produce grupos limpios y no traslapados para comparar salarios. "Los devs Python ganan X" es una afirmación real; "la gente que marcó Python entre otras cosas gana X" está confundida. 4 preguntas reemplazan ~60 casillas (`lang_*` + `front_*` + `mobile_*` + `db_*` + parte de `infra_*`).
+**Por qué:** Selección única produce grupos limpios y no traslapados para comparar salarios. "Los devs Python ganan X" es una afirmación real; "la gente que marcó Python entre otras cosas gana X" está confundida. 4 preguntas reemplazan ~60 casillas (`lang_*` + `front_*` + `mobile_*` + `db_*` + parte de `infra_*`). Todo este bloque de stack (junto con `primary_lang_years`, `stack_change` y `vibe_coding_share`) está **condicionado a un `primary_role` técnico**, así que managers, PMs, UX y soporte lo saltan. `primary_language` gana además una opción *"Ninguno en particular (asistido por IA)"* para que quienes son agnósticos al lenguaje — cada vez más comunes conforme la programación asistida por IA afloja el vínculo con un solo lenguaje — no sean forzados a un principal falso.
 
 #### 1.6.4 Paso 3: Agregar Profundidad (lo que los casillas no captan)
 
 | ID | Pregunta | Tipo | Opciones |
 |---|---|---|---|
 | `primary_lang_years` | ¿Cuántos años llevas usando tu lenguaje principal? | Numérico | (años) |
-| `tech_breadth` | ¿En cuántas de las siguientes áreas trabajas regularmente? (Backend, Frontend, Mobile, Data, Infra/DevOps, Security, AI/ML) | Numérico | 1–7 conteo |
 | `stack_change` | ¿Has cambiado significativamente tu stack tecnológico en los últimos 2 años? | Selección única | Sí, completamente / Sí, parcialmente / No |
 
-**Por qué:** `primary_lang_years` aporta señal de profundidad que los binarios destruyen. `tech_breadth` captura el eje generalista vs. especialista. `stack_change` mide movilidad tecnológica — ¿quienes cambian stack ganan más o menos?
+**Por qué:** `primary_lang_years` aporta señal de profundidad que los binarios destruyen. `stack_change` mide movilidad tecnológica — ¿quienes cambian stack ganan más o menos? (Un `tech_breadth` de conteo generalista-vs-especialista se eliminó: el eje no arrojaba nada estadísticamente significativo y `secondary_role` ya capta la señal cross-disciplina relevante.)
 
 #### 1.6.5 Paso 4: Reducir Certificaciones
 
@@ -285,17 +286,16 @@ En lugar de preguntar por cada tecnología, preguntar por lo que usan *principal
 | ID | Pregunta | Tipo | Opciones |
 |---|---|---|---|
 | `has_certs` | ¿Tienes alguna certificación técnica vigente? | Selección única | Sí / No |
-| `cert_category` | ¿En qué categoría(s)? (selecciona las que apliquen, máx 3) | Selección múltiple | Cloud (AWS/Azure/GCP) / Agile-PM (Scrum/PMP) / Security (CISSP/CEH) / Kubernetes-DevOps / Data (Databricks/Snowflake) / Other |
-| `cert_count` | ¿Cuántas certificaciones tienes? | Numérico | (conteo) |
+| `cert_category` | ¿En qué categoría(s)? (selecciona las que apliquen) | Selección múltiple | Cloud (AWS/Azure/GCP) / Scrum-Agile / PMP / Kubernetes (CKA/CKAD) / Security (CISSP/CompTIA) / Data (Databricks/Snowflake) / Other |
 
-**Por qué:** Las categorías son estables en el tiempo (a diferencia de nombres específicos). `cert_count` prueba si más certs = más salario o si se aplana. 3 preguntas reemplazan 27 casillas.
+**Por qué:** Las categorías son estables en el tiempo (a diferencia de nombres específicos) y se acotan a las familias de certificación más comunes del mercado más Other. `has_certs` condiciona a `cert_category`. (El `cert_count` numérico se eliminó según feedback: poca señal para la carga del encuestado.) 2 preguntas reemplazan 27 casillas.
 
 
 #### 1.6.6 Resumen de Impacto
 
 | Métrica | Actual | Rediseñado |
 |---|---|---|
-| Ítems tech | ~100+ casillas | 13 preguntas estructuradas + 1 opcional |
+| Ítems tech | ~100+ casillas | 11 preguntas estructuradas + 1 opcional |
 | Tiempo de respuesta (sección tech) | 8–12 min | 2–3 min |
 | Señal analítica por pregunta | Baja (binarios dispersos) | Alta (primario + profundidad) |
 | Comparabilidad interanual | Se rompe frecuentemente | Estable (categorías, no productos) |
@@ -364,9 +364,9 @@ El reencuadre crítico: **la informalidad no es solo un problema de cumplimiento
 | ID | Pregunta | Tipo | Opciones |
 |----|----------|------|---------|
 | `employer_hq` | ¿En qué país tiene su sede principal la empresa para la que trabajas? | Selección única | México / Estados Unidos / Canadá / Europa / América Latina (otro) / Asia / Otro |
-| `payment_currency` | ¿En qué moneda recibes tu compensación principal? | Selección única | MXN / USD / EUR / Otra |
 | `cross_border_contract` | ¿Cuál es tu relación laboral con esta empresa extranjera? | Selección única | Contrato laboral local (a través de entidad mexicana) / Contractor independiente / A través de Employer of Record (Deel, Remote, etc.) / Otro |
-| `cross_border_tax` | ¿Emites facturas (CFDI) a una empresa extranjera como persona física con actividad empresarial? | Selección única | Sí / No / No aplica |
+
+*(`payment_currency` se movió al bloque de Compensación, Sec 1.5.1, por ser un atributo de compensación; aún se cruza con `employer_hq` para la descomposición de abajo. El antiguo `cross_border_tax` (CFDI) se eliminó por ser específico de MX y difícil de localizar.)*
 
 **Justificación de advocacy para AMITI:**
 
@@ -396,7 +396,8 @@ El problema central para AMITI: **empleadores extranjeros reclutan talento mexic
 |----|----------|------|---------|
 | `purchasing_power` | ¿Cómo calificarías tu capacidad para cubrir tus necesidades básicas con tu salario actual? | Likert 1–5 | 1=Con mucha dificultad ... 5=Con mucha holgura |
 | `housing_burden` | ¿Qué porcentaje aproximado de tu ingreso mensual destinas a renta o hipoteca? | Selección única | 0% (vivienda propia sin hipoteca) / 1–20% / 21–30% / 31–40% / 41–50% / Más del 50% |
-| `financial_savings` | ¿Logras ahorrar al menos el 10% de tu ingreso mensual? | Selección única | Sí, regularmente / A veces / Rara vez o nunca |
+| `financial_savings` | ¿Qué porcentaje de tu ingreso mensual logras ahorrar? | Selección única | No logro ahorrar / Menos del 10% / 10–20% / 21–30% / Más del 30% |
+| `investment_instruments` | ¿Inviertes activamente parte de tus ingresos? ¿En qué instrumentos? | Selección múltiple | No invierto / Cetes o bonos gubernamentales / ETFs / Fondos de inversión / Acciones individuales / Cripto / Bienes raíces |
 
 **Justificación de advocacy para AMITI:**
 
@@ -415,6 +416,7 @@ Nadie en LatAm publica un **índice de salarios reales específico de tech**. La
 - Construir índice de poder adquisitivo por ciudad: promedio de `purchasing_power` por ciudad, ponderado por banda salarial
 - Comparar rankings de salario nóminal vs. rankings ajustados por poder adquisitivo — resaltar ciudades donde el orden se invierte (ciudades "valor oculto")
 - Modelar `financial_savings` en función de salario, ciudad, carga de vivienda y estado familiar para identificar fragilidad financiera (ciudades con mayor riesgo de rotación)
+- Cruzar `financial_savings` e `investment_instruments` con `first_gen_university` (Sec 2.5) para medir **movilidad social**: si los profesionales de primera generación convierten el salario tech en ahorro e inversión (bonos gubernamentales, ETFs, fondos, acciones, bienes raíces) al mismo ritmo que sus pares, o si las obligaciones familiares absorben la ganancia
 
 ### 2.5 Nuevo Bloque: ROI Educativo y Trayectorias
 
@@ -426,6 +428,7 @@ Nadie en LatAm publica un **índice de salarios reales específico de tech**. La
 | `recent_training` | ¿Has completado alguna capacitación o curso en los últimos 12 meses? | Selección única | Sí, pagado por mi empleador / Sí, pagado por mí / Sí, gratuito / No |
 | `first_job_degree` | ¿Tu primer empleo en tecnología requirió un título universitario? | Selección única | Sí, era requisito formal / No, pero lo tenía / No, y no lo tenía |
 | `edu_debt` | ¿Tienes deuda educativa actualmente (crédito educativo, préstamo para estudios)? | Selección única | Sí / No / Prefiero no contestar |
+| `first_gen_university` | ¿Eres la primera generación de tu familia en cursar estudios universitarios? | Selección única | Sí / No / No cursé universidad |
 
 **Justificación de advocacy para AMITI:**
 
@@ -434,6 +437,7 @@ AMITI ya corre programas de colaboración con ANUIES. Las variables `education` 
 - **¿Vale la pena un grado de CS?** `edu_relevance` + `first_job_degree` lo miden directamente. Si 60% de seniors dice que su educación fue "poco relevante" y su primer empleo no requirió título, AMITI puede ir a ANUIES con datos: "Los planes deben rediseñarse con industria".
 - **¿Quién se reentrena y quién paga?** `recent_training` distingue capacitación pagada por empresa vs. autofinanciada vs. gratuita. Si la mayoría es autofinanciada, AMITI puede pedir deducción fiscal para capacitación de empleador (similar al incentivo STPS, ampliado para certs tech).
 - **¿La deuda educativa es barrera para crecimiento del pipeline?** `edu_debt` es proxy de accesibilidad. Si egresados de bootcamp cargan menos deuda y ganan similar a licenciados, AMITI puede promover bootcamps como ruta más rápida y barata para ampliar talento.
+- **¿Tech es motor de movilidad social?** `first_gen_university` marca a quienes son la primera generación de su familia en la universidad — una fracción grande de tecnólogos en LatAm que eligieron el campo justo por la movilidad que ofrece. Cruzado con salario, ciudad y los ítems de ahorro/inversión (Sec 2.4), cuantifica qué tan eficazmente el sector tech convierte educación en movilidad económica de primera generación, un titular que AMITI puede llevar a SEP y a bancos de desarrollo.
 
 **Recomendaciones accionables para AMITI:**
 - **Proponer a ANUIES (vía comité educativo):** Reformas curriculares basadas en `edu_relevance` por área. "Programas con prácticas industriales alcanzan $50K MXN de mediana 2 años antes — aquí está el dato".
@@ -452,12 +456,15 @@ AMITI ya corre programas de colaboración con ANUIES. Las variables `education` 
 | ID | Pregunta | Tipo | Opciones |
 |----|----------|------|---------|
 | `ai_tools_use` | ¿Utilizas herramientas de IA (Copilot, ChatGPT, etc.) como parte regular de tu trabajo? | Selección única | Sí, diariamente / Sí, semanalmente / Ocasionalmente / No |
+| `vibe_coding_share` (con salto) | ¿Qué proporción de tu código generas describiéndole a una IA lo que quieres, en lugar de escribirlo directamente? | Selección única | Nada / Poco / Aproximadamente la mitad / La mayoría / Casi todo |
 | `ai_task_change` | ¿Han cambiado las tareas que realizas debido a herramientas de IA? | Selección única | Sí, hago tareas de mayor nivel / Sí, hago las mismas tareas más rápido / Sí, algunas tareas ya no las hago / No ha cambiado |
 | `ai_skill_confidence` | ¿Qué tan confiado/a estás en que tus habilidades actuales seguirán siendo relevantes en 3 años? | Likert 1–5 | 1=Nada confiado ... 5=Totalmente confiado |
 | `ai_role_status` | ¿Tu rol actual es un rol de IA? | Selección única | No / Sí, cambié a un rol nuevo de IA / Sí, mi rol tradicional se transformó hacia IA |
 | `ai_specialization` (con salto) | ¿Cuál es tu especialización principal de IA? | Selección única | ML-AI Engineer / GenAI-LLM-Agent Engineer / MLOps-AI Platform Engineer / AI Product Manager / Responsible AI-Governance |
 
 **Diseño de transición de rol (con base en data de industria 2025):** `ai_role_status` distingue los tres fenómenos que produjo el boom de IA — roles de IA nuevos, roles tradicionales transformados hacia IA, y roles sin cambio. `ai_specialization` es una selección única con lógica de salto, mostrada solo a quienes tienen rol de IA (o eligieron AI-ML Engineering en `primary_role`), de modo que captura la taxonomía de roles sin fragmentar `primary_role` en categorías dispersas. La taxonomía de cinco categorías (ML/AI Engineer; GenAI/LLM/Agent Engineer; MLOps/AI Platform; AI Product Manager; Responsible AI/Governance) sigue los marcos de Gartner (AI Engineering y AI TRiSM) y el WEF *Future of Jobs Report 2025*, que ubica a los especialistas en IA y machine learning entre los roles de mayor crecimiento y a IA/big-data como la habilidad #1 en ascenso hacia 2030. La división entre roles nuevos y transformados operacionaliza el hallazgo de McKinsey *State of AI* (nov 2025): la contratación de IA se concentra en roles ya existentes de ingeniería de software y datos, no en títulos exóticos — es decir, la mayoría de los roles de IA son *reconvertidos*, no creados.
+
+**Señal de vibe coding:** `vibe_coding_share` (condicionada a un `primary_role` técnico) mide qué proporción del código se produce describiéndole la intención a una IA en lugar de escribirlo directamente. Es la contraparte individual del cambio de industria y un chequeo de qué tanto la programación asistida por IA afloja el vínculo entre `primary_language`/`primary_framework` y la identidad profesional (junto con la opción "Ninguno en particular / asistido por IA" en `primary_language`, Sec 1.6.3).
 
 **Separación de BP2C (cumplimiento Objetivo 1):**
 
@@ -488,7 +495,7 @@ Este bloque responde a dos peticiones de liderazgo: (1) revelar los *mecanismos*
 
 #### Capa A — Mecanismos de la brecha (todos los géneros, alimenta el modelo)
 
-Estos nueve ítems se preguntan a todas las personas y son el centro analítico. Convierten la brecha de género cruda en un conjunto descomponible de mecanismos (negociación, transparencia, promoción, patrocinio, carga de cuidado, interrupción de carrera, edad de inicio), habilitando una descomposición tipo Oaxaca–Blinder: cuánto de la brecha de −$12,442 es *explicado* vs. *no explicado*.
+Estos diez ítems se preguntan a todas las personas y son el centro analítico. Convierten la brecha de género cruda en un conjunto descomponible de mecanismos (negociación, transparencia, promoción, patrocinio, carga de cuidado, interrupción de carrera, uso de licencia parental, edad de inicio), habilitando una descomposición tipo Oaxaca–Blinder: cuánto de la brecha de −$12,442 es *explicado* vs. *no explicado*.
 
 | ID | Pregunta | Tipo | Opciones |
 |----|----------|------|---------|
@@ -500,6 +507,7 @@ Estos nueve ítems se preguntan a todas las personas y son el centro analítico.
 | `has_sponsor` | ¿Cuentas con un mentor o patrocinador que impulse tu carrera? | Selección única | Sí / No |
 | `caregiving_load` | ¿Tienes responsabilidades de cuidado (hijos, familiares) que afecten tu disponibilidad laboral? | Selección única | Sí, principalmente yo / Sí, compartidas / No |
 | `career_interruption` | ¿Has pausado o reducido tu carrera por responsabilidades personales o familiares? | Selección única | Sí / No |
+| `parental_leave_taken` | Si has tenido hijos, ¿tomaste licencia parental? | Selección única | Sí, completa / Sí, parcial / No / No aplica |
 | `discrimination_exp` | ¿Has experimentado discriminación en procesos de contratación o promoción en el sector tecnológico? | Selección única | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 
 #### Capa B — Experiencia de mujeres (exclusiva, opcional, lógica de salto `gender = mujer`)
@@ -512,6 +520,7 @@ Se muestra solo a quienes se identifican como mujeres. Solo descriptiva — **no
 | `women_only_team` | ¿Eres la única mujer o una de muy pocas en tu equipo? | Selección única | Sí, la única / Una de pocas / No / Prefiero no contestar |
 | `women_harassment` | ¿Te has sentido insegura o has vivido acoso en tu entorno laboral en tech? | Selección única | Sí, frecuentemente / Sí, alguna vez / No / Prefiero no contestar |
 | `women_network` | ¿Tienes acceso a redes o comunidades de mujeres en tech (Women Who Code, Laboratoria, etc.)? | Selección única | Sí, activamente / Sí, pero no participo / No / No las conozco |
+| `women_leadership_program` | ¿Tu empleador tiene programas formales de mentoría o promoción de mujeres hacia posiciones de liderazgo? | Selección única | Sí / No / No sé |
 
 #### Capa C — Experiencia de género alternativo (exclusiva, opcional, lógica de salto `gender = no binario/otro`)
 
@@ -819,7 +828,7 @@ Coordinación a gestionar (no son bloqueantes):
 | 18 | `experience_tech` | `experience` | Años explícitos en tech (Sec 1.5.2) |
 | 19 | `experience_total` | (nuevo) | Años totales; delta = señal de cambio de carrera (Sec 1.5.2) |
 | 20 | `tenure_current` | `seniority` | Antigüedad en empresa reemplaza antigüedad en rol (Sec 1.5.2) |
-| 21 | `seniority_level` | `profile` | Jr/Mid/Sr/Staff/Lead/Director/C-Level (Sec 1.5.3) |
+| 21 | `seniority_level` | `profile` | Jr/Mid/Sr/Staff/Manager/Director/C-Level; nivel gerencial para toda disciplina (Sec 1.5.3) |
 | 22 | `company_size` | (nuevo) | Predictor top-5 ausente (Sec 1.5.4) |
 | 23 | `industry` | (nuevo) | Segmentación por vertical (Sec 1.5.5) |
 | 24 | `english_use` | (nuevo) | Ancla conductual del inglés (Sec 1.5.6) |
@@ -828,31 +837,33 @@ Coordinación a gestionar (no son bloqueantes):
 
 | # | Campo Nuevo | Reemplaza | Cambio |
 |---|-----------|----------|--------|
-| 25 | `primary_role` | `act_*` (26 casillas) | Rol principal único (Sec 1.6.2) |
+| 25 | `primary_role` | `act_*` (26 casillas) | Disciplina principal única; gestión vía `seniority_level` (Sec 1.6.2) |
 | 26 | `secondary_role` | `act_*` (26 casillas) | Rol secundario opcional (Sec 1.6.2) |
-| 27 | `primary_language` | `lang_*` (20 casillas) | Lenguaje principal único (Sec 1.6.3) |
-| 28 | `primary_framework` | `front_*` + `mobile_*` | Framework/plataforma principal (Sec 1.6.3) |
-| 29 | `primary_database` | `db_*` (~15 casillas) | Base de datos principal (Sec 1.6.3) |
-| 30 | `primary_cloud` | `infra_*` (parcial) | Plataforma de nube principal (Sec 1.6.3) |
-| 31 | `primary_lang_years` | (nuevo) | Señal de profundidad (Sec 1.6.4) |
-| 32 | `tech_breadth` | (nuevo) | Eje generalista vs. especialista (Sec 1.6.4) |
+| 27 | `has_second_job` | (nuevo) | Bandera Sí/No de pluriempleo bajo secondary_role (Sec 1.6.2) |
+| 28 | `primary_language` | `lang_*` (20 casillas) | Lenguaje principal único + opción asistido por IA (Sec 1.6.3) |
+| 29 | `primary_framework` | `front_*` + `mobile_*` | Framework/plataforma principal (Sec 1.6.3) |
+| 30 | `primary_database` | `db_*` (~15 casillas) | Base de datos principal (Sec 1.6.3) |
+| 31 | `primary_cloud` | `infra_*` (parcial) | Plataforma de nube principal (Sec 1.6.3) |
+| 32 | `primary_lang_years` | (nuevo) | Señal de profundidad (Sec 1.6.4) |
 | 33 | `stack_change` | (nuevo) | Movilidad tecnológica 2 años (Sec 1.6.4) |
 | 34 | `has_certs` | `cert_*` (27 casillas) | Binario: ¿alguna cert? (Sec 1.6.5) |
-| 35 | `cert_category` | `cert_*` (27 casillas) | Categorías, máx 3 (Sec 1.6.5) |
-| 36 | `cert_count` | (nuevo) | Número de certificaciones (Sec 1.6.5) |
-| 37 | `all_technologies` | `dsc_*` + `dataeng_*` + restantes | Texto libre opcional (Sec 1.6.6) |
+| 35 | `cert_category` | `cert_*` (27 casillas) | Categorías, familias comunes + Other (Sec 1.6.5) |
+| 36 | `all_technologies` | `dsc_*` + `dataeng_*` + restantes | Texto libre opcional (Sec 1.6.6) |
+
+*(El bloque de stack 28–33 más `vibe_coding_share` está condicionado a un `primary_role` técnico. `tech_breadth` y `cert_count` se eliminaron según feedback de jul-2026.)*
 
 ### Preguntas Nuevas de Política y Gancho (Secciones 2.2–2.7, 3.2–3.3)
 
 | Bloque | # Qs | IDs |
 |-------|-------|-----|
 | Formalidad laboral (2.2) | 3 | `formal_contract`, `social_security`, `retirement_saving` |
-| Dinámicas transfronterizas (2.3) | 4 | `employer_hq`, `payment_currency`, `cross_border_contract`, `cross_border_tax` |
-| Poder adquisitivo (2.4) | 3 | `purchasing_power`, `housing_burden`, `financial_savings` |
-| ROI educativo (2.5) | 4 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt` |
-| Impacto IA (2.6) | 5 | `ai_tools_use`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
-| Género — Capa A mecanismos, todos los géneros (2.7) | 9 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `discrimination_exp` |
-| Género — Capa B solo mujeres, exclusiva/opcional (2.7) | 4 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network` |
+| Dinámicas transfronterizas (2.3) | 2 | `employer_hq`, `cross_border_contract` |
+| Moneda de compensación (movida 2.3→1.5.1) | 1 | `payment_currency` |
+| Poder adquisitivo (2.4) | 4 | `purchasing_power`, `housing_burden`, `financial_savings`, `investment_instruments` |
+| ROI educativo (2.5) | 5 | `edu_relevance`, `recent_training`, `first_job_degree`, `edu_debt`, `first_gen_university` |
+| Impacto IA (2.6) | 6 | `ai_tools_use`, `vibe_coding_share`, `ai_task_change`, `ai_skill_confidence`, `ai_role_status`, `ai_specialization` |
+| Género — Capa A mecanismos, todos los géneros (2.7) | 10 | `first_code_age`, `childhood_computer`, `negotiated_salary`, `pay_transparency`, `promoted_2y`, `has_sponsor`, `caregiving_load`, `career_interruption`, `parental_leave_taken`, `discrimination_exp` |
+| Género — Capa B solo mujeres, exclusiva/opcional (2.7) | 5 | `women_maternity`, `women_only_team`, `women_harassment`, `women_network`, `women_leadership_program` |
 | Género — Capa C solo género alternativo, exclusiva/opcional (2.7) | 4 | `identity_visibility`, `altg_misgendering`, `altg_inclusive_policy`, `altg_discrimination` |
 | Vínculo BP2C entre encuestas (3.3) | 1 | `bp2c_enrolled` |
 | Gancho BP2C (3.2) | 3 | `enps`, `leave_reason`, `job_search` |
@@ -869,22 +880,23 @@ Coordinación a gestionar (no son bloqueantes):
 | `seniority` | 1 ítem (reemplazado por `tenure_current`) |
 | `profile` | 1 ítem (reemplazado por `seniority_level`) |
 | `lang_*` (20), `front_*`, `mobile_*`, `db_*`, `infra_*`, `dsc_*`, `dataeng_*` | ~80 casillas (reemplazados por stack principal, Sec 1.6) |
-| `cert_*` (27) | 27 casillas (reemplazados por `has_certs` + `cert_category` + `cert_count`) |
+| `cert_*` (27) | 27 casillas (reemplazados por `has_certs` + `cert_category`) |
 | `act_*` (26) | 26 casillas (reemplazados por `primary_role` + `secondary_role`) |
 | `remote`, `covid_remoto` | 2 ítems (reemplazados por `work_arrangement`) |
+| Ítems eliminados en 2026 | `tech_breadth`, `cert_count`, `cross_border_tax` (agregados en el rediseño y luego eliminados por feedback de jul-2026) |
 
 ### Cambio Neto
 
-**Total final: 77 ítems definidos** (la exposición por persona es menor — ver nota)
+**Total final: 80 ítems definidos** (la exposición por persona es menor — ver nota)
 - 12 retenidos (sin cambios o ajustes menores)
 - 12 rediseñados desde campos existentes (Sec 1.5)
-- 13 del rediseño de stack tecnológico (Sec 1.6)
-- 40 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2–3.3), incluido el bloque de género de 17 ítems (9 para todos los géneros en la Capa A + 4 solo mujeres en la Capa B + 4 solo género alternativo en la Capa C) y la bandera de vínculo `bp2c_enrolled`
+- 12 del rediseño de stack tecnológico (Sec 1.6)
+- 44 nuevas preguntas de política y gancho (Secs 2.2–2.7, 3.2–3.3), incluido el bloque de género de 19 ítems (10 para todos los géneros en la Capa A + 5 solo mujeres en la Capa B + 4 solo género alternativo en la Capa C) y la bandera de vínculo `bp2c_enrolled`
 - **~165 ítems eliminados** (casillas, COVID, beneficios, campos redundantes)
 
-**Exposición por persona:** Las Capas B y C son ramas de lógica de salto mutuamente excluyentes, por lo que cada persona ve a lo sumo una de ellas. Una persona responde aproximadamente **64–66** ítems (los 9 ítems compartidos de la Capa A más una rama exclusiva), no los 77. Las secciones exclusivas son opcionales. `ai_specialization` tiene lógica de salto, por lo que solo suma exposición a quienes tienen rol de IA.
+**Exposición por persona:** Las Capas B y C son ramas de lógica de salto mutuamente excluyentes, por lo que cada persona ve a lo sumo una de ellas. Una persona responde aproximadamente **67–70** ítems (los 10 ítems compartidos de la Capa A más una rama exclusiva), no los 80. Las secciones exclusivas son opcionales, y el bloque técnico de stack, `vibe_coding_share` y `ai_specialization` tienen lógica de salto, por lo que solo suman exposición a los respondientes relevantes.
 
-La encuesta rediseñada reemplaza un instrumento de ~130 ítems dominado por casillas dispersos con un conjunto enfocado de preguntas de alta señal — cada una con alta señal analítica por respuesta — mientras agrega bloques nuevos relevantes para política. Como las dos secciones exclusivas de género son ramas de lógica de salto, cada persona responde aproximadamente 64–66 ítems. El tiempo estimado se mantiene en el rango de 12–15 minutos; quien llena una sección exclusiva agrega cerca de 1–2 minutos.
+La encuesta rediseñada reemplaza un instrumento de ~130 ítems dominado por casillas dispersos con un conjunto enfocado de preguntas de alta señal — cada una con alta señal analítica por respuesta — mientras agrega bloques nuevos relevantes para política. Como las dos secciones exclusivas de género son ramas de lógica de salto, cada persona responde aproximadamente 67–70 ítems. El tiempo estimado se mantiene en el rango de 12–15 minutos; quien llena una sección exclusiva agrega cerca de 1–2 minutos.
 
 ---
 
@@ -896,17 +908,17 @@ Se ejecutó una simulación Monte Carlo (n=6,000 personas encuestadas sintético
 
 | Métrica | Diseño Antiguo | Diseño Nuevo | Cambio |
 |--------|-----------|-----------|--------|
-| Ítems de encuesta | 130 | 77 | −41% |
+| Ítems de encuesta | 130 | 80 | −38% |
 | Tiempo estimado de llenado | 30 min | 14 min | −53% |
-| Predictores del modelo (k) | 90 | 81 | −10% |
+| Predictores del modelo (k) | 90 | 79 | −12% |
 | Respuestas útiles (post abandono) | 5,098 | 5,689 | +591 |
-| **R²** | **0.330** | **0.517** | **+0.187** |
-| R² ajustada | 0.318 | 0.510 | +0.192 |
-| Error estándar de estimación | $23,602 | $20,068 | −$3,534 |
-| R² por ítem | 0.0025 | 0.0068 | +168% |
+| **R²** | **0.330** | **0.516** | **+0.186** |
+| R² ajustada | 0.318 | 0.509 | +0.191 |
+| Error estándar de estimación | $23,602 | $20,082 | −$3,520 |
+| R² por ítem | 0.0025 | 0.0065 | +154% |
 | R² por minuto del encuestado | 0.011 | 0.037 | +235% |
-| Información efectiva (R² × N) | 1,683 | 2,940 | +75% |
-| CV medio bootstrap (estabilidad coef.) | 3.46 | 0.44 | −87% |
+| Información efectiva (R² × N) | 1,683 | 2,935 | +74% |
+| CV medio bootstrap (estabilidad coef.) | 3.46 | 0.43 | −87% |
 
 ### De Dónde Viene la Nueva R²
 
@@ -920,10 +932,10 @@ Partiendo de los predictores equivalentes al diseño anterior (R² = 0.260), cad
 | `industry` | +0.013 | 0.426 |
 | `english_use` | +0.012 | 0.438 |
 | `primary_language` | +0.012 | 0.471 |
-| `gender_mechanisms (Capa A)` | **+0.039** | 0.517 |
-| `cert_depth` | +0.007 | 0.477 |
+| `gender_mechanisms (Capa A)` | **+0.039** | 0.516 |
+| `certs (has_certs)` | +0.006 | 0.477 |
 | `experience_total + tenure` | +0.002 | 0.439 |
-| `tech_depth` | +0.001 | 0.478 |
+| `tech_depth (lang_years)` | +0.000 | 0.477 |
 
 **`seniority_level` por sí solo suma +13.1 pp** — más que todas las preguntas de stack tecnológico juntas. Este campo, ausente en el encuesta vieja, es el mayor hueco analítico que cierra el rediseño. **Los mecanismos de la Capa A de género son el segundo bloque más grande (+3.9 pp)** — suben la R² y permiten al modelo descomponer la brecha de género (abajo).
 
@@ -943,11 +955,11 @@ Los mecanismos de la Capa A para todos los géneros (negociación, transparencia
 
 1. **3× densidad de información por minuto.** Las personas entregan 3× más valor analítico por minuto. La eliminación de casillas es la principal responsable.
 2. **87% más estabilidad de coeficientes.** Eliminar predictores binarios dispersos reduce los swings de coeficientes que hacían poco confiables los efectos por tecnología.
-3. **+629 respuestas útiles.** El encuesta más corto retiene personas que antes abandonaban a mitad de la sección de casillas, reduciendo sesgo de selección hacia senior, hombres, CDMX.
+3. **+591 respuestas útiles.** El encuesta más corto retiene personas que antes abandonaban a mitad de la sección de casillas, reduciendo sesgo de selección hacia senior, hombres, CDMX.
 4. **Las preguntas de política no se modelan.** Los nuevos bloques (formalidad, transfronterizo, poder adquisitivo, ROI educativo, IA, género) están diseñados para hallazgos propios, no predictores salariales — con una excepción: los mecanismos de la Capa A de género (negociación, transparencia, promoción, patrocinio, carga de cuidado), que para todos los géneros *sí* entran al modelo para descomponer la brecha. Las Capas exclusivas B y C nunca lo hacen. Su valor no se refleja en R² sino en los artefactos de advocacy que habilitan.
 
 ### Caveats
 
 - Los resultados son de datos sintéticos calibrados a efectos 2020–2022. Los valores absolutos de R² (0.52) no deben citarse como predicción; lo importante es la comparación relativa entre diseños.
 - Las tasas de completitud (85% viejo, 95% nuevo) son estimaciones de literatura de metodología de encuestas, no mediciones del instrumento real.
-- El VIF es mayor en el diseño nuevo (media 2.58 vs 1.35) porque predictores relevantes se correlacionan entre sí. Ninguna variable supera VIF=10. El VIF bajo del diseño viejo refleja ruido disperso casi ortogonal, no mejor condicionamiento.
+- El VIF es mayor en el diseño nuevo (media 2.35 vs 1.39) porque predictores relevantes se correlacionan entre sí. Ninguna variable supera VIF=10. El VIF bajo del diseño viejo refleja ruido disperso casi ortogonal, no mejor condicionamiento.
