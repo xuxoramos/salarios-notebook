@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Encuesta de Salarios 2026 — Ensayo</title>
+<style>
+  :root { --bg:#0f172a; --card:#ffffff; --ink:#1e293b; --muted:#64748b;
+          --accent:#2563eb; --accent2:#16a34a; --line:#e2e8f0; --warn:#b45309; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+         color:var(--ink); background:#f1f5f9; line-height:1.5; }
+  header { background:var(--bg); color:#fff; padding:16px 20px; position:sticky; top:0; z-index:10;
+           display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; font-weight:700; }
+  header .sub { color:#94a3b8; font-size:13px; }
+  .spacer { flex:1; }
+  .tabs { display:flex; gap:6px; }
+  .tab { background:#1e293b; color:#cbd5e1; border:0; padding:8px 14px; border-radius:8px;
+         cursor:pointer; font-size:14px; }
+  .tab.active { background:var(--accent); color:#fff; }
+  .timer { font-variant-numeric:tabular-nums; background:#1e293b; padding:8px 12px; border-radius:8px;
+           font-size:15px; font-weight:700; }
+  .langtoggle { background:#1e293b; color:#cbd5e1; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; }
+  main { max-width:820px; margin:0 auto; padding:20px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .progresswrap { position:sticky; top:64px; z-index:9; background:#f1f5f9; padding:8px 0; }
+  .bar { height:8px; background:var(--line); border-radius:99px; overflow:hidden; }
+  .bar > i { display:block; height:100%; width:0; background:var(--accent); transition:width .25s; }
+  .progresstxt { font-size:12px; color:var(--muted); margin-top:4px; }
+  fieldset { border:1px solid var(--line); border-radius:12px; margin:0 0 16px; padding:14px 18px; }
+  legend { font-weight:700; color:var(--accent); padding:0 6px; font-size:15px; }
+  .blocklabel { font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:14px 0 6px; }
+  .q { padding:12px 0; border-top:1px dashed var(--line); }
+  .q:first-of-type { border-top:0; }
+  .q label.qlabel { display:block; font-weight:600; margin-bottom:8px; }
+  .q .fid { color:var(--muted); font-weight:400; font-size:12px; }
+  .opts { display:flex; flex-direction:column; gap:6px; }
+  .opts.inline { flex-direction:row; flex-wrap:wrap; gap:10px; }
+  .opt { display:flex; align-items:center; gap:8px; font-weight:400; }
+  input[type=number], textarea, select { width:100%; max-width:420px; padding:8px 10px;
+        border:1px solid #cbd5e1; border-radius:8px; font:inherit; }
+  textarea { min-height:64px; }
+  .badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:99px;
+           background:#fef3c7; color:var(--warn); margin-left:6px; }
+  button.primary { background:var(--accent); color:#fff; border:0; padding:12px 22px; border-radius:10px;
+                   font-size:16px; font-weight:700; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--ink); border:1px solid #cbd5e1; padding:10px 16px;
+                 border-radius:10px; cursor:pointer; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .hidden { display:none !important; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { text-align:left; padding:6px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; }
+  .big { font-size:34px; font-weight:800; color:var(--accent); }
+  .kpi { display:flex; gap:20px; flex-wrap:wrap; margin:8px 0 16px; }
+  .kpi > div { background:#f8fafc; border:1px solid var(--line); border-radius:10px; padding:12px 16px; min-width:130px; }
+  .kpi small { color:var(--muted); display:block; }
+  .muted { color:var(--muted); }
+  h2 { font-size:20px; margin:18px 0 8px; }
+  h3 { font-size:16px; margin:16px 0 6px; }
+  ul { margin:6px 0 6px 18px; } li { margin:4px 0; }
+  code { background:#f1f5f9; padding:1px 5px; border-radius:5px; font-size:.92em; }
+  .tierbox { border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin:8px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Encuesta de Salarios 2026 <span class="sub">· ensayo interno</span></h1></div>
+  <div class="spacer"></div>
+  <div class="timer" id="timer">00:00</div>
+  <button class="langtoggle" id="langBtn">EN</button>
+  <div class="tabs">
+    <button class="tab active" data-view="survey">Encuesta</button>
+    <button class="tab" data-view="rewards">Plan de recompensas</button>
+  </div>
+</header>
+
+<main>
+  <!-- SURVEY VIEW -->
+  <div id="view-survey">
+    <div id="startScreen" class="card">
+      <h2>Ensayo de la encuesta</h2>
+      <p class="muted">Este formulario reproduce la encuesta completa (80 ítems, con lógica de salto)
+      para que el equipo de comunicación la conteste, cronometre el tiempo de respuesta y calibre el plan
+      de recompensas. Los tiempos se miden en tu navegador; nada se envía a ningún servidor.</p>
+      <div class="row" style="margin:14px 0;">
+        <label for="pid" style="font-weight:600;">Identificador de participante (opcional)</label>
+        <input type="text" id="pid" placeholder="p. ej. comms-ana" style="max-width:220px;">
+      </div>
+      <button class="primary" id="startBtn">Comenzar y arrancar cronómetro</button>
+    </div>
+
+    <div id="formScreen" class="hidden">
+      <div class="progresswrap">
+        <div class="bar"><i id="barfill"></i></div>
+        <div class="progresstxt" id="progresstxt">0 de 0 preguntas visibles respondidas</div>
+      </div>
+      <form id="surveyForm"></form>
+      <div class="card row">
+        <button class="primary" id="submitBtn">Terminar y ver tiempos</button>
+        <button class="ghost" id="resetBtn">Reiniciar</button>
+        <span class="muted">Es un ensayo: puedes terminar aunque falten respuestas.</span>
+      </div>
+    </div>
+
+    <div id="resultScreen" class="hidden">
+      <div class="card">
+        <h2>Resultados del ensayo</h2>
+        <div class="kpi">
+          <div><span class="big" id="rTotal">--</span><small>tiempo total</small></div>
+          <div><span class="big" id="rAnswered">--</span><small>respondidas / visibles</small></div>
+          <div><span class="big" id="rAvg">--</span><small>seg. promedio por respuesta</small></div>
+        </div>
+        <h3>Tiempo por sección</h3>
+        <table id="sectionTable"><thead><tr><th>Sección</th><th>Respondidas</th><th>Tiempo (s)</th></tr></thead><tbody></tbody></table>
+        <div class="row" style="margin-top:16px;">
+          <button class="ghost" id="dlCsv">Descargar tiempos (CSV)</button>
+          <button class="ghost" id="dlJson">Descargar respuestas (JSON)</button>
+          <button class="primary" id="againBtn">Otro ensayo</button>
+        </div>
+        <p class="muted" style="margin-top:12px;">Sugerencia: corran varias personas y comparen la mediana.
+        Usen el tiempo mediano para fijar la expectativa de duración y el umbral de "respuesta apresurada"
+        (ver plan de recompensas).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REWARDS VIEW -->
+  <div id="view-rewards" class="hidden">
+    <div class="card">
+      <h2>Plan de recompensas para respondientes</h2>
+      <p class="muted">Objetivo: subir tasa de respuesta y completitud, reducir abandono y mejorar la
+      representación de grupos subrepresentados (mujeres, género alternativo, ciudades fuera de CDMX,
+      países LatAm nuevos), <b>sin</b> premiar la rapidez ni sesgar la muestra.</p>
+
+      <h3>Principios</h3>
+      <ul>
+        <li><b>Premiar completar, no responder rápido.</b> Incentivar velocidad genera respuestas basura.
+        La recompensa se ata a completar el core con calidad mínima.</li>
+        <li><b>Mezcla garantizado + sorteo.</b> Un beneficio pequeño garantizado para todos + rifas por lo
+        de mayor valor mantiene el costo por respuesta bajo.</li>
+        <li><b>Anonimato protegido.</b> El flujo de contacto (para el sorteo) va separado del flujo de datos,
+        para no ligar identidad con respuestas.</li>
+        <li><b>Impulsar a los segmentos prioritarios</b> con rifas dedicadas, no bajando el estándar.</li>
+      </ul>
+
+      <h3>Mecánica escalonada</h3>
+      <div class="tierbox"><b>Nivel 0 — Garantizado (todos los que completan el core)</b>
+        <ul><li>Reporte anticipado + acceso al tablero interactivo de resultados</li>
+        <li>Insignia digital "Contribuí a la Radiografía Tech 2026" (para LinkedIn)</li></ul></div>
+      <div class="tierbox"><b>Nivel 1 — Sorteo base (completó el core)</b>
+        <ul><li>Giftcards (Amazon / Mercado Libre) de monto medio</li>
+        <li>Meses de suscripción a formación (Platzi / Udemy / cursos)</li></ul></div>
+      <div class="tierbox"><b>Nivel 2 — Sorteo ampliado (completó también bloques opcionales)</b>
+        <ul><li>Hardware (teclado mecánico, monitor, audífonos)</li>
+        <li>1–2 premios mayores (p. ej. laptop) al cierre</li></ul></div>
+      <div class="tierbox"><b>Nivel 3 — Referidos y segmentos prioritarios</b>
+        <ul><li>Entradas extra al sorteo por invitar (con tope), enfocado a mujeres, género alternativo,
+        ciudades no-CDMX y países LatAm nuevos</li>
+        <li>Rifas dedicadas por segmento para elevar su representación (atiende la nota de tamaño de muestra
+        del bloque de género)</li></ul></div>
+
+      <h3>Anti-gaming (usar los tiempos de este ensayo)</h3>
+      <ul>
+        <li>Definir un <b>umbral de tiempo mínimo</b> a partir de la mediana medida aquí (p. ej. descartar
+        del sorteo envíos por debajo de ~40% del tiempo mediano).</li>
+        <li>Exigir completitud mínima del core; deduplicar por hash de correo / una entrada por persona.</li>
+        <li>Detectar patrones (misma respuesta en todo, straight-lining) antes de asignar premios.</li>
+      </ul>
+
+      <h3>Presupuesto y medición</h3>
+      <ul>
+        <li>Fijar un <b>costo objetivo por respuesta válida</b> y dimensionar el sorteo según la meta
+        (5,000 MX / 3,000 por país si hay expansión LatAm).</li>
+        <li>KPIs: tasa de completitud, tiempo mediano, % por segmento prioritario, costo por respuesta válida,
+        tasa de abandono por sección.</li>
+        <li>Este ensayo entrega el <b>tiempo mediano esperado</b> y el <b>tiempo por sección</b>: úsenlos para
+        redactar la promesa ("te toma ~X min") y para ubicar dónde la gente se cansa.</li>
+      </ul>
+
+      <h3>Legal / privacidad</h3>
+      <ul>
+        <li>Publicar bases del sorteo; separar el registro de contacto del cuestionario.</li>
+        <li>Cumplir LFPDPPP: aviso de privacidad, consentimiento y no vincular identidad con respuestas
+        en reportes públicos.</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<script>
+const QUESTIONS = [{"order": 1, "id": "age", "section": "Demographics", "block": "Demographics", "es": "¿Cuántos años tienes?", "en": "How old are you?", "type": "Numeric", "options": [], "skip": null}, {"order": 2, "id": "gender", "section": "Demographics", "block": "Demographics", "es": "¿Con qué género te identificas?", "en": "What gender do you identify with?", "type": "Single", "options": ["hombre", "mujer", "nb", "prefiero no contestar"], "skip": null}, {"order": 3, "id": "country", "section": "Demographics", "block": "Demographics", "es": "¿En qué país resides actualmente?", "en": "In which country do you currently reside?", "type": "Single", "options": ["México", "Colombia", "Argentina", "Brasil", "Estados Unidos", "Otro (especificar)"], "skip": null}, {"order": 4, "id": "city", "section": "Demographics", "block": "Demographics", "es": "¿En qué ciudad resides?", "en": "In which city do you reside?", "type": "Single", "options": ["CDMX", "Guadalajara", "Monterrey", "Hermosillo", "Querétaro", "Mérida", "Aguascalientes", "León", "SLP", "Puebla", "Bogotá", "Medellín", "Buenos Aires", "São Paulo", "Otra (especificar)"], "skip": null}, {"order": 5, "id": "education", "section": "Demographics", "block": "Demographics", "es": "¿Cuál es tu nivel máximo de estudios completado?", "en": "What is your highest completed education level?", "type": "Single", "options": ["Secundaria o equivalente", "Preparatoria-Bachillerato o equivalente", "Técnico superior", "Licenciatura (en curso)", "Licenciatura (titulado)", "Maestría", "Doctorado"], "skip": null}, {"order": 6, "id": "edutype", "section": "Demographics", "block": "Demographics", "es": "¿Cómo aprendiste a programar?", "en": "How did you learn to program?", "type": "Single", "options": ["escuela", "autodidacta", "online", "trabajo", "bootcamp"], "skip": null}, {"order": 7, "id": "experience_tech", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuántos años llevas trabajando profesionalmente en el sector de tecnología?", "en": "How many years of professional experience in the tech sector?", "type": "Numeric", "options": [], "skip": null}, {"order": 8, "id": "experience_total", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuántos años de experiencia laboral total tienes (en cualquier sector)?", "en": "How many total years of work experience (any sector)?", "type": "Numeric", "options": [], "skip": null}, {"order": 9, "id": "tenure_current", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuántos años llevas en tu empresa actual?", "en": "How many years at your current company?", "type": "Numeric", "options": [], "skip": null}, {"order": 10, "id": "seniority_level", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuál es tu nivel dentro de tu organización?", "en": "What is your level within your organization?", "type": "Single", "options": ["Junior", "Mid", "Senior", "Staff-Principal", "Manager", "Director+", "Founder-C-Level", "No aplica (freelance, estudiante)"], "skip": null}, {"order": 11, "id": "orgtype", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Qué tipo de organización es tu empleador?", "en": "What type of organization is your employer?", "type": "Single", "options": ["corp", "startup", "product_company", "ai_native", "itservices", "freelance", "gobierno", "uni"], "skip": null}, {"order": 12, "id": "company_size", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuántos empleados tiene tu empresa (aproximadamente)?", "en": "Approximately how many employees does your company have?", "type": "Single", "options": ["1–10", "11–50", "51–200", "201–1000", "1001–5000", "5000+"], "skip": null}, {"order": 13, "id": "industry", "section": "Professional Profile", "block": "Professional Profile", "es": "¿En qué industria opera tu empresa?", "en": "In which industry does your company operate?", "type": "Single", "options": ["Tecnología/Software", "Finanzas/Fintech", "Salud", "E-commerce/Retail", "Educación", "Manufactura", "Gobierno", "Consultoría", "Telecomunicaciones", "Entretenimiento/Medios", "Otro"], "skip": null}, {"order": 14, "id": "emptype", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuál es tu tipo de contratación?", "en": "What is your employment type?", "type": "Single", "options": ["nomina", "honorarios", "freelance", "hibrido", "emprendedor", "becario", "estudiante"], "skip": null}, {"order": 15, "id": "work_arrangement", "section": "Professional Profile", "block": "Professional Profile", "es": "¿Cuál es tu esquema de trabajo actual?", "en": "What is your current work arrangement?", "type": "Single", "options": ["Totalmente remoto", "Híbrido (1–3 días en oficina por semana)", "Totalmente presencial", "Nómada / independiente de ubicación"], "skip": null}, {"order": 16, "id": "english", "section": "Language", "block": "English Proficiency", "es": "¿Cuál es tu nivel de inglés?", "en": "What is your English proficiency level?", "type": "Single", "options": ["0=Ninguno", "1=Elemental", "2=Limitado", "3=Profesional", "4=Avanzado", "5=Nativo o bilingüe"], "skip": null}, {"order": 17, "id": "english_use", "section": "Language", "block": "English Proficiency", "es": "¿Con qué frecuencia usas inglés en tu trabajo diario?", "en": "How frequently do you use English in your daily work?", "type": "Single", "options": ["Nunca", "Ocasionalmente (documentación)", "Regularmente (reuniones, emails)", "La mayor parte del tiempo", "Todo mi trabajo es en inglés"], "skip": null}, {"order": 18, "id": "base_salary", "section": "Compensation", "block": "Compensation", "es": "¿Cuál es tu salario mensual bruto BASE (antes de impuestos, sin incluir bonos ni compensación variable)?", "en": "What is your monthly gross BASE salary (before taxes, excluding bonuses and variable compensation)?", "type": "Numeric", "options": [], "skip": null}, {"order": 19, "id": "total_cash_annual", "section": "Compensation", "block": "Compensation", "es": "¿Cuál fue tu compensación total en efectivo en los últimos 12 meses (incluyendo salario, bonos, aguinaldo, y cualquier otra compensación en efectivo)?", "en": "What was your total cash compensation in the last 12 months (including salary, bonuses, Christmas bonus, and any other cash compensation)?", "type": "Numeric", "options": [], "skip": null}, {"order": 20, "id": "payment_currency", "section": "Compensation", "block": "Compensation", "es": "¿En qué moneda recibes tu compensación principal?", "en": "In which currency do you receive your primary compensation?", "type": "Single", "options": ["MXN", "USD", "EUR", "BRL", "COP", "ARS", "Otra"], "skip": null}, {"order": 21, "id": "has_equity", "section": "Compensation", "block": "Compensation", "es": "¿Recibes compensación en acciones, opciones o RSUs de tu empleador actual?", "en": "Do you receive equity compensation (stock, options, or RSUs) from your current employer?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 22, "id": "salary_change", "section": "Compensation", "block": "Compensation", "es": "Comparado con hace 12 meses, tu compensación total...", "en": "Compared to 12 months ago, your total compensation...", "type": "Single", "options": ["Aumentó >20%", "Aumentó 10–20%", "Aumentó 1–9%", "Se mantuvo igual", "Disminuyó"], "skip": null}, {"order": 23, "id": "salary_change_reason", "section": "Compensation", "block": "Compensation", "es": "¿A qué se debió el cambio principal?", "en": "What was the main reason for the change?", "type": "Single", "options": ["Promoción", "Cambio de empresa", "Ajuste anual", "Cambio a moneda extranjera", "Recorte", "Otro", "No cambió"], "skip": null}, {"order": 24, "id": "vacaciones", "section": "Compensation", "block": "Compensation", "es": "¿Cuántos días de vacaciones al año tienes?", "en": "How many vacation days per year do you have?", "type": "Numeric", "options": [], "skip": null}, {"order": 25, "id": "aguinaldo", "section": "Compensation", "block": "Compensation", "es": "¿Cuántos días de aguinaldo recibes?", "en": "How many days of Christmas bonus do you receive?", "type": "Numeric", "options": [], "skip": null}, {"order": 26, "id": "primary_role", "section": "Tech Stack", "block": "Primary Role", "es": "¿Cuál es tu rol o actividad principal?", "en": "What is your primary role or activity?", "type": "Single", "options": ["Software Engineer (Backend/Frontend/Fullstack)", "Mobile Engineer", "Data Engineer", "Data Scientist-ML", "Data Analyst", "AI-ML Engineer", "DevOps-SRE-Infra", "Security-InfoSec", "Architecture", "QA-Testing", "UX-UI Design", "Product Manager", "Project Manager", "Program Manager", "Support", "Other"], "skip": null}, {"order": 27, "id": "secondary_role", "section": "Tech Stack", "block": "Primary Role", "es": "¿Tienes un rol secundario?", "en": "Do you have a secondary role?", "type": "Single", "options": ["Software Engineer (Backend/Frontend/Fullstack)", "Mobile Engineer", "Data Engineer", "Data Scientist-ML", "Data Analyst", "AI-ML Engineer", "DevOps-SRE-Infra", "Security-InfoSec", "Architecture", "QA-Testing", "UX-UI Design", "Product Manager", "Project Manager", "Program Manager", "Support", "Other", "No tengo rol secundario"], "skip": null}, {"order": 28, "id": "has_second_job", "section": "Tech Stack", "block": "Primary Role", "es": "¿Tienes un segundo empleo remunerado además de tu trabajo principal?", "en": "Do you have a second paid job in addition to your main job?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 29, "id": "primary_language", "section": "Tech Stack", "block": "Primary Stack", "es": "¿Cuál es tu lenguaje de programación principal?", "en": "What is your primary programming language?", "type": "Single", "options": ["JavaScript-TypeScript", "Python", "Java", "C#", "Go", "Rust", "PHP", "Ruby", "Kotlin", "Swift", "C-C++", "Scala", "Elixir", "Ninguno en particular (asistido por IA)", "Other"], "skip": {"type": "technical"}}, {"order": 30, "id": "primary_framework", "section": "Tech Stack", "block": "Primary Stack", "es": "¿Cuál es tu framework o plataforma principal?", "en": "What is your primary framework or platform?", "type": "Single", "options": ["React", "Angular", "Vue", "Next.js", "Spring", "Django-FastAPI", ".NET", "Rails", "Flutter", "Laravel", "Node.js-Express", "None", "Other"], "skip": {"type": "technical"}}, {"order": 31, "id": "primary_database", "section": "Tech Stack", "block": "Primary Stack", "es": "¿Cuál es tu base de datos principal?", "en": "What is your primary database?", "type": "Single", "options": ["PostgreSQL", "MySQL", "SQL Server", "MongoDB", "Redis", "DynamoDB", "Firebase", "Oracle", "Other"], "skip": {"type": "technical"}}, {"order": 32, "id": "primary_cloud", "section": "Tech Stack", "block": "Primary Stack", "es": "¿Cuál es tu plataforma de nube principal?", "en": "What is your primary cloud platform?", "type": "Single", "options": ["AWS", "Azure", "GCP", "On-premise", "No uso nube", "Other"], "skip": {"type": "technical"}}, {"order": 33, "id": "primary_lang_years", "section": "Tech Stack", "block": "Tech Depth", "es": "¿Cuántos años llevas usando tu lenguaje principal?", "en": "How many years have you been using your primary language?", "type": "Numeric", "options": [], "skip": {"type": "technical"}}, {"order": 34, "id": "stack_change", "section": "Tech Stack", "block": "Tech Depth", "es": "¿Has cambiado significativamente tu stack tecnológico en los últimos 2 años?", "en": "Have you significantly changed your tech stack in the last 2 years?", "type": "Single", "options": ["Sí, completamente", "Sí, parcialmente", "No"], "skip": {"type": "technical"}}, {"order": 35, "id": "has_certs", "section": "Tech Stack", "block": "Certifications", "es": "¿Tienes alguna certificación técnica vigente?", "en": "Do you hold any current technical certifications?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 36, "id": "cert_category", "section": "Tech Stack", "block": "Certifications", "es": "¿En qué categoría(s)? (selecciona las que apliquen; máx 3)", "en": "In which category(s)? (select up to 3)", "type": "Multi-select", "options": ["Cloud (AWS/Azure/GCP)", "Scrum-Agile", "PMP", "Kubernetes (CKA/CKAD)", "Security (CISSP/CompTIA)", "Data (Databricks/Snowflake)", "Other"], "skip": {"type": "eq", "field": "has_certs", "value": "Sí"}}, {"order": 37, "id": "all_technologies", "section": "Tech Stack", "block": "Optional Detail", "es": "(Opcional) Enlista todas las tecnologías que usas regularmente", "en": "(Optional) List all technologies you use regularly", "type": "Free text", "options": [], "skip": null}, {"order": 38, "id": "formal_contract", "section": "Labor Formality", "block": "Labor Formality & Social Protection", "es": "¿Tienes un contrato laboral formal por escrito?", "en": "Do you have a formal written employment contract?", "type": "Single", "options": ["Sí", "No", "No sé"], "skip": null}, {"order": 39, "id": "social_security", "section": "Labor Formality", "block": "Labor Formality & Social Protection", "es": "¿Estás inscrito en el IMSS, ISSSTE u otro sistema de seguridad social a través de tu empleo?", "en": "Are you enrolled in IMSS, ISSSTE, or another social security system through your employment?", "type": "Single", "options": ["Sí, por mi empleo", "Sí, por cuenta propia", "No"], "skip": null}, {"order": 40, "id": "retirement_saving", "section": "Labor Formality", "block": "Labor Formality & Social Protection", "es": "¿Realizas aportaciones a una Afore o fondo de retiro?", "en": "Do you contribute to a retirement fund (Afore or equivalent)?", "type": "Single", "options": ["Sí, mi empleador aporta", "Sí, solo por mi cuenta", "No"], "skip": null}, {"order": 41, "id": "employer_hq", "section": "Cross-Border", "block": "Cross-Border Work Dynamics", "es": "¿En qué país tiene su sede principal la empresa para la que trabajas?", "en": "In which country is your employer headquartered?", "type": "Single", "options": ["México", "Estados Unidos", "Canadá", "Europa", "América Latina (otro)", "Asia", "Otro"], "skip": null}, {"order": 42, "id": "cross_border_contract", "section": "Cross-Border", "block": "Cross-Border Work Dynamics", "es": "¿Cuál es tu relación laboral con esta empresa extranjera?", "en": "What is your employment relationship with this foreign company?", "type": "Single", "options": ["Contrato laboral local (a través de entidad local)", "Contractor independiente", "A través de Employer of Record (Deel, Remote, etc.)", "Otro"], "skip": {"type": "cross_border"}}, {"order": 43, "id": "purchasing_power", "section": "Purchasing Power", "block": "Purchasing Power & Cost of Living", "es": "¿Cómo calificarías tu capacidad para cubrir tus necesidades básicas con tu salario actual?", "en": "How would you rate your ability to cover basic needs with your current salary?", "type": "Likert 1–5", "options": ["1=Con mucha dificultad", "2", "3", "4", "5=Con mucha holgura"], "skip": null}, {"order": 44, "id": "housing_burden", "section": "Purchasing Power", "block": "Purchasing Power & Cost of Living", "es": "¿Qué porcentaje aproximado de tu ingreso mensual destinas a renta o hipoteca?", "en": "What approximate percentage of your monthly income goes to rent/mortgage?", "type": "Single", "options": ["0% (vivienda propia sin hipoteca)", "1–20%", "21–30%", "31–40%", "41–50%", "Más del 50%"], "skip": null}, {"order": 45, "id": "financial_savings", "section": "Purchasing Power", "block": "Purchasing Power & Cost of Living", "es": "¿Qué porcentaje de tu ingreso mensual logras ahorrar?", "en": "What percentage of your monthly income do you manage to save?", "type": "Single", "options": ["No logro ahorrar", "Menos del 10%", "10–20%", "21–30%", "Más del 30%"], "skip": null}, {"order": 46, "id": "investment_instruments", "section": "Purchasing Power", "block": "Purchasing Power & Cost of Living", "es": "¿Inviertes activamente parte de tus ingresos? ¿En qué instrumentos?", "en": "Do you actively invest part of your income? In which instruments?", "type": "Multi-select", "options": ["No invierto", "Cetes o bonos gubernamentales", "ETFs", "Fondos de inversión", "Acciones individuales", "Cripto", "Bienes raíces"], "skip": null}, {"order": 47, "id": "edu_relevance", "section": "Education ROI", "block": "Education ROI & Career Pathways", "es": "¿Qué tan relevante fue tu educación formal para tu trabajo actual?", "en": "How relevant was your formal education to your current work?", "type": "Likert 1–5", "options": ["1=Nada relevante", "2", "3", "4", "5=Totalmente relevante"], "skip": null}, {"order": 48, "id": "recent_training", "section": "Education ROI", "block": "Education ROI & Career Pathways", "es": "¿Has completado alguna capacitación o curso en los últimos 12 meses?", "en": "Have you completed any training or course in the last 12 months?", "type": "Single", "options": ["Sí, pagado por mi empleador", "Sí, pagado por mí", "Sí, gratuito", "No"], "skip": null}, {"order": 49, "id": "first_job_degree", "section": "Education ROI", "block": "Education ROI & Career Pathways", "es": "¿Tu primer empleo en tecnología requirió un título universitario?", "en": "Did your first tech job require a university degree?", "type": "Single", "options": ["Sí, era requisito formal", "No, pero lo tenía", "No, y no lo tenía"], "skip": null}, {"order": 50, "id": "edu_debt", "section": "Education ROI", "block": "Education ROI & Career Pathways", "es": "¿Tienes deuda educativa actualmente (crédito educativo / préstamo para estudios)?", "en": "Do you currently have educational debt?", "type": "Single", "options": ["Sí", "No", "Prefiero no contestar"], "skip": null}, {"order": 51, "id": "first_gen_university", "section": "Education ROI", "block": "Education ROI & Career Pathways", "es": "¿Eres la primera generación de tu familia en cursar estudios universitarios?", "en": "Are you the first generation in your family to attend university?", "type": "Single", "options": ["Sí", "No", "No cursé universidad"], "skip": null}, {"order": 52, "id": "ai_tools_use", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Utilizas herramientas de IA (Copilot, ChatGPT, etc.) como parte regular de tu trabajo?", "en": "Do you use AI tools (Copilot, ChatGPT, etc.) as a regular part of your work?", "type": "Single", "options": ["Sí, diariamente", "Sí, semanalmente", "Ocasionalmente", "No"], "skip": null}, {"order": 53, "id": "vibe_coding_share", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Qué proporción de tu código generas describiéndole a una IA lo que quieres, en lugar de escribirlo directamente?", "en": "What share of your code do you produce by describing what you want to an AI, rather than writing it directly?", "type": "Single", "options": ["Nada", "Poco", "Aproximadamente la mitad", "La mayoría", "Casi todo"], "skip": {"type": "technical"}}, {"order": 54, "id": "ai_task_change", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Han cambiado las tareas que realizas debido a herramientas de IA?", "en": "Have your tasks changed due to AI tools?", "type": "Single", "options": ["Sí, hago tareas de mayor nivel", "Sí, hago las mismas tareas más rápido", "Sí, algunas tareas ya no las hago", "No ha cambiado"], "skip": null}, {"order": 55, "id": "ai_skill_confidence", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Qué tan confiado/a estás en que tus habilidades actuales seguirán siendo relevantes en 3 años?", "en": "How confident are you that your current skills will remain relevant in 3 years?", "type": "Likert 1–5", "options": ["1=Nada confiado", "2", "3", "4", "5=Totalmente confiado"], "skip": null}, {"order": 56, "id": "ai_role_status", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Tu rol actual es un rol de IA?", "en": "Is your current role an AI role?", "type": "Single", "options": ["No", "Sí, cambié a un rol nuevo de IA", "Sí, mi rol tradicional se transformó hacia IA"], "skip": null}, {"order": 57, "id": "ai_specialization", "section": "AI Impact", "block": "AI Impact on the Individual", "es": "¿Cuál es tu especialización principal de IA?", "en": "What is your primary AI specialization?", "type": "Single", "options": ["ML-AI Engineer", "GenAI-LLM-Agent Engineer", "MLOps-AI Platform Engineer", "AI Product Manager", "Responsible AI-Governance"], "skip": {"type": "ai_spec"}}, {"order": 58, "id": "first_code_age", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿A qué edad escribiste tu primera línea de código o programa?", "en": "At what age did you write your first line of code or program?", "type": "Numeric", "options": [], "skip": null}, {"order": 59, "id": "childhood_computer", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Tenías acceso a una computadora en casa durante tu infancia (antes de los 15 años)?", "en": "Did you have access to a computer at home during childhood (before age 15)?", "type": "Single", "options": ["Sí, propia", "Sí, compartida", "No"], "skip": null}, {"order": 60, "id": "negotiated_salary", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Negociaste tu salario al aceptar tu empleo actual?", "en": "Did you negotiate your salary when accepting your current job?", "type": "Single", "options": ["Sí", "No", "No tuve oportunidad"], "skip": null}, {"order": 61, "id": "pay_transparency", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Sabes cuánto ganan tus colegas en un rol equivalente?", "en": "Do you know what colleagues in an equivalent role earn?", "type": "Single", "options": ["Sí, abiertamente", "Aproximadamente", "No"], "skip": null}, {"order": 62, "id": "promoted_2y", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Has sido promovido/a en los últimos 2 años?", "en": "Have you been promoted in the last 2 years?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 63, "id": "has_sponsor", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Cuentas con un mentor o patrocinador que impulse tu carrera?", "en": "Do you have a mentor or sponsor who advances your career?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 64, "id": "caregiving_load", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Tienes responsabilidades de cuidado (hijos, familiares) que afecten tu disponibilidad laboral?", "en": "Do you have caregiving responsibilities (children, family) that affect your work availability?", "type": "Single", "options": ["Sí, principalmente yo", "Sí, compartidas", "No"], "skip": null}, {"order": 65, "id": "career_interruption", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Has pausado o reducido tu carrera por responsabilidades personales o familiares?", "en": "Have you paused or scaled back your career for personal/family responsibilities?", "type": "Single", "options": ["Sí", "No"], "skip": null}, {"order": 66, "id": "parental_leave_taken", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "Si has tenido hijos, ¿tomaste licencia parental?", "en": "If you have had children, did you take parental leave?", "type": "Single", "options": ["Sí, completa", "Sí, parcial", "No", "No aplica"], "skip": null}, {"order": 67, "id": "discrimination_exp", "section": "Gender & Diversity", "block": "Gender Mechanisms (all genders)", "es": "¿Has experimentado discriminación en procesos de contratación o promoción en el sector tecnológico?", "en": "Have you experienced discrimination in hiring or promotion in the tech sector?", "type": "Single", "options": ["Sí, frecuentemente", "Sí, alguna vez", "No", "Prefiero no contestar"], "skip": null}, {"order": 68, "id": "women_maternity", "section": "Gender & Diversity", "block": "Women — exclusive section", "es": "¿Cómo calificarías el trato de tu empleador respecto a maternidad y reincorporación laboral?", "en": "How would you rate your employer's treatment of maternity and return-to-work?", "type": "Single", "options": ["Muy negativo", "Negativo", "Neutral", "Positivo", "Muy positivo", "No aplica", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "mujer"}}, {"order": 69, "id": "women_only_team", "section": "Gender & Diversity", "block": "Women — exclusive section", "es": "¿Eres la única mujer o una de muy pocas en tu equipo?", "en": "Are you the only woman or one of very few on your team?", "type": "Single", "options": ["Sí, la única", "Una de pocas", "No", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "mujer"}}, {"order": 70, "id": "women_harassment", "section": "Gender & Diversity", "block": "Women — exclusive section", "es": "¿Te has sentido insegura o has vivido acoso en tu entorno laboral en tech?", "en": "Have you felt unsafe or experienced harassment in your tech workplace?", "type": "Single", "options": ["Sí, frecuentemente", "Sí, alguna vez", "No", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "mujer"}}, {"order": 71, "id": "women_network", "section": "Gender & Diversity", "block": "Women — exclusive section", "es": "¿Tienes acceso a redes o comunidades de mujeres en tech (Women Who Code, Laboratoria, etc.)?", "en": "Do you have access to women-in-tech networks or communities?", "type": "Single", "options": ["Sí, activamente", "Sí, pero no participo", "No", "No las conozco"], "skip": {"type": "eq", "field": "gender", "value": "mujer"}}, {"order": 72, "id": "women_leadership_program", "section": "Gender & Diversity", "block": "Women — exclusive section", "es": "¿Tu empleador tiene programas formales de mentoría o promoción de mujeres hacia posiciones de liderazgo?", "en": "Does your employer have formal programs to mentor or promote women into leadership positions?", "type": "Single", "options": ["Sí", "No", "No sé"], "skip": {"type": "eq", "field": "gender", "value": "mujer"}}, {"order": 73, "id": "identity_visibility", "section": "Gender & Diversity", "block": "Alternative gender — exclusive section", "es": "¿Te sientes cómodo/a siendo visible con tu identidad (género, orientación, etnia) en tu lugar de trabajo?", "en": "Do you feel comfortable being visible with your identity (gender, orientation, ethnicity) at work?", "type": "Likert 1–5", "options": ["1=Nada cómodo", "2", "3", "4", "5=Totalmente cómodo"], "skip": {"type": "eq", "field": "gender", "value": "nb"}}, {"order": 74, "id": "altg_misgendering", "section": "Gender & Diversity", "block": "Alternative gender — exclusive section", "es": "¿Con qué frecuencia experimentas misgendering o falta de respeto a tu identidad en el trabajo?", "en": "How often do you experience misgendering or disrespect of your identity at work?", "type": "Single", "options": ["Frecuentemente", "A veces", "Rara vez", "Nunca", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "nb"}}, {"order": 75, "id": "altg_inclusive_policy", "section": "Gender & Diversity", "block": "Alternative gender — exclusive section", "es": "¿Tu empleador ofrece políticas inclusivas (pronombres, seguro médico inclusivo, instalaciones, apoyo a transición)?", "en": "Does your employer offer inclusive policies (pronouns, inclusive health coverage, facilities, transition support)?", "type": "Single", "options": ["Sí, varias", "Algunas", "Ninguna", "No sé", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "nb"}}, {"order": 76, "id": "altg_discrimination", "section": "Gender & Diversity", "block": "Alternative gender — exclusive section", "es": "¿Has experimentado discriminación específicamente por tu identidad o expresión de género u orientación?", "en": "Have you experienced discrimination specifically due to your gender identity/expression or orientation?", "type": "Single", "options": ["Sí, frecuentemente", "Sí, alguna vez", "No", "Prefiero no contestar"], "skip": {"type": "eq", "field": "gender", "value": "nb"}}, {"order": 77, "id": "bp2c_enrolled", "section": "BP2C Link", "block": "Certification Link", "es": "¿Tu empleador está certificado o inscrito en Best Place to Create (BP2C) de Software Guru?", "en": "Is your employer certified or enrolled in Software Guru's Best Place to Create (BP2C)?", "type": "Single", "options": ["Sí", "No", "No sé"], "skip": null}, {"order": 78, "id": "enps", "section": "BP2C Hook", "block": "Satisfaction Gap Teaser", "es": "Del 1 al 10, ¿qué tan probable es que recomiendes a tu empleador a un amigo?", "en": "On a scale of 1–10, how likely are you to recommend your employer to a friend?", "type": "NPS scale", "options": ["1–10"], "skip": null}, {"order": 79, "id": "leave_reason", "section": "BP2C Hook", "block": "Satisfaction Gap Teaser", "es": "¿Cuál sería la razón principal por la que dejarías tu empleo actual?", "en": "What would be the primary reason you'd leave your current job?", "type": "Single", "options": ["Salario", "Crecimiento profesional", "Cultura organizacional", "Liderazgo", "Flexibilidad", "Otro"], "skip": null}, {"order": 80, "id": "job_search", "section": "BP2C Hook", "block": "Satisfaction Gap Teaser", "es": "¿Estás buscando activamente otro empleo?", "en": "Are you actively looking for another job?", "type": "Single", "options": ["Sí", "No, pero estoy abierto/a", "No"], "skip": null}];
+const TECH_ROLES = ["Software Engineer (Backend/Frontend/Fullstack)","Mobile Engineer","Data Engineer",
+  "Data Scientist-ML","Data Analyst","AI-ML Engineer","DevOps-SRE-Infra","Security-InfoSec","Architecture","QA-Testing"];
+const COUNTRY_REGION = {"México":"México","Estados Unidos":"Estados Unidos","Colombia":"América Latina (otro)",
+  "Argentina":"América Latina (otro)","Brasil":"América Latina (otro)","Otro (especificar)":"Otro"};
+
+let lang = "es";
+let startTime = null, tick = null;
+const answers = {};        // id -> value | array
+const firstAnswerAt = {};  // id -> ms offset from start
+
+function fmt(ms){ const s=Math.floor(ms/1000); const m=Math.floor(s/60);
+  return String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+
+/* ---------- rendering ---------- */
+function buildForm(){
+  const form = document.getElementById("surveyForm");
+  form.innerHTML = "";
+  let curSection=null, curBlock=null, fs=null;
+  for(const q of QUESTIONS){
+    if(q.section !== curSection){
+      curSection = q.section; curBlock=null;
+      fs = document.createElement("fieldset");
+      const lg = document.createElement("legend"); lg.textContent = q.section; fs.appendChild(lg);
+      form.appendChild(fs);
+    }
+    if(q.block !== curBlock){
+      curBlock = q.block;
+      const bl = document.createElement("div"); bl.className="blocklabel"; bl.textContent=q.block; fs.appendChild(bl);
+    }
+    fs.appendChild(renderQ(q));
+  }
+  applySkips(); updateProgress();
+}
+
+function renderQ(q){
+  const wrap = document.createElement("div");
+  wrap.className="q"; wrap.dataset.qid=q.id;
+  const lab = document.createElement("label"); lab.className="qlabel";
+  lab.innerHTML = `<span class="qtext">${lang==="es"?q.es:(q.en||q.es)}</span>
+                   <span class="fid">· ${q.id}${q.skip?' <span class="badge">salto</span>':''}</span>`;
+  wrap.appendChild(lab);
+
+  const t = q.type;
+  if(t==="Numeric"){
+    const i=document.createElement("input"); i.type="number"; i.dataset.qid=q.id;
+    i.addEventListener("input",()=>onAnswer(q.id,i.value)); wrap.appendChild(i);
+  } else if(t==="Free text"){
+    const i=document.createElement("textarea"); i.dataset.qid=q.id;
+    i.addEventListener("input",()=>onAnswer(q.id,i.value)); wrap.appendChild(i);
+  } else if(t==="Multi-select"){
+    const box=document.createElement("div"); box.className="opts";
+    q.options.forEach(o=>{
+      const d=document.createElement("label"); d.className="opt";
+      const c=document.createElement("input"); c.type="checkbox"; c.value=o; c.dataset.qid=q.id;
+      c.addEventListener("change",()=>{ const sel=[...box.querySelectorAll("input:checked")].map(x=>x.value);
+        onAnswer(q.id, sel); });
+      d.appendChild(c); d.appendChild(document.createTextNode(" "+o)); box.appendChild(d);
+    });
+    wrap.appendChild(box);
+  } else if(t==="Single" && q.options.length>6){
+    const sel=document.createElement("select"); sel.dataset.qid=q.id;
+    sel.innerHTML='<option value="">— elige —</option>'+q.options.map(o=>`<option>${o}</option>`).join("");
+    sel.addEventListener("change",()=>onAnswer(q.id,sel.value)); wrap.appendChild(sel);
+  } else {
+    // Single (<=6), Likert 1-5, NPS scale
+    let opts = q.options;
+    if(t==="NPS scale") opts = Array.from({length:10},(_,i)=>String(i+1));
+    const box=document.createElement("div"); box.className="opts"+((t==="Likert 1–5"||t==="NPS scale")?" inline":"");
+    opts.forEach(o=>{
+      const d=document.createElement("label"); d.className="opt";
+      const r=document.createElement("input"); r.type="radio"; r.name="q_"+q.id; r.value=o; r.dataset.qid=q.id;
+      r.addEventListener("change",()=>onAnswer(q.id,o));
+      d.appendChild(r); d.appendChild(document.createTextNode(" "+o)); box.appendChild(d);
+    });
+    wrap.appendChild(box);
+  }
+  return wrap;
+}
+
+/* ---------- answering + skip logic ---------- */
+function onAnswer(id,val){
+  if(Array.isArray(val) ? val.length : (val!==""&&val!=null)){
+    if(firstAnswerAt[id]==null && startTime!=null) firstAnswerAt[id]=Date.now()-startTime;
+    answers[id]=val;
+  } else { delete answers[id]; }
+  applySkips(); updateProgress();
+}
+
+function evalSkip(desc){
+  if(!desc) return true;
+  if(desc.type==="technical") return TECH_ROLES.includes(answers["primary_role"]);
+  if(desc.type==="eq") return answers[desc.field]===desc.value;
+  if(desc.type==="ai_spec") return (answers["ai_role_status"]&&answers["ai_role_status"]!=="No")
+        || answers["primary_role"]==="AI-ML Engineer";
+  if(desc.type==="cross_border"){ const reg=COUNTRY_REGION[answers["country"]]; const e=answers["employer_hq"];
+        return !!(e && reg && e!==reg); }
+  return true;
+}
+
+function applySkips(){
+  for(const q of QUESTIONS){
+    if(!q.skip) continue;
+    const show = evalSkip(q.skip);
+    const wrap = document.querySelector(`.q[data-qid="${q.id}"]`);
+    if(!wrap) continue;
+    wrap.classList.toggle("hidden", !show);
+    if(!show && answers[q.id]!=null){       // cleared when it becomes irrelevant
+      delete answers[q.id]; delete firstAnswerAt[q.id];
+      wrap.querySelectorAll("input,select,textarea").forEach(el=>{
+        if(el.type==="checkbox"||el.type==="radio") el.checked=false; else el.value="";
+      });
+    }
+  }
+}
+
+function visibleQuestions(){ return QUESTIONS.filter(q=>{
+  const w=document.querySelector(`.q[data-qid="${q.id}"]`); return w && !w.classList.contains("hidden"); }); }
+
+function updateProgress(){
+  const vis=visibleQuestions(); const ans=vis.filter(q=>answers[q.id]!=null).length;
+  const pct = vis.length? Math.round(ans/vis.length*100):0;
+  document.getElementById("barfill").style.width=pct+"%";
+  document.getElementById("progresstxt").textContent=`${ans} de ${vis.length} preguntas visibles respondidas (${pct}%)`;
+}
+
+/* ---------- timer ---------- */
+function startTimer(){ startTime=Date.now();
+  tick=setInterval(()=>{document.getElementById("timer").textContent=fmt(Date.now()-startTime);},1000); }
+
+/* ---------- results ---------- */
+function computeResults(){
+  const total = Date.now()-startTime;
+  const vis = visibleQuestions();
+  const answered = vis.filter(q=>answers[q.id]!=null);
+  // order by first-answer offset for delta attribution
+  const ev = answered.map(q=>({id:q.id,section:q.section,off:firstAnswerAt[q.id]??total}))
+                     .sort((a,b)=>a.off-b.off);
+  let prev=0; const perSection={};
+  for(const e of ev){ const delta=Math.max(0,e.off-prev); prev=e.off;
+    perSection[e.section]=perSection[e.section]||{n:0,t:0};
+    perSection[e.section].n++; perSection[e.section].t+=delta; }
+  return {total, visCount:vis.length, answered:answered.length, perSection, ev};
+}
+
+function showResults(){
+  clearInterval(tick);
+  const r=computeResults();
+  document.getElementById("rTotal").textContent=fmt(r.total);
+  document.getElementById("rAnswered").textContent=`${r.answered}/${r.visCount}`;
+  document.getElementById("rAvg").textContent = r.answered? (r.total/1000/r.answered).toFixed(1) : "--";
+  const tb=document.querySelector("#sectionTable tbody"); tb.innerHTML="";
+  Object.entries(r.perSection).forEach(([s,v])=>{
+    tb.insertAdjacentHTML("beforeend",`<tr><td>${s}</td><td>${v.n}</td><td>${(v.t/1000).toFixed(1)}</td></tr>`);
+  });
+  document.getElementById("formScreen").classList.add("hidden");
+  document.getElementById("resultScreen").classList.remove("hidden");
+  window._results=r;
+}
+
+function download(name,text,mime){
+  const b=new Blob([text],{type:mime}); const a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download=name; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---------- wiring ---------- */
+document.getElementById("startBtn").onclick=()=>{
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("formScreen").classList.remove("hidden");
+  buildForm(); startTimer();
+};
+document.getElementById("submitBtn").onclick=showResults;
+document.getElementById("resetBtn").onclick=()=>location.reload();
+document.getElementById("againBtn").onclick=()=>location.reload();
+document.getElementById("dlCsv").onclick=()=>{
+  const pid=(document.getElementById("pid").value||"anon");
+  const r=window._results;
+  let csv="participant,field_id,section,offset_seconds\n";
+  r.ev.forEach(e=>{csv+=`${pid},${e.id},"${e.section}",${(e.off/1000).toFixed(1)}\n`;});
+  csv+=`${pid},__TOTAL__,,${(r.total/1000).toFixed(1)}\n`;
+  download(`tiempos_${pid}.csv`,csv,"text/csv");
+};
+document.getElementById("dlJson").onclick=()=>{
+  const pid=(document.getElementById("pid").value||"anon");
+  download(`respuestas_${pid}.json`, JSON.stringify({participant:pid,answers,firstAnswerAt},null,2),"application/json");
+};
+document.getElementById("langBtn").onclick=()=>{
+  lang = lang==="es"?"en":"es";
+  document.getElementById("langBtn").textContent = lang==="es"?"EN":"ES";
+  document.querySelectorAll(".q").forEach(w=>{
+    const q=QUESTIONS.find(x=>x.id===w.dataset.qid);
+    if(q) w.querySelector(".qtext").textContent = lang==="es"?q.es:(q.en||q.es);
+  });
+};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")); t.classList.add("active");
+  const v=t.dataset.view;
+  document.getElementById("view-survey").classList.toggle("hidden", v!=="survey");
+  document.getElementById("view-rewards").classList.toggle("hidden", v!=="rewards");
+});
+</script>
+<footer style="text-align:center;color:#94a3b8;font-size:12px;padding:20px;">
+Generado desde salarios_question_inventory_2026.csv (80 ítems) · 2026-07-04 · ensayo interno, sin backend
+</footer>
+</body>
+</html>
