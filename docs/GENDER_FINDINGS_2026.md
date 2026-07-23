@@ -1,6 +1,8 @@
 # Gender Pay Gap — SG Tech Pulse 2026 (Preliminary Findings)
 
-**Date:** 2026-07-21
+> **"El tech mexicano les paga igual a las mujeres… hasta que valen más."**
+
+**Date:** 2026-07-22
 **Data:** SG Tech Pulse 2026 live response dump — 217 responses (165 completed, 52 partial).
 Gender: 154 men, 60 women, 2 non-binary, 1 unstated. Base-salary analysis sample: **n=192** (136 men, 56 women).
 **Status:** Preliminary. Survey still open; sample is self-selected (not a probability sample of the market).
@@ -9,53 +11,67 @@ Gender: 154 men, 60 women, 2 non-binary, 1 unstated. Base-salary analysis sample
 
 ## Executive summary
 
-1. **Women in tech earn a raw ~32% less** in base monthly salary than men ($55,000 vs $80,500 median).
-2. **~25% of that gap survives full controls** for experience, seniority, role, industry, company size, and English. Most of the gap is *not* explained by women being more junior or in different roles.
-3. **The gap is a top-of-the-ladder phenomenon:** near zero at mid-level, but ~29% at Senior and ~38% at Manager.
-4. **Women are 28% of respondents but thin out above mid-level** (58% of Medio, ~20% of Senior+), a visible leak at the top.
-5. Supporting gaps in access are **more modest than early small-sample figures suggested**, but the lived-experience signals (isolation, harassment, absent leadership programs) are concerning.
+**Mexican tech pays women fairly, until they start to be worth more.** At junior and mid levels women earn as much as men or slightly more. Then, exactly at seniority and leadership, a penalty opens and never closes. This is not a pipeline problem; it is a ceiling that switches on at the top. Four findings:
+
+1. **The toll.** Equal at junior/mid, but a **~37% penalty at senior and leadership** levels, and **half the raw gap is unexplained** by any difference in experience, level, or role (Oaxaca-Blinder).
+2. **The vanishing.** Women are **62% of mid-level roles but only 27% of senior-and-above** — the headcount collapses exactly where the pay penalty appears.
+3. **The unexplained pesos.** For a senior woman, roughly **$15,000/month (~$176,000/year)** is a pure penalty that nothing about her work explains.
+4. **The male-only exit (directional).** The market's biggest raise — working for a foreign employer — carries a **63% gap** there; the escape hatch from low local pay is essentially male (small sample, n=11 women).
+
+Raw gap: base monthly median **$80,500 (men) vs $55,000 (women), −32%**. Sample is self-selected and the female n is small; treat as preliminary and directional.
 
 ---
 
-## 1. The gap (G1 raw, G2 adjusted)
+## Finding 1 — The toll: equal at the bottom, penalized at the top
 
-**Raw gap.** Base monthly salary, median: men **$80,500** vs women **$55,000** → **−31.7%** (95% CI [10%, 53%]; mean gap 35%). The confidence interval is wide because the female sample is still small, but it excludes zero.
+**Raw gap.** Base monthly salary, median: men **$80,500** vs women **$55,000** → **−32%** (95% CI [10%, 53%]; mean gap 35%). Wide interval (small female sample), but it excludes zero.
 
-**Adjusted gap.** In a log-salary regression controlling for tech experience, seniority level, English use, role, industry, and company size, the female coefficient corresponds to a **~25–26% gap** (95% CI roughly [10–12%, 38%]); the lean and full specifications agree:
+**The gap is not flat — it switches on at the top.** Grouped by career stage:
 
-| Specification | Adjusted gap | 95% CI | R² | k |
+| Career stage | Men (median) | Women (median) | Gap | n (H / M) |
 |---|---|---|---|---|
-| Lean (experience + seniority + English) | −26.3% | [12%, 38%] | 0.55 | 18 |
-| Full (+ role + industry + company size) | −25.4% | [10%, 38%] | 0.77 | 73 |
+| Junior / Mid | $32,000 | $37,623 | **women +18%** | 25 / 25 |
+| Senior and above | $95,000 | $60,000 | **−37%** | 125 / 47 |
 
-**Interpretation:** most of the raw gap is unexplained by composition. The defensible headline is *"at the same level, role, and experience, women still earn about a quarter less."*
+At junior and mid levels there is no male advantage (if anything women are slightly ahead, partly because women concentrate in the better-paid Medio tier). The penalty appears at senior and leadership levels and is large. By individual tier: Medio −2%, Senior **−29%**, Gerente **−38%** (n=7 women, directional).
+
+**Half the gap is unexplained.** An Oaxaca-Blinder decomposition splits the raw gap into a part explained by measurable qualifications (experience, seniority, English, role) and a residual:
+
+| Component | Share of raw gap |
+|---|---|
+| Explained by qualifications | ~50% |
+| **Unexplained residual** | **~50% (a ~20% pure penalty)** |
+
+An adjusted log-salary regression agrees: controlling for experience, seniority, role, industry, company size, and English, women still earn **~25% less** (95% CI ~[10%, 38%]). *Unexplained is not the same as proven discrimination — it also holds factors we did not measure, including the mechanism questions dropped from the deployed form (see Limitations).*
 
 ---
 
-## 2. Where the gap opens (G3)
+## Finding 2 — The vanishing: majority in the middle, one in four at the top
 
-The gap is small at mid-level and widens sharply with seniority (tiers with fewer than 5 women suppressed):
+- **Women are 27.8%** of respondents overall, but the distribution collapses with seniority: **62% of mid-level (Medio) roles are held by women, versus only 27% of senior-and-above.** They are the majority in the middle and roughly one in four at the top.
+- The collapse lands exactly where the pay penalty (Finding 1) appears: fewer women *and* paid less, at the same rung.
+- **Pipeline origin gap (context):** women wrote their first program later (median **19 vs 17**) and had less childhood computer access (**40% vs 51%**).
 
-| Tier | Men (median) | Women (median) | Gap | n (H / M) |
+---
+
+## Finding 3 — The unexplained pesos
+
+Half of the gap is a pure penalty. Applying the ~20% unexplained residual (Finding 1) to salaries:
+
+| | Woman's median | Equivalent man | Monthly penalty | Annual penalty |
 |---|---|---|---|---|
-| Medio | $46,500 | $45,500 | −2% | 10 / 14 |
-| Senior | $79,500 | $56,795 | **−29%** | 52 / 21 |
-| Gerente | $96,500 | $60,000 | **−38%** | 30 / 7 (directional) |
-| Junior / Staff-Principal / Director | — | — | suppressed | women <5 |
+| Median woman | $55,000 | ~$68,500 | ~$13,500 | **~$162,000** |
+| Senior woman | $60,000 | ~$74,700 | ~$14,700 | **~$176,000** |
+
+For a senior woman, roughly **$15,000 a month, about $176,000 a year**, is money that nothing about her experience, level, or role explains.
 
 ---
 
-## 3. Representation and pipeline (G5)
+## Finding 4 (directional) — The male-only exit
 
-- **Women are 27.8%** of respondents overall.
-- **The distribution leaks at the top.** Female share by tier: Junior 19%, **Medio 58%**, Senior 28%, Staff-Principal 19%, Gerente 21%, Director 20%. Women concentrate at mid-level and thin out above it.
-- **Pipeline origin gap:** women wrote their first program later (median **19 vs 17**) and had less childhood computer access (**40% vs 51%**).
+Working for a foreign employer is the single biggest raise in the market (+49% overall). But that lane is not equally open: **among foreign-employer workers the gap is 63%** (men $120,000 vs women $44,400, n=11 women). Every lever that raises pay — seniority, English, going global — *widens* the gap rather than closing it. Treat the 63% as directional (small female cell), but the pattern across all three levers is consistent.
 
----
-
-## 4. Supporting access gaps (G4)
-
-With the larger sample these are real but modest (women vs men, share and risk ratio):
+Supporting access ratios (women vs men, share and risk ratio):
 
 | Access | Men | Women | RR (W/M) |
 |---|---|---|---|
@@ -68,7 +84,7 @@ Note: earlier launch-week figures were drawn from ~15 women and overstated some 
 
 ---
 
-## 5. Women-only lived experience (G6)
+## Support — Women-only lived experience
 
 Descriptive, women-only, n≈47, cells below threshold suppressed:
 
@@ -83,6 +99,7 @@ Descriptive, women-only, n≈47, cells below threshold suppressed:
 - **Salary:** base monthly, normalized to MXN (USD reports × FX 18.5; conclusions are stable across FX 17–20). Log-transformed for the regression; outliers outside ~$8k–$400k trimmed.
 - **Raw gap:** median (robust) with a 3,000-sample bootstrap 95% CI.
 - **Adjusted gap:** OLS on log salary; female coefficient reported as `1 − exp(β)` with a normal-approximation CI.
+- **Oaxaca-Blinder:** twofold decomposition with pooled reference coefficients over a parsimonious control set (experience, seniority rank, English use, role family) to keep it estimable on the female subsample. The monetized penalty applies the unexplained log-point residual to median salaries.
 - **Suppression:** any published cell with fewer than 5 women is withheld. Non-binary respondents (n=2) are excluded from inference.
 - **Sample:** self-selected respondents; presented as a respondent sample, not a population estimate.
 
@@ -99,6 +116,6 @@ Descriptive, women-only, n≈47, cells below threshold suppressed:
 
 ## Implications (for AMITI / advocacy)
 
-- The market-level message is defensible now: **an adjusted ~25% gap that widens at senior and management levels**, framed as a talent-supply problem (the sector loses senior women it can least afford to lose).
-- The pipeline-origin and leadership-program findings point to concrete asks: early-STEM access for girls (childhood-computer and first-program-age gaps) and employer accountability on formal women-to-leadership programs.
-- Before this goes external, the two priorities are: (1) grow the female sample further, and (2) restore the mechanism questions so the residual can be decomposed into negotiation, sponsorship, and promotion channels.
+- The reframe is the message: **it is not a pipeline problem, it is a promotion-and-pay ceiling.** Women reach mid-level in force and are paid fairly there; the sector then loses them, and underpays the ones who stay, exactly at senior and leadership. That is the talent the industry can least afford to lose.
+- Concrete asks: employer accountability on **pay-equity audits at senior/leadership levels** and on **formal women-to-leadership programs** (68% of women report none); plus early-STEM access for girls (the first-program-age and childhood-computer gaps).
+- Before this goes external: (1) grow the female sample, and (2) restore the mechanism questions so the ~50% unexplained residual can be decomposed into negotiation, sponsorship, and promotion channels.

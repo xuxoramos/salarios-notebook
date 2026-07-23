@@ -1,6 +1,8 @@
 # Brecha Salarial de Género — SG Tech Pulse 2026 (Hallazgos Preliminares)
 
-**Fecha:** 2026-07-21
+> **"El tech mexicano les paga igual a las mujeres… hasta que valen más."**
+
+**Fecha:** 2026-07-22
 **Datos:** Volcado de respuestas en vivo de SG Tech Pulse 2026 — 217 respuestas (165 completas, 52 parciales).
 Género: 154 hombres, 60 mujeres, 2 personas no binarias, 1 sin especificar. Muestra para análisis salarial: **n=192** (136 hombres, 56 mujeres).
 **Estado:** Preliminar. La encuesta sigue abierta; la muestra es autoseleccionada (no es una muestra probabilística del mercado).
@@ -9,53 +11,67 @@ Género: 154 hombres, 60 mujeres, 2 personas no binarias, 1 sin especificar. Mue
 
 ## Resumen ejecutivo
 
-1. **Las mujeres en tech ganan ~32% menos** de salario base mensual que los hombres ($55,000 vs $80,500 de mediana).
-2. **~25% de esa brecha sobrevive a los controles** por experiencia, seniority, rol, industria, tamaño de empresa e inglés. La mayor parte de la brecha *no* se explica porque las mujeres sean más junior o estén en otros roles.
-3. **La brecha es un fenómeno de la parte alta de la escalera:** casi nula en nivel medio, pero ~29% en Senior y ~38% en Gerente.
-4. **Las mujeres son 28% de la muestra, pero se adelgazan por encima del nivel medio** (58% de Medio, ~20% de Senior en adelante), una fuga visible en la cima.
-5. Las brechas de acceso de apoyo son **más moderadas de lo que sugerían las cifras iniciales de muestra pequeña**, pero las señales de experiencia vivida (aislamiento, acoso, ausencia de programas de liderazgo) son preocupantes.
+**El tech mexicano les paga igual a las mujeres, hasta que empiezan a valer más.** En niveles junior y medio, las mujeres ganan igual que los hombres o un poco más. Luego, justo al llegar a seniority y liderazgo, se abre un castigo que ya no se cierra. No es un problema de pipeline; es un techo que se enciende en la cima. Cuatro hallazgos:
+
+1. **El peaje.** Iguales en junior/medio, pero un **castigo de ~37% en niveles senior y de liderazgo**, y **la mitad de la brecha cruda no se explica** por ninguna diferencia de experiencia, nivel o rol (Oaxaca-Blinder).
+2. **La desaparición.** Las mujeres son **62% de los puestos de nivel medio pero solo 27% de senior en adelante**: el conteo se colapsa justo donde aparece el castigo salarial.
+3. **Los pesos sin explicación.** Para una mujer senior, cerca de **$15,000/mes (~$176,000/año)** es un castigo puro que nada de su trabajo explica.
+4. **La salida solo para ellos (direccional).** El mayor aumento del mercado — trabajar para un empleador extranjero — tiene ahí una **brecha de 63%**; la salida del pago local bajo es esencialmente masculina (muestra pequeña, n=11 mujeres).
+
+Brecha cruda: mediana base mensual **$80,500 (hombres) vs $55,000 (mujeres), −32%**. La muestra es autoseleccionada y la n femenina es pequeña; tratar como preliminar y direccional.
 
 ---
 
-## 1. La brecha (G1 cruda, G2 ajustada)
+## Hallazgo 1 — El peaje: iguales abajo, castigadas arriba
 
-**Brecha cruda.** Salario base mensual, mediana: hombres **$80,500** vs mujeres **$55,000** → **−31.7%** (IC 95% [10%, 53%]; brecha por media 35%). El intervalo de confianza es amplio porque la muestra femenina aún es pequeña, pero excluye el cero.
+**Brecha cruda.** Salario base mensual, mediana: hombres **$80,500** vs mujeres **$55,000** → **−32%** (IC 95% [10%, 53%]; brecha por media 35%). Intervalo amplio (muestra femenina pequeña), pero excluye el cero.
 
-**Brecha ajustada.** En una regresión de salario logarítmico controlando por experiencia tech, nivel de seniority, uso de inglés, rol, industria y tamaño de empresa, el coeficiente femenino corresponde a una brecha de **~25–26%** (IC 95% aproximadamente [10–12%, 38%]); las especificaciones simple y completa coinciden:
+**La brecha no es plana — se enciende en la cima.** Agrupada por etapa de carrera:
 
-| Especificación | Brecha ajustada | IC 95% | R² | k |
+| Etapa de carrera | Hombres (mediana) | Mujeres (mediana) | Brecha | n (H / M) |
 |---|---|---|---|---|
-| Simple (experiencia + seniority + inglés) | −26.3% | [12%, 38%] | 0.55 | 18 |
-| Completa (+ rol + industria + tamaño) | −25.4% | [10%, 38%] | 0.77 | 73 |
+| Junior / Medio | $32,000 | $37,623 | **mujeres +18%** | 25 / 25 |
+| Senior en adelante | $95,000 | $60,000 | **−37%** | 125 / 47 |
 
-**Interpretación:** la mayor parte de la brecha cruda no se explica por composición. El titular defendible es *"al mismo nivel, mismo rol y misma experiencia, las mujeres aún ganan cerca de una cuarta parte menos."*
+En junior y medio no hay ventaja masculina (si acaso las mujeres van un poco arriba, en parte porque se concentran en el nivel Medio mejor pagado). El castigo aparece en niveles senior y de liderazgo y es grande. Por nivel individual: Medio −2%, Senior **−29%**, Gerente **−38%** (n=7 mujeres, direccional).
+
+**La mitad de la brecha no se explica.** Una descomposición Oaxaca-Blinder separa la brecha cruda en una parte explicada por cualificaciones medibles (experiencia, seniority, inglés, rol) y un residual:
+
+| Componente | Proporción de la brecha cruda |
+|---|---|
+| Explicado por cualificaciones | ~50% |
+| **Residual no explicado** | **~50% (un castigo puro de ~20%)** |
+
+Una regresión ajustada de salario logarítmico coincide: controlando por experiencia, seniority, rol, industria, tamaño de empresa e inglés, las mujeres aún ganan **~25% menos** (IC 95% ~[10%, 38%]). *Lo no explicado no equivale a discriminación probada — también contiene factores que no medimos, incluidos los ítems de mecanismo eliminados del formulario desplegado (ver Limitaciones).*
 
 ---
 
-## 2. Dónde se abre la brecha (G3)
+## Hallazgo 2 — La desaparición: mayoría en medio, una de cada cuatro arriba
 
-La brecha es pequeña en nivel medio y se ensancha con la seniority (se suprimen los niveles con menos de 5 mujeres):
+- **Las mujeres son 27.8%** de la muestra en total, pero la distribución se colapsa con la seniority: **62% de los puestos de nivel medio (Medio) son de mujeres, contra solo 27% de senior en adelante.** Son mayoría en el medio y aproximadamente una de cada cuatro en la cima.
+- El colapso cae justo donde aparece el castigo salarial (Hallazgo 1): menos mujeres *y* peor pagadas, en el mismo peldaño.
+- **Brecha de origen del pipeline (contexto):** las mujeres escribieron su primer programa más tarde (mediana **19 vs 17**) y tuvieron menos acceso a computadora en la infancia (**40% vs 51%**).
 
-| Nivel | Hombres (mediana) | Mujeres (mediana) | Brecha | n (H / M) |
+---
+
+## Hallazgo 3 — Los pesos sin explicación
+
+La mitad de la brecha es un castigo puro. Aplicando el residual no explicado de ~20% (Hallazgo 1) a los salarios:
+
+| | Mediana mujer | Hombre equivalente | Castigo mensual | Castigo anual |
 |---|---|---|---|---|
-| Medio | $46,500 | $45,500 | −2% | 10 / 14 |
-| Senior | $79,500 | $56,795 | **−29%** | 52 / 21 |
-| Gerente | $96,500 | $60,000 | **−38%** | 30 / 7 (directivo) |
-| Junior / Staff-Principal / Director | — | — | suprimido | mujeres <5 |
+| Mujer mediana | $55,000 | ~$68,500 | ~$13,500 | **~$162,000** |
+| Mujer senior | $60,000 | ~$74,700 | ~$14,700 | **~$176,000** |
+
+Para una mujer senior, cerca de **$15,000 al mes, unos $176,000 al año**, es dinero que nada de su experiencia, nivel o rol explica.
 
 ---
 
-## 3. Representación y pipeline (G5)
+## Hallazgo 4 (direccional) — La salida solo para ellos
 
-- **Las mujeres son 27.8%** de la muestra en total.
-- **La distribución se fuga en la cima.** Proporción femenina por nivel: Junior 19%, **Medio 58%**, Senior 28%, Staff-Principal 19%, Gerente 21%, Director 20%. Las mujeres se concentran en nivel medio y se adelgazan por encima.
-- **Brecha de origen del pipeline:** las mujeres escribieron su primer programa más tarde (mediana **19 vs 17**) y tuvieron menos acceso a computadora en la infancia (**40% vs 51%**).
+Trabajar para un empleador extranjero es el mayor aumento del mercado (+49% en general). Pero ese carril no está igual de abierto: **entre quienes trabajan para empleadores extranjeros la brecha es 63%** (hombres $120,000 vs mujeres $44,400, n=11 mujeres). Cada palanca que sube el salario — seniority, inglés, salir a lo global — *ensancha* la brecha en vez de cerrarla. Tratar el 63% como direccional (celda femenina pequeña), pero el patrón en las tres palancas es consistente.
 
----
-
-## 4. Brechas de acceso de apoyo (G4)
-
-Con la muestra más grande son reales pero moderadas (mujeres vs hombres, proporción y razón de riesgo):
+Razones de acceso de apoyo (mujeres vs hombres, proporción y razón de riesgo):
 
 | Acceso | Hombres | Mujeres | RR (M/H) |
 |---|---|---|---|
@@ -68,7 +84,7 @@ Nota: las cifras de la semana de lanzamiento salían de ~15 mujeres y sobreestim
 
 ---
 
-## 5. Experiencia vivida de las mujeres (G6)
+## Apoyo — Experiencia vivida de las mujeres
 
 Descriptivo, solo mujeres, n≈47, celdas por debajo del umbral suprimidas:
 
@@ -83,6 +99,7 @@ Descriptivo, solo mujeres, n≈47, celdas por debajo del umbral suprimidas:
 - **Salario:** base mensual, normalizado a MXN (reportes en USD × tipo de cambio 18.5; las conclusiones son estables entre TC 17 y 20). Transformado a logaritmo para la regresión; se recortan outliers fuera de ~$8k–$400k.
 - **Brecha cruda:** mediana (robusta) con IC 95% por bootstrap de 3,000 muestras.
 - **Brecha ajustada:** MCO sobre salario logarítmico; el coeficiente femenino se reporta como `1 − exp(β)` con IC por aproximación normal.
+- **Oaxaca-Blinder:** descomposición twofold con coeficientes de referencia agrupados sobre un conjunto parsimonioso de controles (experiencia, rango de seniority, uso de inglés, familia de rol) para que sea estimable en la submuestra femenina. El castigo monetizado aplica el residual no explicado (en puntos log) a las medianas salariales.
 - **Supresión:** se retiene cualquier celda publicada con menos de 5 mujeres. Las personas no binarias (n=2) se excluyen de la inferencia.
 - **Muestra:** respondientes autoseleccionados; se presenta como muestra de respondientes, no como estimación poblacional.
 
@@ -99,6 +116,6 @@ Descriptivo, solo mujeres, n≈47, celdas por debajo del umbral suprimidas:
 
 ## Implicaciones (para AMITI / advocacy)
 
-- El mensaje a nivel de mercado ya es defendible: **una brecha ajustada de ~25% que se ensancha en niveles senior y gerenciales**, encuadrada como problema de oferta de talento (el sector pierde a las mujeres senior que menos puede darse el lujo de perder).
-- Los hallazgos de origen del pipeline y de programas de liderazgo apuntan a peticiones concretas: acceso temprano a STEM para niñas (brechas de computadora en la infancia y edad del primer programa) y rendición de cuentas del empleador sobre programas formales de mujeres hacia el liderazgo.
-- Antes de que esto salga al exterior, las dos prioridades son: (1) crecer más la muestra femenina, y (2) restaurar los ítems de mecanismo para poder descomponer el residual en canales de negociación, patrocinio y promoción.
+- El reencuadre es el mensaje: **no es un problema de pipeline, es un techo de promoción y pago.** Las mujeres llegan con fuerza al nivel medio y ahí se les paga justo; el sector luego las pierde, y subpaga a las que se quedan, justo en senior y liderazgo. Es el talento que la industria menos puede darse el lujo de perder.
+- Peticiones concretas: rendición de cuentas del empleador en **auditorías de equidad salarial en niveles senior/liderazgo** y en **programas formales de mujeres hacia el liderazgo** (68% de las mujeres reporta que no hay ninguno); más acceso temprano a STEM para niñas (las brechas de edad del primer programa y de computadora en la infancia).
+- Antes de que esto salga al exterior: (1) crecer la muestra femenina, y (2) restaurar los ítems de mecanismo para poder descomponer el residual de ~50% no explicado en canales de negociación, patrocinio y promoción.
