@@ -136,4 +136,46 @@ ax.legend(frameon=False, loc="upper left"); ax.set_ylim(0, 150000)
 ax.spines[["top","right"]].set_visible(False)
 save(fig, "fig5_exit.png")
 
+# ---------- Fig 6: isolation waffle (women-only, holds after refresh) ----------
+fig, ax = plt.subplots(figsize=(9.5, 5.8))
+GREY = "#cbd5e1"
+N_ROSE = 54            # 54% of women are ≤20% of their team; each cell = 1% of women
+cell, gap = 1.0, 0.14
+for idx in range(100):
+    r, c = idx // 10, idx % 10
+    ax.add_patch(plt.Rectangle((c, r), cell - gap, cell - gap,
+                 color=(WOMEN if idx < N_ROSE else GREY)))
+ax.set_xlim(-0.2, 10.0); ax.set_ylim(-0.2, 10.2)
+ax.set_aspect("equal"); ax.axis("off")
+ax.set_title("Más de la mitad de las mujeres es minoría en su propio equipo",
+             fontsize=17, fontweight="bold", loc="left", pad=14, color=INK)
+fig.text(0.5, 0.02,
+         "54% son ≤20% de su equipo  ·  mediana: 20% de pares mujeres  ·  n≈77 mujeres",
+         ha="center", color=WOMEN, fontsize=13, fontweight="bold")
+save(fig, "fig6_isolation.png")
+
+# ---------- Fig 7: AI coding-style shift (developers) ----------
+AI_ACCENT = "#d97706"   # amber, distinct from the gender rose
+fig, ax = plt.subplots(figsize=(9.5, 5.0))
+cats = ["Instruyo a los agentes\n(ya casi no programo a mano)",
+        "Programo a mano\n+ IA de apoyo",
+        "Programo a mano\n+ IA complementaria"]
+vals = [47, 32, 18]
+ypos = [2, 1, 0]
+colors = [AI_ACCENT, MEN, MEN]
+ax.barh(ypos, vals, color=colors, height=0.62)
+for y, v in zip(ypos, vals):
+    ax.text(v + 1, y, f"{v}%", va="center", fontsize=14, fontweight="bold",
+            color=(AI_ACCENT if y == 2 else INK))
+ax.set_yticks(ypos); ax.set_yticklabels(cats, fontsize=12)
+ax.set_xlim(0, 58); ax.set_xticks([])
+ax.set_xlabel("% de quienes desarrollan software", labelpad=8)
+ax.set_title("Casi la mitad ya no programa a mano: instruye a los agentes",
+             fontsize=16, fontweight="bold", loc="left", pad=12)
+ax.grid(False)
+ax.spines[["top", "right", "bottom"]].set_visible(False)
+fig.text(0.5, -0.02, "Entre quienes desarrollan software  ·  n=72 (México)",
+         ha="center", color=MUTED, fontsize=12)
+save(fig, "fig7_ai.png")
+
 print("done ->", OUT)

@@ -111,6 +111,20 @@ El mayor aumento del mercado (trabajar para el extranjero) casi no llega a ellas
 </div>
 
 ---
+
+# El aislamiento
+
+<div class="text-lg opacity-70 -mt-2 mb-3">La experiencia de las mujeres · sección solo-mujeres (n≈77)</div>
+
+<div class="flex justify-center">
+<img src="./figures/fig6_isolation.png" class="h-96 rounded-lg shadow" />
+</div>
+
+<div class="text-center mt-2 text-lg">
+<b class="text-rose-600">54%</b> de las mujeres son ≤20% de su equipo (mediana: 20% de pares mujeres). Son la excepción en su propia sala.
+</div>
+
+---
 layout: center
 class: text-center
 ---
@@ -126,6 +140,22 @@ class: text-center
 
 <div class="mt-8 text-2xl italic text-rose-600 font-semibold">
 "En el tech mexicano, ser mujer cuesta desde el primer día, y cada ascenso lo encarece."
+</div>
+
+---
+
+# Bonus — La IA ya cambió cómo se programa
+
+<div class="flex justify-center">
+<img src="./figures/fig7_ai.png" class="h-64 rounded-lg shadow" />
+</div>
+
+<div class="text-center mt-2 text-sm">
+Y paga: quienes trabajan así ganan una mediana de <b style="color:#d97706">$79,000</b> vs $58,000 (<b>+36%</b>). <span class="opacity-70">(descriptivo, no causal; n=72 desarrolladores · hilo aparte de la brecha)</span>
+</div>
+
+<div class="text-center mt-4 text-lg max-w-4xl mx-auto bg-rose-50 text-rose-900 rounded-lg py-3 px-5">
+¿Y las mujeres van en esta ola o se quedan atrás? <b>Aún no lo sabemos:</b> solo <b>19 mujeres</b> nos dijeron cómo trabajan con IA, muy pocas para saberlo. Si eres mujer en tech, tu respuesta define el número. <b class="text-rose-600">Responde SG Tech Pulse 2026.</b>
 </div>
 
 ---
