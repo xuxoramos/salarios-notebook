@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stat cards — ¿Cuánto vale tu ___? · SG Tech Pulse 2026</title>
+<style>
+  :root { --ink:#0f172a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:#334155; color:#0f172a; }
+  .toolbar { position:sticky; top:0; z-index:10; background:#0f172a; color:#fff; padding:12px 18px;
+             display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+  .toolbar b { font-size:15px; } .toolbar span { color:#94a3b8; font-size:13px; }
+  .toolbar .sp { flex:1; }
+  button { background:#2563eb; color:#fff; border:0; padding:9px 14px; border-radius:8px; cursor:pointer; font-size:14px; }
+  button.alt { background:#1e293b; }
+  .sheet { padding:24px; display:flex; flex-wrap:wrap; gap:24px; justify-content:center; }
+  .cardwrap { }
+  .cap { color:#e2e8f0; font-size:13px; margin:0 0 6px 4px; }
+  /* Instagram square, true size 1080x1080; preview scales via zoom */
+  .card { width:1080px; height:1080px; border-radius:36px; overflow:hidden; position:relative;
+          display:flex; flex-direction:column; color:#fff; padding:80px 84px;
+          box-shadow:0 20px 60px rgba(0,0,0,.4); font-feature-settings:"tnum"; }
+  body.preview .card { zoom:0.46; }         /* Chromium: scales layout box too */
+  .kicker { font-size:30px; letter-spacing:.12em; text-transform:uppercase; opacity:.85; font-weight:700; }
+  .stat { font-size:340px; font-weight:900; line-height:.9; margin-top:auto; letter-spacing:-.02em; }
+  .stat.sm { font-size:210px; }
+  .head { font-size:66px; font-weight:800; line-height:1.05; margin-top:24px; }
+  .sub { font-size:40px; font-weight:500; line-height:1.3; margin-top:22px; opacity:.95; }
+  .fill { flex:1; }
+  .fine { font-size:24px; opacity:.7; margin-top:26px; line-height:1.35; }
+  .footer { position:absolute; left:0; right:0; bottom:0; padding:34px 84px; font-size:34px; font-weight:700;
+            display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,.18); }
+  .footer .cta { font-weight:800; }
+  .post { width:497px; margin:10px auto 0; color:#cbd5e1; background:#1e293b; border:1px solid #334155;
+          border-radius:12px; padding:14px 16px; font-size:13px; line-height:1.5; white-space:pre-wrap; }
+  .post b { color:#fff; display:block; margin-bottom:6px; letter-spacing:.04em; text-transform:uppercase; font-size:11px; opacity:.7; }
+  /* themes */
+  .t-red    { background:linear-gradient(150deg,#7f1d1d,#b91c1c); }
+  .t-slate  { background:linear-gradient(150deg,#0f172a,#1e3a8a); }
+  .t-violet { background:linear-gradient(150deg,#4c1d95,#7c3aed); }
+  .t-teal   { background:linear-gradient(150deg,#134e4a,#0d9488); }
+  .t-amber  { background:linear-gradient(150deg,#78350f,#d97706); }
+  .t-cta    { background:linear-gradient(150deg,#111827,#2563eb); }
+  @media print {
+    .toolbar,.cap { display:none !important; }
+    body { background:#fff; } .sheet { display:block; padding:0; }
+    body.preview .card { zoom:1; }
+    .card { page-break-after:always; border-radius:0; box-shadow:none; margin:0 auto; }
+    .post { display:none !important; }
+  }
+</style>
+</head>
+<body class="preview">
+<div class="toolbar">
+  <b>Stat cards · ¿Cuánto vale tu ___?</b>
+  <span>1080×1080 (Instagram). Abrir en Chrome. Captura cada tarjeta a tamaño real o exporta a PDF (1 por página). Cifras: SG Tech Pulse 2026, n=323, mediana USD/mes.</span>
+  <div class="sp"></div>
+  <button id="sizeBtn" class="alt">Ver a tamaño real</button>
+  <button onclick="window.print()">Imprimir / PDF</button>
+</div>
+
+<div class="sheet">
+
+  <div class="cardwrap"><p class="cap">01 · Intro</p>
+  <div class="card t-slate">
+    <div class="kicker">SG Tech Pulse 2026</div>
+    <div class="fill"></div>
+    <div class="head" style="font-size:104px;">¿Cuánto vale tu _____?</div>
+    <div class="sub" style="font-size:44px;">Tu lenguaje, tu nube, tu inglés, tu país. No dejes que el promedio hable por ti.</div>
+    <div class="fill"></div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">El número lo pones tú</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>¿Cuánto vale tu inglés, tu stack, tu ciudad? Estamos midiendo el sueldo tech de LATAM, y el promedio no te representa hasta que respondes. Cada semana soltamos un número nuevo. ¿Te atreves a comparar el tuyo? Responde SG Tech Pulse 2026.
+
+#SGTechPulse #SoftwareGuru #SalariosTech #TechLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">02 · Inglés</p>
+  <div class="card t-teal">
+    <div class="kicker">¿Cuánto vale tu inglés?</div>
+    <div class="stat">2.5×</div>
+    <div class="head">Quien usa inglés todo el día gana 2.5× lo de quien no lo usa.</div>
+    <div class="sub">Mediana: $5,405 vs $2,162 USD al mes.</div>
+    <div class="fill"></div>
+    <div class="fine">Mediana bruta USD/mes, sin ajustar por experiencia. Muestra autoseleccionada (n=323).</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Que tu inglés cuente</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Quien usa inglés todo el día reporta 2.5× lo de quien no lo usa: $5,405 vs $2,162 al mes (mediana, n=323). ¿Tu inglés se está pagando o te lo estás regalando? Pon tu número.
+
+#SGTechPulse #Ingles #SalariosTech #TechLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">03 · Empleador extranjero</p>
+  <div class="card t-violet">
+    <div class="kicker">¿Cuánto vale tu jefe extranjero?</div>
+    <div class="stat">+40%</div>
+    <div class="head">Trabajar para una empresa de otro país paga ~40% más.</div>
+    <div class="sub">Mediana $4,865 vs $3,486 USD al mes (empleador local).</div>
+    <div class="fill"></div>
+    <div class="fine">n=49 con empleador extranjero. Mediana bruta USD/mes. Muestra preliminar.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Presume para quién trabajas</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Trabajar para una empresa de fuera paga ~40% más: $4,865 vs $3,486 al mes. ¿Local o extranjero? Presume para quién trabajas.
+
+#SGTechPulse #TrabajoRemoto #SalariosTech #TechLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">04 · Nube</p>
+  <div class="card t-amber">
+    <div class="kicker">¿Cuánto vale tu nube?</div>
+    <div class="stat">+77%</div>
+    <div class="head">Quien usa Google Cloud reporta 77% más que la mediana.</div>
+    <div class="sub">AWS +23% · Azure −23%. GCP: $6,216 USD al mes.</div>
+    <div class="fill"></div>
+    <div class="fine">Solo 6 respuestas de Google Cloud: muy pocas para confirmarlo. Ayúdanos a saber si es real.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Pon tu nube en el mapa</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Google Cloud lidera con +77% sobre la mediana... pero solo 6 personas nos lo han dicho. AWS +23%, Azure −23%. ¿GCP de verdad paga más o es puro ruido? Ayúdanos a confirmarlo. ¿Cuál es tu nube?
+
+#SGTechPulse #AWS #Azure #GoogleCloud #DevOps</div></div>
+
+  <div class="cardwrap"><p class="cap">05 · Lenguaje</p>
+  <div class="card t-red">
+    <div class="kicker">¿Cuánto vale tu lenguaje?</div>
+    <div class="stat">+131%</div>
+    <div class="head">El lenguaje que mejor paga en la muestra casi no tiene respuestas.</div>
+    <div class="sub">Clojure lidera; Java +38%, Python −25%, JavaScript −32%.</div>
+    <div class="fill"></div>
+    <div class="fine">Solo 2 respuestas de Clojure: es un guiño, no un dato. ¿Programas en algo raro? Cuéntanos.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Defiende tu lenguaje</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>El lenguaje que mejor paga en la muestra casi no tiene respuestas: Clojure +131% (n=2). Java +38%, Python −25%, y JavaScript... −32%. Sí, JS debajo del promedio. ¿Nos vas a dejar así o defiendes tu lenguaje?
+
+#SGTechPulse #JavaScript #Python #Clojure #DevLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">06 · El mapa de LATAM</p>
+  <div class="card t-slate">
+    <div class="kicker">¿Cuánto se gana en tu país?</div>
+    <div class="stat sm">85%</div>
+    <div class="head">85% de las respuestas son de México. El resto de LATAM casi no aparece.</div>
+    <div class="sub">Colombia −32%, Perú −28%... con 2 o 3 respuestas cada uno. No alcanza para saberlo.</div>
+    <div class="fill"></div>
+    <div class="fine">273 de 323 respuestas son de México. Tu país está en blanco hasta que respondas.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Tu país te necesita</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>85% de las respuestas son de México. Colombia, Perú, Chile: 2 o 3 cada uno. No alcanza para saber cuánto se gana en tu país. El mapa de sueldos de LATAM lo está dibujando México solo. Tu país está en blanco.
+
+#SGTechPulse #TechLATAM #Colombia #Peru #Chile #Argentina</div></div>
+
+  <div class="cardwrap"><p class="cap">07 · El mapa de México</p>
+  <div class="card t-teal">
+    <div class="kicker">¿Cuánto se gana en tu región?</div>
+    <div class="stat sm">−8%</div>
+    <div class="head">Monterrey, la meca del norte, reporta menos que CDMX.</div>
+    <div class="sub">El noroeste manda (+42%); el sur reporta la mitad (−54%). El mapa no es el que crees.</div>
+    <div class="fill"></div>
+    <div class="fine">Monterrey n=29; Sur n=5, Noroeste n=8: direccional. Tu región casi no aparece hasta que respondas.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Pon tu región en el mapa</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Sorpresa: Monterrey reporta menos que CDMX (−8%). El noroeste manda (+42%) y el sur reporta la mitad (−54%). Varias regiones con un puñado de respuestas. ¿De verdad tu región gana eso? Ponla en el mapa.
+
+#SGTechPulse #Monterrey #CDMX #Guadalajara #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">08 · Diáspora en EE.UU.</p>
+  <div class="card t-cta">
+    <div class="kicker">¿Y los que ya cruzaron?</div>
+    <div class="stat">3×</div>
+    <div class="head">Los que trabajan desde Estados Unidos reportan el triple. Pero solo 9 nos han contado.</div>
+    <div class="sub">¿Estás en la bahía o en un tech gringo? Tu número es la brújula de quien sueña con llegar.</div>
+    <div class="fill"></div>
+    <div class="fine">n=9 residentes en EE.UU. ($10,000/mes mediana). Muy pocos para un dato. Preséntate.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Ilumina el camino</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Los que ya cruzaron reportan 3×: $10,000 al mes de mediana. Pero solo 9 nos han contado. Si estás en la bahía o en un tech gringo, tu número es la brújula de quien sueña con llegar. Preséntate.
+
+#SGTechPulse #LatinosInTech #SiliconValley #TechLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">09 · Seguridad</p>
+  <div class="card t-violet">
+    <div class="kicker">¿Cuánto vale tu rol?</div>
+    <div class="stat">2×</div>
+    <div class="head">Seguridad/InfoSec reporta el doble de la mediana.</div>
+    <div class="sub">$7,027 USD al mes vs $3,514 de la mediana general.</div>
+    <div class="fill"></div>
+    <div class="fine">Solo 7 respuestas en seguridad: muy pocas para asegurarlo. ¿Trabajas en seguridad? Cuéntanos.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Demuéstralo</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Seguridad/InfoSec reporta el doble de la mediana: $7,027 al mes. Con 7 respuestas es un indicio, no un veredicto. ¿Trabajas en seguridad? Demuéstralo.
+
+#SGTechPulse #InfoSec #Ciberseguridad #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">10 · Industria</p>
+  <div class="card t-red">
+    <div class="kicker">¿Cuánto vale tu industria?</div>
+    <div class="stat">−53%</div>
+    <div class="head">Quien trabaja en gobierno reporta 53% menos que la mediana.</div>
+    <div class="sub">$1,649 vs $3,514 USD al mes. Ecommerce, en cambio, +69%.</div>
+    <div class="fill"></div>
+    <div class="fine">n=8 en gobierno. Direccional. ¿Tú en qué industria estás?</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Suma tu industria</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Gobierno reporta 53% menos que la mediana ($1,649). Ecommerce, al revés, +69%. ¿Tu industria te paga lo que vales o te ancla? Suma la tuya.
+
+#SGTechPulse #Fintech #Gobierno #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">11 · Experiencia</p>
+  <div class="card t-slate">
+    <div class="kicker">¿Cuánto vale tu experiencia?</div>
+    <div class="stat">4×</div>
+    <div class="head">Con 11+ años se reporta casi 4× lo del que empieza.</div>
+    <div class="sub">0-2 años $1,135 · 3-5 $2,162 · 6-10 $3,649 · 11+ $4,432 al mes.</div>
+    <div class="fill"></div>
+    <div class="fine">Mediana USD/mes (n=290). Los primeros años son los más baratos.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Pon tus años sobre la mesa</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Con 11+ años se reporta casi 4× lo del que empieza: $4,432 vs $1,135 al mes. Los primeros años son los más baratos, y nadie te lo dice. ¿En qué tramo vas? Pon tus años sobre la mesa.
+
+#SGTechPulse #CarreraTech #SalariosTech #TechLATAM</div></div>
+
+  <div class="cardwrap"><p class="cap">12 · Modalidad</p>
+  <div class="card t-teal">
+    <div class="kicker">¿Cuánto vale trabajar remoto?</div>
+    <div class="stat">+56%</div>
+    <div class="head">El remoto total paga 56% más que el presencial.</div>
+    <div class="sub">Remoto $3,784 vs presencial $2,432 al mes. El híbrido queda en medio.</div>
+    <div class="fill"></div>
+    <div class="fine">Mediana USD/mes. Remoto n=133, presencial n=43. Muestra preliminar.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Presume tu modalidad</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>El remoto total paga 56% más que el presencial: $3,784 vs $2,432 al mes. ¿Te están pagando la oficina? Presume tu modalidad.
+
+#SGTechPulse #TrabajoRemoto #RemoteWork #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">13 · Equity</p>
+  <div class="card t-amber">
+    <div class="kicker">¿Cuánto vale más allá del sueldo?</div>
+    <div class="stat">+68%</div>
+    <div class="head">Quien recibe acciones reporta 68% más que la mediana.</div>
+    <div class="sub">Con equity $5,892 vs $3,243 sin equity. Solo 1 de cada 5 lo recibe.</div>
+    <div class="fill"></div>
+    <div class="fine">n=61 con acciones/RSU. Mediana de salario base USD/mes; el equity va aparte.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">¿Te toca del pastel?</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>Quien recibe acciones reporta 68% más que la mediana ($5,892 vs $3,243), y solo 1 de cada 5 lo recibe. El sueldo base es solo una parte. ¿A ti te toca del pastel?
+
+#SGTechPulse #Equity #Startups #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">14 · Certificaciones</p>
+  <div class="card t-violet">
+    <div class="kicker">¿Tu certificación se paga sola?</div>
+    <div class="stat sm">≈ 0%</div>
+    <div class="head">En la muestra, tener certificación no mueve la aguja.</div>
+    <div class="sub">Con cert $3,459 vs sin cert $3,674 al mes. Casi lo mismo.</div>
+    <div class="fill"></div>
+    <div class="fine">n=147 vs 146. ¿Tu certificación te subió el sueldo? Demuéstranos que sí.</div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Demuéstranos que sí</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>¿La certificación se paga sola? En la muestra, no: con cert $3,459 vs sin cert $3,674 al mes, casi lo mismo. ¿A ti la certificación te subió el sueldo? Demuéstranos que sí.
+
+#SGTechPulse #Certificaciones #AWS #Scrum #SalariosTech</div></div>
+
+  <div class="cardwrap"><p class="cap">15 · Llamado a la acción</p>
+  <div class="card t-cta">
+    <div class="kicker">SG Tech Pulse 2026</div>
+    <div class="fill"></div>
+    <div class="head" style="font-size:84px;">No dejes que el promedio hable por ti.</div>
+    <div class="sub" style="font-size:46px;">Si trabajas en tecnología en cualquier país de LATAM, responde SG Tech Pulse 2026 y pon tu número sobre la mesa.</div>
+    <div class="fill"></div>
+    <div class="footer"><span>@SoftwareGuru</span><span class="cta">Link en bio</span></div>
+  </div>
+  <div class="post"><b>Copy para redes</b>No dejes que el promedio hable por ti. Si trabajas en tecnología en cualquier país de LATAM, tu respuesta mueve cada número que publicamos. 5 minutos, anónimo, el mapa lo armamos entre todos. Responde SG Tech Pulse 2026.
+
+#SGTechPulse #SoftwareGuru #SalariosTech #TechLATAM</div></div>
+
+</div>
+
+<script>
+  const b=document.getElementById("sizeBtn");
+  b.onclick=()=>{ document.body.classList.toggle("preview");
+    b.textContent = document.body.classList.contains("preview") ? "Ver a tamaño real" : "Ver en vista previa"; };
+</script>
+</body>
+</html>
