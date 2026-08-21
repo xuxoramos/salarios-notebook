@@ -698,7 +698,7 @@ PAGE_HTML = r"""<!doctype html>
     <h2>La ventana de la IA</h2>
     <p class="modsub" id="codingsub">Cómo se escribe código ahora, entre quienes programan.</p>
     <svg id="codingchart" role="img" aria-label="Formas de usar IA para crear código"></svg>
-    <p class="modsub" style="margin-top:18px">«¿Qué tan seguro/a estás de que tus habilidades seguirán siendo relevantes dentro de 3 años?» (1 = nada, 5 = mucho)</p>
+    <p class="modsub" style="margin-top:18px">«¿Qué tan seguro/a estás de que tus habilidades seguirán siendo relevantes dentro de 3 años?»</p>
     <svg id="confchart" role="img" aria-label="Distribución de confianza en la relevancia futura de habilidades"></svg>
     <p class="contextline hidden" id="confline"></p>
   </div>
@@ -892,6 +892,7 @@ PAGE_HTML = r"""<!doctype html>
   // Confidence distribution: 5 vertical bars, no salary attached
   (function () {
     const cc = dist.ai_confidence;
+    const confLabels = ["Nada", "Poco", "Algo", "Bastante", "Mucho"];
     const w = 680, h = 190, mm = { top: 54, right: 14, bottom: 26, left: 14 };
     const s = $("confchart");
     s.setAttribute("viewBox", "0 0 " + w + " " + h);
@@ -905,7 +906,7 @@ PAGE_HTML = r"""<!doctype html>
       out += '<path fill="var(--bar)" d="M' + bx + " " + (by + r) + " q0 " + -r + " " + r + " " + -r +
              " h" + (bw - 2 * r) + " q" + r + " 0 " + r + " " + r + " v" + (bh - r) + " h" + -bw + ' z"/>';
       out += '<text x="' + (bx + bw / 2) + '" y="' + (by - 6) + '" text-anchor="middle" font-size="12" fill="var(--ink-2)">' + c + "</text>";
-      out += '<text x="' + (bx + bw / 2) + '" y="' + (h - 8) + '" text-anchor="middle" font-size="12" fill="var(--muted)">' + (i + 1) + "</text>";
+      out += '<text x="' + (bx + bw / 2) + '" y="' + (h - 8) + '" text-anchor="middle" font-size="12" fill="var(--muted)">' + confLabels[i] + "</text>";
       if (me.found && me.ai_confidence === i + 1) {
         const cx = bx + bw / 2;
         out += '<text x="' + cx + '" y="' + (by - 36) + '" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Tú</text>' +
@@ -920,7 +921,7 @@ PAGE_HTML = r"""<!doctype html>
       $("confline").classList.remove("hidden");
       $("confline").textContent = me.ai_confidence <= 2
         ? "Compartes esta inquietud con " + worried + " de " + cc.n + " personas. No estás solo/a."
-        : "Tu respuesta: " + me.ai_confidence + " de 5 · " + cc.n + " personas han respondido.";
+        : "Tu respuesta: " + confLabels[me.ai_confidence - 1].toLowerCase() + " · " + cc.n + " personas han respondido.";
     }
   })();
 
