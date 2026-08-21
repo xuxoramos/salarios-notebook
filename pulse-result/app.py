@@ -892,7 +892,7 @@ PAGE_HTML = r"""<!doctype html>
   // Confidence distribution: 5 vertical bars, no salary attached
   (function () {
     const cc = dist.ai_confidence;
-    const w = 680, h = 170, mm = { top: 34, right: 14, bottom: 26, left: 14 };
+    const w = 680, h = 190, mm = { top: 54, right: 14, bottom: 26, left: 14 };
     const s = $("confchart");
     s.setAttribute("viewBox", "0 0 " + w + " " + h);
     const innerW = w - mm.left - mm.right, innerH = h - mm.top - mm.bottom;
@@ -907,7 +907,9 @@ PAGE_HTML = r"""<!doctype html>
       out += '<text x="' + (bx + bw / 2) + '" y="' + (by - 6) + '" text-anchor="middle" font-size="12" fill="var(--ink-2)">' + c + "</text>";
       out += '<text x="' + (bx + bw / 2) + '" y="' + (h - 8) + '" text-anchor="middle" font-size="12" fill="var(--muted)">' + (i + 1) + "</text>";
       if (me.found && me.ai_confidence === i + 1) {
-        out += '<path class="you" d="M' + (bx + bw / 2 - 6) + " " + (by - 26) + " h12 l-6 8 z" + '" fill="var(--you)"/>';
+        const cx = bx + bw / 2;
+        out += '<text x="' + cx + '" y="' + (by - 36) + '" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Tú</text>' +
+               '<path class="you" d="M' + (cx - 7) + " " + (by - 30) + " h14 l-7 10 z" + '" fill="var(--you)"/>';
       }
     });
     out += '<line x1="' + mm.left + '" x2="' + (w - mm.right) + '" y1="' + (mm.top + innerH) + '" y2="' + (mm.top + innerH) +
