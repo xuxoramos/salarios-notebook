@@ -37,7 +37,7 @@ Cada semana se publica un carrusel de **3 tarjetas**:
 Las tarjetas 1 y 3 son las mismas cada semana (se producen una sola vez). La del centro cambia. Por lo tanto:
 
 - **Cada tarjeta de contenido nueva = una semana más de campaña.** El modelo no limita el número de tarjetas, lo amplía.
-- Con las **13 tarjetas de contenido** actuales (02 a 14) hay material para **13 semanas** (un trimestre completo), una por semana.
+- Con las **16 tarjetas de contenido** actuales (02 a 17) hay material para **16 semanas** (un trimestre completo y tres semanas más), una por semana.
 - Recomendación opcional: dejar la tarjeta 3 (CTA) idéntica siempre, y cambiar solo la primera línea de la Intro para nombrar el tema de esa semana y evitar que se sienta repetitivo.
 
 ### 2.3 Voz y tono
@@ -55,9 +55,9 @@ Las tarjetas 1 y 3 son las mismas cada semana (se producen una sola vez). La del
 3. **La cifra es carnada, no conclusión.** Si el número resulta falso cuando llegue más gente, mejor: eso es justo lo que la campaña busca corregir.
 4. **Temas sensibles** (por ejemplo diáspora) se tratan con respeto y sentido de comunidad, nunca con culpa ni tono de "fuga de cerebros".
 
-### 2.5 Secuencia sugerida (13 semanas)
+### 2.5 Secuencia sugerida (16 semanas)
 
-Arranca con los datos más sólidos para generar confianza; deja los de muestra chica (carnada pura) para cuando ya haya tracción.
+Arranca con los datos más sólidos para generar confianza; deja los de muestra chica (carnada pura) para cuando ya haya tracción. El bloque de IA (semanas 13-15) se agrupa a propósito, ya entrada la campaña, como un segundo arranque temático antes del cierre.
 
 | Semana | Tarjeta central | Por qué ahí |
 |---|---|---|
@@ -73,7 +73,10 @@ Arranca con los datos más sólidos para generar confianza; deja los de muestra 
 | 10 | 14 Certificaciones | rompe mitos |
 | 11 | 10 Industria | identidad de sector |
 | 12 | 08 Diáspora EE.UU. | carnada, para compartir en redes de diáspora |
-| 13 | 06 Mapa de LATAM | cierre "llena el mapa" |
+| 13 | 16 Vibe coding | novedoso, muy compartible, dato sólido (n=72) |
+| 14 | 15 Rol en IA | prima de rol, refuerza el ángulo de carrera (n=18) |
+| 15 | 17 Roles 100% IA | carnada pura, mercado emergente (n=19) |
+| 16 | 06 Mapa de LATAM | cierre "llena el mapa" |
 
 ---
 
@@ -104,10 +107,10 @@ Formato base para rediseño. Las tarjetas actuales siguen esta estructura.
 | Tema | Colores | Usado en |
 |---|---|---|
 | `t-red` | #7f1d1d → #b91c1c | Lenguaje, Industria |
-| `t-slate` | #0f172a → #1e3a8a | Intro, Mapa LATAM, Experiencia |
-| `t-violet` | #4c1d95 → #7c3aed | Empleador, Seguridad, Certificaciones |
+| `t-slate` | #0f172a → #1e3a8a | Intro, Mapa LATAM, Experiencia, Roles 100% IA |
+| `t-violet` | #4c1d95 → #7c3aed | Empleador, Seguridad, Certificaciones, Rol en IA |
 | `t-teal` | #134e4a → #0d9488 | Inglés, Mapa de México, Modalidad |
-| `t-amber` | #78350f → #d97706 | Nube, Equity |
+| `t-amber` | #78350f → #d97706 | Nube, Equity, Vibe coding |
 | `t-cta` | #111827 → #2563eb | Diáspora, CTA final |
 
 Regla de diseño: no repetir el mismo tema en tarjetas consecutivas del carrusel.
@@ -120,12 +123,13 @@ Regla de diseño: no repetir el mismo tema en tarjetas consecutivas del carrusel
 - **Métrica:** mediana del **salario base mensual en USD**. Si la persona reportó en USD se usa ese valor; si reportó en MXN se convierte con tipo de cambio 18.5. Se recortan valores fuera de 400 a 25,000 USD/mes.
 - **Mediana general de referencia:** ~$3,514 USD/mes (n=293 con salario).
 - Las cifras son **preliminares y de muestra autoseleccionada**. No representan al sector completo; representan a quien ha respondido hasta hoy.
+- **Excepción — tarjetas 15 a 17 (bloque de IA):** vienen de un corte anterior, restringido a México (`docs/GENERAL_FINDINGS_2026_ES_MX.md` y `campaign/gender-slides/make_figures.py`), no del mismo corte de 323 respuestas LATAM. Las cifras en MXN se convirtieron a USD con el mismo tipo de cambio (18.5) solo para que la unidad calce con el resto del set; no asumir que comparten muestra con las demás tarjetas. Recalcular contra el corte de 323 en cuanto el dato de rol/IA esté disponible ahí.
 
 ---
 
 ## 5. Inventario de tarjetas
 
-Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (con hashtags). Las tarjetas 01 y 15 son fijas; las 02 a 14 rotan.
+Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (con hashtags). Las tarjetas 01 y 18 son fijas; las 02 a 17 rotan.
 
 ### 01 · Intro (fija) — `t-slate`
 - **Kicker:** SG Tech Pulse 2026
@@ -283,7 +287,40 @@ Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (co
 > **Copy para redes:** ¿La certificación se paga sola? En la muestra, no: con cert $3,459 vs sin cert $3,674 al mes, casi lo mismo. ¿A ti la certificación te subió el sueldo? Demuéstranos que sí.
 > `#SGTechPulse #Certificaciones #AWS #Scrum #SalariosTech`
 
-### 15 · Llamado a la acción (fija) — `t-cta`
+### 15 · Rol en IA — `t-violet`
+- **Kicker:** ¿Cuánto vale tu rol en IA?
+- **Cifra:** +26%
+- **Head:** Ciencia de datos / IA reporta 26% más que la mediana.
+- **Sub:** Mediana $5,089 vs $4,054 USD al mes (corte nacional México).
+- **Letra chica:** n=18 en ciencia de datos/IA. Cifra MXN convertida a USD (TC 18.5). Muestra preliminar.
+- **CTA:** Defiende tu rol en IA
+
+> **Copy para redes:** Ciencia de datos / IA reporta 26% más que la mediana general: ~$5,089 vs ~$4,054 al mes. Todavía es muestra chica (n=18), pero apunta hacia dónde se mueve el dinero. ¿Ya trabajas en IA? Pon tu número.
+> `#SGTechPulse #IA #DataScience #SalariosTech`
+
+### 16 · Vibe coding — `t-amber`
+- **Kicker:** ¿Todavía programas a mano?
+- **Cifra:** 47%
+- **Head:** Instruye a agentes de IA y ya casi no programa a mano.
+- **Sub:** 32% programa a mano con apoyo de IA · 18% la usa solo de vez en cuando.
+- **Letra chica:** Entre quienes desarrollan software, México (n=72). La encuesta sigue abierta.
+- **CTA:** Cuéntanos cómo programas
+
+> **Copy para redes:** La forma de programar ya cambió: 47% de quienes desarrollan software ya casi no programa a mano, instruye a agentes de IA y revisa el resultado (n=72, México). ¿Tú todavía picas código línea por línea o ya le hablas a la IA?
+> `#SGTechPulse #VibeCoding #IA #DevLATAM`
+
+### 17 · Roles 100% IA — `t-slate`
+- **Kicker:** ¿Ya tienes un rol 100% IA?
+- **Cifra:** 19 ya (`stat.sm`)
+- **Head:** 19 personas ya tienen un puesto enfocado 100% en IA.
+- **Sub:** GenAI/LLM engineer, AI product manager, calidad de modelos: los nuevos títulos del sector.
+- **Letra chica:** 19 de ~217 respuestas; rol abierto, no una lista cerrada. Mercado apenas naciendo.
+- **CTA:** Preséntate
+
+> **Copy para redes:** Ya son 19 las personas con un puesto 100% enfocado en IA: GenAI/LLM engineer, AI product manager, calidad de modelos IA. El mercado apenas se está formando. Si tu rol ya es así, cuéntanos y ayúdanos a dibujar el mapa.
+> `#SGTechPulse #IA #CarrerasIA #TechLATAM`
+
+### 18 · Llamado a la acción (fija) — `t-cta`
 - **Kicker:** SG Tech Pulse 2026
 - **Head:** No dejes que el promedio hable por ti.
 - **Sub:** Si trabajas en tecnología en cualquier país de LATAM, responde SG Tech Pulse 2026 y pon tu número sobre la mesa.
@@ -297,12 +334,13 @@ Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (co
 ## 6. Qué falta y cómo crece
 
 - **Frameworks:** la encuesta 2026 no capturó el framework principal (solo si el stack cambió en 18 meses). Para tener una tarjeta de frameworks en la próxima ola, hay que **agregar la pregunta** al cuestionario.
-- **Más ángulos disponibles** para extender la campaña más allá de 13 semanas: premium por rol (frontend/backend/data), remuneración total vs base, tasa de ahorro / costo de vida, neurodivergencia (con trato respetuoso), segundo idioma, y profundizar por país conforme lleguen respuestas.
+- **Más ángulos disponibles** para extender la campaña más allá de 16 semanas: premium por rol (frontend/backend/data), remuneración total vs base, tasa de ahorro / costo de vida, neurodivergencia (con trato respetuoso), segundo idioma, y profundizar por país conforme lleguen respuestas.
+- **IA todavía tiene tela de dónde cortar:** confianza en que las habilidades sigan siendo relevantes en 3 años (3.4/5 promedio, sin explotar en tarjeta), corte de vibe coding por seniority o rol, y repetir el bloque de IA (15-17) contra el corte de 323 en cuanto ese dato exista ahí en vez de solo en el corte nacional de México.
 - **Cada corte nuevo de datos** actualiza las cifras. Antes de reusar una tarjeta en una ola posterior, recalcular su número.
 
 ---
 
 ## 7. Archivos
 
-- `stat-cards-cuanto-vale.html`: las 15 tarjetas listas para capturar (1080×1080) o exportar a PDF. Debajo de cada tarjeta trae su copia de redes (se oculta al imprimir).
+- `stat-cards-cuanto-vale.html`: las 18 tarjetas listas para capturar (1080×1080) o exportar a PDF. Debajo de cada tarjeta trae su copia de redes (se oculta al imprimir).
 - `blueprint-cuanto-vale.md`: este documento.
