@@ -149,13 +149,14 @@ def bucket_key(value, order):
 
 def foreign_of(value):
     """Answer to '¿La empresa está ubicada en el mismo país donde resides?'
-    → True means foreign employer (answered No)."""
+    → True means foreign employer (answered No). SurveySparrow renders this
+    yes/no question as Yes/Sí/true vs No/false depending on export path."""
     if value is None:
         return None
     n = norm_text(value)
-    if n.startswith(("yes", "si")):
+    if n.startswith(("yes", "si", "true")):
         return False
-    if n.startswith("no"):
+    if n.startswith(("no", "false")):
         return True
     return None
 
@@ -985,6 +986,20 @@ PAGE_HTML = r"""<!doctype html>
       drawYou(v);
     });
     $("salaryinput").addEventListener("keydown", e => { if (e.key === "Enter") $("askbtn").click(); });
+    // SurveySparrow's webhook can lag the redirect by a few minutes: poll
+    // quietly and upgrade to the personalized view when the data lands,
+    // unless the visitor already started typing their own number.
+    if (sid) {
+      let tries = 0;
+      const poll = setInterval(async () => {
+        if (++tries > 30) return clearInterval(poll);
+        if ($("salaryinput").value) return;
+        try {
+          const again = await (await fetch("api/me?sid=" + encodeURIComponent(sid))).json();
+          if (again.found && again.salary) { clearInterval(poll); location.reload(); }
+        } catch (e) { /* transient; keep polling */ }
+      }, 10000);
+    }
   }
 })();
 </script>
