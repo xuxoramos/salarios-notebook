@@ -52,7 +52,8 @@ QUESTION_PREFIXES = {
     "ai_coding": "¿como utilizas la ia para crear codigo",
 }
 NUMERIC_FIELDS = {"salary_mxn", "salary_usd", "years_tech", "ai_confidence"}
-TEXT_FIELDS = {"level", "role", "english_usage", "foreign_employer", "ai_coding"}
+UTM_FIELDS = ("utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term")
+TEXT_FIELDS = {"level", "role", "english_usage", "foreign_employer", "ai_coding", *UTM_FIELDS}
 ALL_FIELDS = NUMERIC_FIELDS | TEXT_FIELDS
 
 # Canonical buckets for the page modules, matched by normalized prefix.
@@ -210,6 +211,11 @@ EXTRA_COLUMNS = [
     ("foreign_employer", "TEXT"),
     ("ai_confidence", "REAL"),
     ("ai_coding", "TEXT"),
+    ("utm_source", "TEXT"),
+    ("utm_medium", "TEXT"),
+    ("utm_campaign", "TEXT"),
+    ("utm_content", "TEXT"),
+    ("utm_term", "TEXT"),
 ]
 
 
@@ -244,10 +250,12 @@ def init_db():
 UPSERT_SQL = """INSERT INTO submissions
      (id, salary_mxn, salary_usd, salary_norm, level, role, years_tech,
       english_usage, foreign_employer, ai_confidence, ai_coding,
+      utm_source, utm_medium, utm_campaign, utm_content, utm_term,
       completed, source, received_at)
    VALUES (:id, :salary_mxn, :salary_usd, :salary_norm, :level, :role,
            :years_tech, :english_usage, :foreign_employer, :ai_confidence,
-           :ai_coding, :completed, :source, :received_at)
+           :ai_coding, :utm_source, :utm_medium, :utm_campaign, :utm_content,
+           :utm_term, :completed, :source, :received_at)
    ON CONFLICT(id) DO UPDATE SET
      salary_mxn=excluded.salary_mxn, salary_usd=excluded.salary_usd,
      salary_norm=excluded.salary_norm, level=excluded.level,
@@ -255,6 +263,9 @@ UPSERT_SQL = """INSERT INTO submissions
      english_usage=excluded.english_usage,
      foreign_employer=excluded.foreign_employer,
      ai_confidence=excluded.ai_confidence, ai_coding=excluded.ai_coding,
+     utm_source=excluded.utm_source, utm_medium=excluded.utm_medium,
+     utm_campaign=excluded.utm_campaign, utm_content=excluded.utm_content,
+     utm_term=excluded.utm_term,
      completed=excluded.completed, source=excluded.source,
      received_at=excluded.received_at"""
 
@@ -332,7 +343,10 @@ async def webhook(request: Request):
     for src in sources:
         for field in fields:
             if fields[field] is None and field in src:
-                fields[field] = parse_field(field, src[field])
+                value = src[field]
+                if isinstance(value, dict) and "answer" in value:
+                    value = value["answer"]
+                fields[field] = parse_field(field, value)
 
     # Fallback: question/answer structures anywhere in the payload.
     for question, answer in extract_qa_pairs(payload):
@@ -494,6 +508,29 @@ def me(request: Request, sid: str = ""):
             out["exp_n"] = len(peers)
             out["exp_median"] = round(statistics.median(peers))
     return out
+
+
+@app.get("/pulse/api/attribution")
+def attribution():
+    with db() as conn:
+        rows = conn.execute(
+            "SELECT COALESCE(utm_source, '(sin utm)'),"
+            " COALESCE(utm_medium, ''), COALESCE(utm_campaign, ''), COUNT(*)"
+            " FROM submissions WHERE source = 'webhook'"
+            " GROUP BY 1, 2, 3 ORDER BY COUNT(*) DESC"
+        ).fetchall()
+        total, since = conn.execute(
+            "SELECT COUNT(*), MIN(received_at) FROM submissions WHERE source = 'webhook'"
+        ).fetchone()
+    return {
+        "webhook_submissions": total,
+        "since": since,
+        "note": "solo respuestas llegadas por webhook; el seed histórico no trae UTM",
+        "by_channel": [
+            {"utm_source": s, "utm_medium": m, "utm_campaign": c, "count": n}
+            for s, m, c, n in rows
+        ],
+    }
 
 
 @app.get("/pulse/health")

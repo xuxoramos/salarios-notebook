@@ -59,6 +59,28 @@ IP — historical sequential Submission Ids cannot be walked to read salaries.
   The left-hand key names are load-bearing; empty or unreplaced placeholders
   are handled. Categorical answers are matched by text prefix
   (see `ENGLISH_ORDER` / `AI_CODING_ORDER` in `app.py`).
+
+## Marketing attribution (UTM chain)
+
+The funnel is: ad/post (UTM) → salarios.sg.com.mx → SurveySparrow → this app.
+To keep attribution intact:
+
+1. **Landing page** (salarios.sg.com.mx, Hugo repo): a small script copies the
+   current page's `utm_*` params onto the survey CTA link, so they reach
+   SurveySparrow.
+2. **SurveySparrow custom variables**: define `utm_source`, `utm_medium`,
+   `utm_campaign`, `utm_content`, `utm_term`. URL params matching those names
+   are stored per response.
+3. **Webhook Content**: add one key per UTM, e.g.
+   `"utm_source": {"question": "utm_source", "answer": "{custom.utm_source}"}`
+   (flat string values work too). They land in the `submissions` table.
+4. **Report**: `GET /pulse/api/attribution` → completions by
+   source/medium/campaign (webhook-era rows only; the historical seed has no
+   UTM data). Custom-variable columns in future CSV dumps are picked up by
+   `seed.py` automatically when named exactly `utm_*`.
+5. **GA4**: enable SurveySparrow's Google Analytics integration
+   (`survey_submission` event) against the same GA4 property as the landing
+   page so completions are conversions attributable to the original campaign.
 - **Thank-you page redirect**: enable Page Redirect with URL
   `https://thedata.pub/pulse/mi-resultado?sid={submission_id}` (pick the
   submission-id variable from the redirect field's variable picker; if the

@@ -11,7 +11,7 @@ import os
 from datetime import datetime, timezone
 
 from app import (
-    ALL_FIELDS, DB_PATH, UPSERT_SQL, db, init_db, match_field,
+    ALL_FIELDS, DB_PATH, UPSERT_SQL, UTM_FIELDS, db, init_db, match_field,
     normalize_salary, parse_field,
 )
 
@@ -41,8 +41,11 @@ def main():
         field = match_field(h)
         if field and field not in col:
             col[field] = i
+        # custom variables (utm_*) export as columns named after the variable
+        if h.strip().lower() in UTM_FIELDS and h.strip().lower() not in col:
+            col[h.strip().lower()] = i
     meta = {name: header.index(name) for name in ("Submission Id", "CompletionStatus", "Submitted Time")}
-    missing = sorted(ALL_FIELDS - col.keys())
+    missing = sorted(ALL_FIELDS - col.keys() - set(UTM_FIELDS))
     if missing:
         sys.exit(f"could not locate columns for: {missing}")
 
@@ -58,7 +61,10 @@ def main():
             ).fetchone()
             if existing and existing[0] == "webhook":
                 continue
-            fields = {f: parse_field(f, r[col[f]]) for f in ALL_FIELDS}
+            fields = {
+                f: parse_field(f, r[col[f]]) if f in col else None
+                for f in ALL_FIELDS
+            }
             norm = normalize_salary(fields["salary_mxn"], fields["salary_usd"])
             conn.execute(
                 UPSERT_SQL,
