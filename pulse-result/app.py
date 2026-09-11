@@ -956,9 +956,9 @@ const I18N = {
     conf_answer: "Tu respuesta: {label} · {n} personas han respondido.",
   },
   en: {
-    title: "Thank you for taking part · SG Tech Pulse",
+    title: "Thank you for responding · SG Tech Pulse",
     eyebrow: "SG Tech Pulse 2026 · Salary Survey",
-    thanks_h1: "Thank you for taking part!",
+    thanks_h1: "Thank you for taking part in our survey!",
     thanks_lead: "Your response was recorded anonymously and is now part of the study on salaries, AI, diversity and tech careers across Latin America. Here's what your response makes visible.",
     sectiontitle: "Where does your salary land?",
     sub: "Your monthly base salary compared with everyone who has already answered the survey.",
