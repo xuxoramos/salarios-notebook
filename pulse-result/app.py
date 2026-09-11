@@ -669,6 +669,7 @@ PAGE_HTML = r"""<!doctype html>
     backdrop-filter: blur(12px); border-bottom: 1px solid var(--grid);
   }
   .nav-in { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+  .nav-controls { display: inline-flex; gap: 8px; }
   .brand img { height: 30px; width: auto; display: block; }
   .brand .lg-dark { display: none; }
   :root[data-theme="dark"] .brand .lg-light { display: none; }
@@ -796,10 +797,16 @@ PAGE_HTML = r"""<!doctype html>
     <img class="lg-light" src="https://salarios.sg.com.mx/images/brand/logo-negro_hu_4935ae413724ddf0.webp" width="440" height="102" alt="SG Tech Pulse 2026 · Encuesta de Salarios">
     <img class="lg-dark" src="https://salarios.sg.com.mx/images/brand/logo-blanco_hu_d2b6415631d4722c.webp" width="440" height="102" alt="">
   </a>
-  <button class="theme-btn" id="theme-toggle" type="button" aria-label="Cambiar entre tema claro y oscuro">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-    <span class="lbl-light">Claro</span><span class="lbl-dark">Oscuro</span>
+  <span class="nav-controls">
+  <button class="theme-btn" id="lang-toggle" type="button" aria-label="Cambiar idioma / Change language">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.9 3.8 9S14.5 21.3 12 21c-2.5-.3-3.8-5.9-3.8-9S9.5 5.7 12 3z"/></svg>
+    <span id="lang-code">EN</span>
   </button>
+  <button class="theme-btn" id="theme-toggle" type="button" data-i18n-aria="theme_aria" aria-label="Cambiar entre tema claro y oscuro">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span class="lbl-light" data-i18n="lbl_light">Claro</span><span class="lbl-dark" data-i18n="lbl_dark">Oscuro</span>
+  </button>
+  </span>
 </div></nav>
 
 <section class="hero-sec">
@@ -811,67 +818,68 @@ PAGE_HTML = r"""<!doctype html>
       <circle cx="34" cy="10" r="5" fill="var(--lime)"/>
       <circle cx="47" cy="23" r="6" fill="var(--coral)"/>
     </svg>
-    <p class="eyebrow">SG Tech Pulse 2026 · Encuesta de Salarios</p>
-    <h1>¡Gracias por participar!</h1>
-    <p class="lead">Tu respuesta quedó registrada de forma anónima y ya forma parte del estudio de
+    <p class="eyebrow" data-i18n="eyebrow">SG Tech Pulse 2026 · Encuesta de Salarios</p>
+    <h1 data-i18n="thanks_h1">¡Gracias por participar!</h1>
+    <p class="lead" data-i18n="thanks_lead">Tu respuesta quedó registrada de forma anónima y ya forma parte del estudio de
     salarios, IA, diversidad y carreras tech en Latinoamérica. Esto es lo que tu respuesta permite ver.</p>
   </div>
 </section>
 
 <main>
   <div class="wrap">
-  <h2 class="sectiontitle">¿Dónde está tu sueldo?</h2>
-  <p class="sub">Tu sueldo base mensual comparado con quienes ya respondieron la encuesta.</p>
+  <h2 class="sectiontitle" data-i18n="sectiontitle">¿Dónde está tu sueldo?</h2>
+  <p class="sub" data-i18n="sub">Tu sueldo base mensual comparado con quienes ya respondieron la encuesta.</p>
 
   <div class="card" id="herocard">
-    <p class="hero" id="hero">Cargando la distribución…</p>
+    <p class="hero" id="hero" data-i18n="loading">Cargando la distribución…</p>
     <p class="meta" id="herometa"></p>
     <p class="peerline hidden" id="levelline"></p>
     <p class="peerline hidden" id="expline"></p>
     <div class="askrow hidden" id="askrow">
       <input id="salaryinput" type="text" inputmode="numeric"
+             data-i18n-ph="ph_salary" data-i18n-aria="aria_salary"
              placeholder="Tu sueldo base mensual en MXN, p. ej. 65000"
              aria-label="Tu sueldo base mensual en pesos mexicanos">
-      <button id="askbtn">Ver mi posición</button>
+      <button id="askbtn" data-i18n="btn_seeposition">Ver mi posición</button>
     </div>
-    <p class="privacy hidden" id="privacynote">El monto se compara aquí en tu navegador; no se envía a ningún servidor.</p>
+    <p class="privacy hidden" id="privacynote" data-i18n="privacy">El monto se compara aquí en tu navegador; no se envía a ningún servidor.</p>
   </div>
 
   <div class="card">
     <div id="chartwrap">
       <div class="tooltip" id="tooltip"></div>
-      <svg id="chart" role="img" aria-label="Histograma de sueldos base mensuales en pesos mexicanos"></svg>
+      <svg id="chart" role="img" data-i18n-aria="hist_aria" aria-label="Histograma de sueldos base mensuales en pesos mexicanos"></svg>
     </div>
     <p class="contextline" id="foreignline"></p>
     <details id="tabledetails">
-      <summary>Ver los datos en tabla</summary>
+      <summary data-i18n="table_toggle">Ver los datos en tabla</summary>
       <table id="datatable"></table>
     </details>
   </div>
 
   <div class="card" id="englishcard">
-    <h2>¿Cuánto vale tu inglés?</h2>
-    <p class="modsub">Mediana de sueldo base según la frecuencia de uso del inglés en el trabajo.</p>
-    <svg id="englishchart" role="img" aria-label="Mediana de sueldo por frecuencia de uso del inglés"></svg>
+    <h2 data-i18n="english_h2">¿Cuánto vale tu inglés?</h2>
+    <p class="modsub" data-i18n="english_sub">Mediana de sueldo base según la frecuencia de uso del inglés en el trabajo.</p>
+    <svg id="englishchart" role="img" data-i18n-aria="english_aria" aria-label="Mediana de sueldo por frecuencia de uso del inglés"></svg>
   </div>
 
   <div class="card" id="aicard">
-    <h2>La ventana de la IA</h2>
-    <p class="modsub" id="codingsub">Cómo se escribe código ahora, entre quienes programan.</p>
-    <svg id="codingchart" role="img" aria-label="Formas de usar IA para crear código"></svg>
-    <p class="modsub" style="margin-top:18px">«¿Qué tan seguro/a estás de que tus habilidades seguirán siendo relevantes dentro de 3 años?»</p>
-    <svg id="confchart" role="img" aria-label="Distribución de confianza en la relevancia futura de habilidades"></svg>
+    <h2 data-i18n="ai_h2">La ventana de la IA</h2>
+    <p class="modsub" id="codingsub" data-i18n="coding_sub">Cómo se escribe código ahora, entre quienes programan.</p>
+    <svg id="codingchart" role="img" data-i18n-aria="coding_aria" aria-label="Formas de usar IA para crear código"></svg>
+    <p class="modsub" style="margin-top:18px" data-i18n="conf_q">«¿Qué tan seguro/a estás de que tus habilidades seguirán siendo relevantes dentro de 3 años?»</p>
+    <svg id="confchart" role="img" data-i18n-aria="conf_aria" aria-label="Distribución de confianza en la relevancia futura de habilidades"></svg>
     <p class="contextline hidden" id="confline"></p>
   </div>
 
   <p class="foot">
-    Muestra autoseleccionada de la comunidad tech; resultados preliminares que cambian conforme llegan respuestas.
+    <span id="foottext" data-i18n="foot">Muestra autoseleccionada de la comunidad tech; resultados preliminares que cambian conforme llegan respuestas.
     Sueldos en dólares convertidos a MXN. Las medianas por grupo describen la muestra, no efectos causales.
-    La encuesta sigue abierta<span id="sharespan"></span>.
+    La encuesta sigue abierta</span><span id="sharespan"></span>.
   </p>
 
-  <div class="backrow"><a class="btn btn-primary" href="__HOME_URL__">Volver a SG Tech Pulse</a>
-    <p class="closenote">Puedes cerrar esta pestaña sin problema: no hay nada pendiente de guardar.</p>
+  <div class="backrow"><a class="btn btn-primary" href="__HOME_URL__" data-i18n="back_btn">Volver a SG Tech Pulse</a>
+    <p class="closenote" data-i18n="closenote">Puedes cerrar esta pestaña sin problema: no hay nada pendiente de guardar.</p>
   </div>
   </div>
 </main>
@@ -881,7 +889,7 @@ PAGE_HTML = r"""<!doctype html>
     <img class="lg-light" src="https://salarios.sg.com.mx/images/brand/logo-negro_hu_4935ae413724ddf0.webp" width="440" height="102" alt="SG Software Guru">
     <img class="lg-dark" src="https://salarios.sg.com.mx/images/brand/logo-blanco_hu_d2b6415631d4722c.webp" width="440" height="102" alt="">
   </a>
-  <p class="foot-note">Una iniciativa de SG Software Guru, agencia de Developer Relations y bureau de inteligencia del mercado tech.</p>
+  <p class="foot-note" data-i18n="footnote">Una iniciativa de SG Software Guru, agencia de Developer Relations y bureau de inteligencia del mercado tech.</p>
   <a class="foot-link" href="https://sg.com.mx">sg.com.mx</a>
 </div></footer>
 <script>
@@ -900,15 +908,159 @@ PAGE_HTML = r"""<!doctype html>
     try { localStorage.setItem("tp-theme", next); } catch (e) {}
   });
 })();
+// ---- i18n ----------------------------------------------------------
+const I18N = {
+  es: {
+    title: "Gracias por participar · SG Tech Pulse",
+    eyebrow: "SG Tech Pulse 2026 · Encuesta de Salarios",
+    thanks_h1: "¡Gracias por participar!",
+    thanks_lead: "Tu respuesta quedó registrada de forma anónima y ya forma parte del estudio de salarios, IA, diversidad y carreras tech en Latinoamérica. Esto es lo que tu respuesta permite ver.",
+    sectiontitle: "¿Dónde está tu sueldo?",
+    sub: "Tu sueldo base mensual comparado con quienes ya respondieron la encuesta.",
+    loading: "Cargando la distribución…",
+    ph_salary: "Tu sueldo base mensual en MXN, p. ej. 65000",
+    aria_salary: "Tu sueldo base mensual en pesos mexicanos",
+    btn_seeposition: "Ver mi posición",
+    privacy: "El monto se compara aquí en tu navegador; no se envía a ningún servidor.",
+    table_toggle: "Ver los datos en tabla",
+    english_h2: "¿Cuánto vale tu inglés?",
+    english_sub: "Mediana de sueldo base según la frecuencia de uso del inglés en el trabajo.",
+    ai_h2: "La ventana de la IA",
+    coding_sub: "Cómo se escribe código ahora, entre quienes programan.",
+    conf_q: "«¿Qué tan seguro/a estás de que tus habilidades seguirán siendo relevantes dentro de 3 años?»",
+    foot: "Muestra autoseleccionada de la comunidad tech; resultados preliminares que cambian conforme llegan respuestas. Sueldos en dólares convertidos a MXN. Las medianas por grupo describen la muestra, no efectos causales. La encuesta sigue abierta",
+    back_btn: "Volver a SG Tech Pulse",
+    closenote: "Puedes cerrar esta pestaña sin problema: no hay nada pendiente de guardar.",
+    footnote: "Una iniciativa de SG Software Guru, agencia de Developer Relations y bureau de inteligencia del mercado tech.",
+    theme_aria: "Cambiar entre tema claro y oscuro",
+    lbl_light: "Claro", lbl_dark: "Oscuro",
+    share: "compártela con tu equipo",
+    hist_aria: "Histograma de sueldos base mensuales en pesos mexicanos",
+    english_aria: "Mediana de sueldo por frecuencia de uso del inglés",
+    coding_aria: "Formas de usar IA para crear código",
+    conf_aria: "Distribución de confianza en la relevancia futura de habilidades",
+    hero_pct: 'Tu sueldo base está por encima del <strong><span class="pct">{pct}&hairsp;%</span></strong> de las {n} personas que han respondido.',
+    meta_you: "Tú: {salary} al mes · mediana general: {median}",
+    ask_hero: "Escribe tu sueldo base mensual y te decimos dónde estás.",
+    ask_meta: "{n} personas han respondido · mediana general: {median}",
+    level_line: 'Entre nivel <b>{level}</b> estás por encima del <b>{pct}%</b> <span class="n">({n} personas)</span>.',
+    exp_line: 'Para tu experiencia (~{y} años en tech), la mediana es <b>{m}</b> <span class="n">({n} personas con ±2 años)</span>.',
+    foreign_line: "Quienes trabajan para una empresa en el extranjero ({nf} personas): mediana {mf} · empresa local ({ns}): {ms}.",
+    tt_range: "{lo} – {hi} · {people}",
+    tt_over: "Más de {lo} · {people}",
+    person_one: "1 persona", person_other: "{n} personas",
+    you_label: "Tú · {salary}", you_tag: "Tú",
+    tbl_range: "Rango (MXN/mes)", tbl_people: "Personas", tbl_over: "Más de {lo}",
+    coding_value: "{share}% · mediana {m}",
+    conf_worried: "Compartes esta inquietud con {w} de {n} personas. No estás solo/a.",
+    conf_answer: "Tu respuesta: {label} · {n} personas han respondido.",
+  },
+  en: {
+    title: "Thank you for taking part · SG Tech Pulse",
+    eyebrow: "SG Tech Pulse 2026 · Salary Survey",
+    thanks_h1: "Thank you for taking part!",
+    thanks_lead: "Your response was recorded anonymously and is now part of the study on salaries, AI, diversity and tech careers across Latin America. Here's what your response makes visible.",
+    sectiontitle: "Where does your salary land?",
+    sub: "Your monthly base salary compared with everyone who has already answered the survey.",
+    loading: "Loading the distribution…",
+    ph_salary: "Your monthly base salary in MXN, e.g. 65000",
+    aria_salary: "Your monthly base salary in Mexican pesos",
+    btn_seeposition: "See where I land",
+    privacy: "The amount is compared here in your browser; nothing is sent to any server.",
+    table_toggle: "View the data as a table",
+    english_h2: "What is your English worth?",
+    english_sub: "Median base salary by how often English is used at work.",
+    ai_h2: "The AI window",
+    coding_sub: "How code gets written now, among those who program.",
+    conf_q: "“How confident are you that your current skills will remain relevant in 3 years?”",
+    foot: "Self-selected sample of the tech community; preliminary results that change as responses arrive. USD salaries converted to MXN. Group medians describe the sample, not causal effects. The survey is still open",
+    back_btn: "Back to SG Tech Pulse",
+    closenote: "You can safely close this tab: nothing is left to save.",
+    footnote: "An initiative by SG Software Guru, a Developer Relations agency and tech-market intelligence bureau.",
+    theme_aria: "Toggle between light and dark theme",
+    lbl_light: "Light", lbl_dark: "Dark",
+    share: "share it with your team",
+    hist_aria: "Histogram of monthly base salaries in Mexican pesos",
+    english_aria: "Median salary by frequency of English use",
+    coding_aria: "Ways of using AI to write code",
+    conf_aria: "Distribution of confidence in future skill relevance",
+    hero_pct: 'Your base salary is higher than <strong><span class="pct">{pct}&hairsp;%</span></strong> of the {n} people who have answered.',
+    meta_you: "You: {salary}/mo MXN · overall median: {median}",
+    ask_hero: "Enter your monthly base salary and we'll tell you where you land.",
+    ask_meta: "{n} people have answered · overall median: {median}",
+    level_line: 'At <b>{level}</b> level you\'re higher than <b>{pct}%</b> <span class="n">({n} people)</span>.',
+    exp_line: 'For your experience (~{y} years in tech), the median is <b>{m}</b> <span class="n">({n} people within ±2 years)</span>.',
+    foreign_line: "People working for a foreign employer ({nf} people): median {mf} · local employer ({ns}): {ms}.",
+    tt_range: "{lo} – {hi} · {people}",
+    tt_over: "Over {lo} · {people}",
+    person_one: "1 person", person_other: "{n} people",
+    you_label: "You · {salary}", you_tag: "You",
+    tbl_range: "Range (MXN/month)", tbl_people: "People", tbl_over: "Over {lo}",
+    coding_value: "{share}% · median {m}",
+    conf_worried: "You share this concern with {w} of {n} people. You're not alone.",
+    conf_answer: "Your answer: {label} · {n} people have answered.",
+  },
+};
+const LABELS = {
+  english: {
+    es: { "nunca": "Nunca", "ocasionalmente": "Ocasionalmente (leer docs)", "con regularidad": "Con regularidad (juntas, emails)", "la mayoria del tiempo": "La mayoría del tiempo", "todo el tiempo": "Todo el tiempo" },
+    en: { "nunca": "Never", "ocasionalmente": "Occasionally (reading docs)", "con regularidad": "Regularly (meetings, emails)", "la mayoria del tiempo": "Most of the time", "todo el tiempo": "All the time" },
+  },
+  coding: {
+    es: { "programo manualmente y uso ia como soporte": "Programo a mano; IA como soporte", "programo la funcionalidad manualmente": "Programo a mano; IA para testing y docs", "aunque se programar": "Doy instrucciones a agentes y reviso" },
+    en: { "programo manualmente y uso ia como soporte": "I code by hand; AI as support", "programo la funcionalidad manualmente": "I code by hand; AI for testing & docs", "aunque se programar": "I instruct agents and review" },
+  },
+  conf: {
+    es: ["Nada", "Poco", "Algo", "Bastante", "Mucho"],
+    en: ["Not at all", "A little", "Somewhat", "Quite", "Very"],
+  },
+};
+function normLang(s) {
+  s = (s || "").toString().toLowerCase();
+  if (!s) return null;
+  if (s.indexOf("en") === 0 || s.indexOf("english") >= 0) return "en";
+  if (s.indexOf("es") === 0 || s.indexOf("span") >= 0) return "es";
+  return null;
+}
+function detectLang() {
+  const p = new URLSearchParams(location.search).get("lang");
+  let stored = null; try { stored = localStorage.getItem("tp-lang"); } catch (e) {}
+  return normLang(p) || normLang(stored) || normLang(navigator.language) || "es";
+}
+const LANG = detectLang();
+function t(k) { const d = I18N[LANG] || I18N.es; return d[k] != null ? d[k] : (I18N.es[k] != null ? I18N.es[k] : k); }
+function tt(k, v) { return t(k).replace(/\{(\w+)\}/g, (_, n) => (v && v[n] != null) ? v[n] : ""); }
+document.documentElement.setAttribute("lang", LANG === "en" ? "en" : "es-MX");
+document.title = t("title");
+(function () {
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria"))); });
+  const lc = document.getElementById("lang-code"); if (lc) lc.textContent = LANG === "en" ? "ES" : "EN";
+})();
+(function () {
+  const btn = document.getElementById("lang-toggle"); if (!btn) return;
+  btn.addEventListener("click", function () {
+    const next = LANG === "en" ? "es" : "en";
+    try { localStorage.setItem("tp-lang", next); } catch (e) {}
+    const u = new URL(location.href); u.searchParams.set("lang", next); location.href = u.toString();
+  });
+})();
+
 (async function () {
-  const fmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
+  const nf = new Intl.NumberFormat(LANG === "en" ? "en-US" : "es-MX", { maximumFractionDigits: 0 });
+  const fmt = { format: v => "$" + nf.format(Math.round(v)) };
   const fmtK = v => v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + v;
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const people = n => n === 1 ? t("person_one") : tt("person_other", { n: n });
+  const engLabel = k => (LABELS.english[LANG] || LABELS.english.es)[k] || k;
+  const codLabel = k => (LABELS.coding[LANG] || LABELS.coding.es)[k] || k;
+  const confLabels = LABELS.conf[LANG] || LABELS.conf.es;
 
   const surveyUrl = "__SURVEY_URL__";
   if (surveyUrl) $("sharespan").innerHTML =
-    ' — <a href="' + esc(surveyUrl) + '">compártela con tu equipo</a>';
+    ' — <a href="' + esc(surveyUrl) + '">' + t("share") + '</a>';
 
   const sid = new URLSearchParams(location.search).get("sid") || "";
   const dist = await (await fetch("api/distribution")).json();
@@ -930,17 +1082,13 @@ PAGE_HTML = r"""<!doctype html>
   }
 
   function setHero(salary, pct) {
-    $("hero").innerHTML =
-      'Tu sueldo base está por encima del <strong><span class="pct">' + pct +
-      '&hairsp;%</span></strong> de las ' + dist.n + " personas que han respondido.";
-    $("herometa").textContent =
-      "Tú: " + fmt.format(salary) + " al mes · mediana general: " + fmt.format(dist.median);
+    $("hero").innerHTML = tt("hero_pct", { pct: pct, n: dist.n });
+    $("herometa").textContent = tt("meta_you", { salary: fmt.format(salary), median: fmt.format(dist.median) });
   }
 
   function showAskRow() {
-    $("hero").textContent = "Escribe tu sueldo base mensual y te decimos dónde estás.";
-    $("herometa").textContent =
-      dist.n + " personas han respondido · mediana general: " + fmt.format(dist.median);
+    $("hero").textContent = t("ask_hero");
+    $("herometa").textContent = tt("ask_meta", { n: dist.n, median: fmt.format(dist.median) });
     $("askrow").classList.remove("hidden");
     $("privacynote").classList.remove("hidden");
   }
@@ -991,7 +1139,7 @@ PAGE_HTML = r"""<!doctype html>
 
   function drawYou(salary) {
     svg.querySelectorAll(".you").forEach(el => el.remove());
-    const xx = xOfSalary(salary), yTop = M.top - 6, label = "Tú · " + fmt.format(salary);
+    const xx = xOfSalary(salary), yTop = M.top - 6, label = tt("you_label", { salary: fmt.format(salary) });
     const anchor = xx > W - 140 ? "end" : (xx < M.left + 100 ? "start" : "middle");
     svg.insertAdjacentHTML("beforeend", '<g class="you">' +
       '<line x1="' + xx + '" x2="' + xx + '" y1="' + yTop + '" y2="' + (M.top + ih) + '" stroke="var(--you)" stroke-width="2"/>' +
@@ -1004,8 +1152,9 @@ PAGE_HTML = r"""<!doctype html>
     const t = e.target.closest(".hit");
     if (!t) { tip.style.display = "none"; return; }
     const b = bins[+t.dataset.i];
-    const persons = b.count === 1 ? "1 persona" : b.count + " personas";
-    tip.textContent = (b.overflow ? "Más de " + fmt.format(b.lo) : fmt.format(b.lo) + " – " + fmt.format(b.hi)) + " · " + persons;
+    tip.textContent = b.overflow
+      ? tt("tt_over", { lo: fmt.format(b.lo), people: people(b.count) })
+      : tt("tt_range", { lo: fmt.format(b.lo), hi: fmt.format(b.hi), people: people(b.count) });
     const r = wrap.getBoundingClientRect();
     tip.style.display = "block";
     tip.style.left = Math.min(e.clientX - r.left + 12, r.width - tip.offsetWidth - 4) + "px";
@@ -1014,16 +1163,17 @@ PAGE_HTML = r"""<!doctype html>
   svg.addEventListener("mouseleave", () => { tip.style.display = "none"; });
 
   $("datatable").innerHTML =
-    "<tr><th>Rango (MXN/mes)</th><th>Personas</th></tr>" +
-    bins.map(b => "<tr><td>" + (b.overflow ? "Más de " + fmt.format(b.lo) : fmt.format(b.lo) + " – " + fmt.format(b.hi)) +
+    "<tr><th>" + t("tbl_range") + "</th><th>" + t("tbl_people") + "</th></tr>" +
+    bins.map(b => "<tr><td>" + (b.overflow ? tt("tbl_over", { lo: fmt.format(b.lo) }) : fmt.format(b.lo) + " – " + fmt.format(b.hi)) +
                   "</td><td>" + b.count + "</td></tr>").join("");
 
   // foreign-employer context line
   const fr = dist.foreign;
   if (fr.foreign.count >= 20 && fr.same.count >= 20) {
-    $("foreignline").textContent =
-      "Quienes trabajan para una empresa en el extranjero (" + fr.foreign.count + " personas): mediana " +
-      fmt.format(fr.foreign.median) + " · empresa local (" + fr.same.count + "): " + fmt.format(fr.same.median) + ".";
+    $("foreignline").textContent = tt("foreign_line", {
+      nf: fr.foreign.count, mf: fmt.format(fr.foreign.median),
+      ns: fr.same.count, ms: fmt.format(fr.same.median),
+    });
   } else {
     $("foreignline").classList.add("hidden");
   }
@@ -1046,7 +1196,7 @@ PAGE_HTML = r"""<!doctype html>
       out += '<text x="' + (padL + bw + 8) + '" y="' + (barY + 13) + '" font-size="13" font-weight="600" fill="var(--ink)">' + esc(r.valueLabel) + "</text>";
       if (r.you) {
         out += '<path d="M' + (padL - 1) + " " + (barY + 2) + " l7 6 l-7 6 z" + '" fill="var(--you)"/>' +
-               '<text x="' + (padL + 10) + '" y="' + (barY + 13) + '" font-size="12" font-weight="700" fill="#fff">Tú</text>';
+               '<text x="' + (padL + 10) + '" y="' + (barY + 13) + '" font-size="12" font-weight="700" fill="#fff">' + t("you_tag") + '</text>';
       }
     });
     s.innerHTML = out;
@@ -1055,7 +1205,7 @@ PAGE_HTML = r"""<!doctype html>
   // English ladder: median salary per usage band
   const engRows = dist.english.filter(e => e.count >= 20);
   hbars("englishchart", engRows.map(e => ({
-    label: e.label, sub: "(" + e.count + ")",
+    label: engLabel(e.key), sub: "(" + e.count + ")",
     value: e.median, valueLabel: fmt.format(e.median),
     you: me.found && me.english_key === e.key,
   })), Math.max(...engRows.map(e => e.median)));
@@ -1064,8 +1214,8 @@ PAGE_HTML = r"""<!doctype html>
   const codRows = dist.ai_coding.filter(c => c.count >= 15);
   if (codRows.length) {
     hbars("codingchart", codRows.map(c => ({
-      label: c.label, sub: "(" + c.count + ")",
-      value: c.share, valueLabel: c.share + "% · mediana " + fmtK(c.median),
+      label: codLabel(c.key), sub: "(" + c.count + ")",
+      value: c.share, valueLabel: tt("coding_value", { share: c.share, m: fmtK(c.median) }),
       you: me.found && me.ai_coding_key === c.key,
     })), Math.max(...codRows.map(c => c.share)));
   } else {
@@ -1076,7 +1226,6 @@ PAGE_HTML = r"""<!doctype html>
   // Confidence distribution: 5 vertical bars, no salary attached
   (function () {
     const cc = dist.ai_confidence;
-    const confLabels = ["Nada", "Poco", "Algo", "Bastante", "Mucho"];
     const w = 680, h = 190, mm = { top: 54, right: 14, bottom: 26, left: 14 };
     const s = $("confchart");
     s.setAttribute("viewBox", "0 0 " + w + " " + h);
@@ -1093,7 +1242,7 @@ PAGE_HTML = r"""<!doctype html>
       out += '<text x="' + (bx + bw / 2) + '" y="' + (h - 8) + '" text-anchor="middle" font-size="12" fill="var(--muted)">' + confLabels[i] + "</text>";
       if (me.found && me.ai_confidence === i + 1) {
         const cx = bx + bw / 2;
-        out += '<text x="' + cx + '" y="' + (by - 36) + '" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Tú</text>' +
+        out += '<text x="' + cx + '" y="' + (by - 36) + '" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">' + t("you_tag") + '</text>' +
                '<path class="you" d="M' + (cx - 7) + " " + (by - 30) + " h14 l-7 10 z" + '" fill="var(--you)"/>';
       }
     });
@@ -1104,8 +1253,8 @@ PAGE_HTML = r"""<!doctype html>
       const worried = cc.counts[0] + cc.counts[1];
       $("confline").classList.remove("hidden");
       $("confline").textContent = me.ai_confidence <= 2
-        ? "Compartes esta inquietud con " + worried + " de " + cc.n + " personas. No estás solo/a."
-        : "Tu respuesta: " + confLabels[me.ai_confidence - 1].toLowerCase() + " · " + cc.n + " personas han respondido.";
+        ? tt("conf_worried", { w: worried, n: cc.n })
+        : tt("conf_answer", { label: confLabels[me.ai_confidence - 1].toLowerCase(), n: cc.n });
     }
   })();
 
@@ -1115,13 +1264,11 @@ PAGE_HTML = r"""<!doctype html>
     drawYou(me.salary);
     if (me.level_percentile !== undefined) {
       $("levelline").classList.remove("hidden");
-      $("levelline").innerHTML = "Entre nivel <b>" + esc(me.level) + "</b> estás por encima del <b>" +
-        me.level_percentile + "%</b> <span class=\"n\">(" + me.level_n + " personas)</span>.";
+      $("levelline").innerHTML = tt("level_line", { level: esc(me.level), pct: me.level_percentile, n: me.level_n });
     }
     if (me.exp_median !== undefined) {
       $("expline").classList.remove("hidden");
-      $("expline").innerHTML = "Para tu experiencia (~" + me.exp_years + " años en tech), la mediana es <b>" +
-        fmt.format(me.exp_median) + "</b> <span class=\"n\">(" + me.exp_n + " personas con ±2 años)</span>.";
+      $("expline").innerHTML = tt("exp_line", { y: me.exp_years, m: fmt.format(me.exp_median), n: me.exp_n });
     }
   } else {
     showAskRow();
