@@ -572,131 +572,254 @@ PAGE_HTML = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Gracias por participar · SG Tech Pulse</title>
+<link rel="icon" href="https://salarios.sg.com.mx/images/brand/isotipo-plasta_hu_95cd1f28bbb616c8.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+  // Apply the shared theme choice before paint (same key as the landing site).
+  try {
+    var t = localStorage.getItem("tp-theme");
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+</script>
 <style>
   :root {
+    /* SG Tech Pulse 2026 palette (light) */
+    --ground: #F6F3EE;
+    --ground-rgb: 246,243,238;
+    --surface: #FFFFFF;
+    --surface-2: #EFEBE4;
+    --ink: #171716;
+    --ink-2: #5C574E;        /* --tx-soft */
+    --muted: #8C867A;        /* --tx-faint */
+    --grid: #E0DACF;         /* --rule */
+    --baseline: #CFC8BB;
+    --border: #E0DACF;
+    --violet: #6B3DFA;       /* --accent */
+    --violet-rgb: 107,61,250;
+    --lime: #C4E833;
+    --lime-rgb: 196,232,51;
+    --coral: #FD655C;
+    --bar: #6B3DFA;          /* chart bar, validated on #FFFFFF */
+    --you: #FD655C;          /* respondent marker, validated on #FFFFFF */
+    --on-accent: #FFFFFF;
     color-scheme: light;
-    --page: #ffffff;
-    --page-rgb: 255,255,255;
-    --surface: #ffffff;
-    --ink: #212529;
-    --ink-2: #495057;
-    --muted: #6c757d;
-    --grid: #e9ecef;
-    --baseline: #ced4da;
-    --border: #dee2e6;
-    --bar: #712cf9;       /* SG violet, validated on white */
-    --you: #dc3545;       /* Bootstrap danger, validated on white */
-    --violet: #712cf9;
-    --violet-hover: #6528e0;
-    --violet-rgb: 112,44,249;
-    --accent-rgb: 255,228,132;
-    --primary-rgb: 13,110,253;
   }
+  :root:not([data-theme="light"]) { }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
+      --ground: #171716;
+      --ground-rgb: 23,23,22;
+      --surface: #201F1C;
+      --surface-2: #2A2825;
+      --ink: #F6F3EE;
+      --ink-2: #ADA79B;
+      --muted: #7D776C;
+      --grid: #35322D;
+      --baseline: #4A463F;
+      --border: #35322D;
+      --violet: #8A63FF;
+      --violet-rgb: 138,99,255;
+      --bar: #8A63FF;        /* validated on #201F1C */
+      --you: #F5504A;        /* validated on #201F1C */
       color-scheme: dark;
-      --page: #212529;
-      --page-rgb: 33,37,41;
-      --surface: #2b3035;
-      --ink: #dee2e6;
-      --ink-2: #adb5bd;
-      --muted: #868e96;
-      --grid: #343a40;
-      --baseline: #495057;
-      --border: #495057;
-      --bar: #8e5cfb;     /* violet stepped for dark, validated on #212529 */
-      --you: #e35d6a;     /* danger stepped for dark, validated on #212529 */
     }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171716;
+    --ground-rgb: 23,23,22;
+    --surface: #201F1C;
+    --surface-2: #2A2825;
+    --ink: #F6F3EE;
+    --ink-2: #ADA79B;
+    --muted: #7D776C;
+    --grid: #35322D;
+    --baseline: #4A463F;
+    --border: #35322D;
+    --violet: #8A63FF;
+    --violet-rgb: 138,99,255;
+    --bar: #8A63FF;
+    --you: #F5504A;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; background: var(--page); color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "Instrument Sans", system-ui, -apple-system, sans-serif;
+    font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
     display: flex; flex-direction: column; min-height: 100vh;
   }
-  .navbar { padding: 12px 0; }
-  .navbar .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-  .navbar a { color: var(--ink); text-decoration: none; font-size: 20px; font-weight: 500; }
-  .masthead {
-    padding: 40px 16px 48px; text-align: center;
-    background-image:
-      linear-gradient(180deg, rgba(var(--page-rgb), 0.01), rgba(var(--page-rgb), 1) 85%),
-      radial-gradient(ellipse at top left, rgba(var(--primary-rgb), 0.5), transparent 50%),
-      radial-gradient(ellipse at top right, rgba(var(--accent-rgb), 0.5), transparent 50%);
+  h1, h2, h3 {
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-weight: 800; letter-spacing: -.03em; line-height: 1.04; margin: 0;
+    text-wrap: balance;
   }
-  .masthead .inner { max-width: 720px; margin: 0 auto; }
-  .masthead h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 600; margin: 16px 0 12px; }
-  .masthead .lead { font-size: 18px; color: var(--ink-2); margin: 0 0 20px; line-height: 1.5; }
-  .btn-sg {
-    display: inline-block; background: var(--violet); color: #fff;
-    font-weight: 600; font-size: 17px; text-decoration: none;
-    padding: 12px 28px; border-radius: .5rem; border: 1px solid var(--violet);
+  svg text { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); margin: 0;
   }
-  .btn-sg:hover { background: var(--violet-hover); border-color: var(--violet-hover); }
-  .closenote { color: var(--muted); font-size: 14px; margin: 14px 0 0; }
-  main { max-width: 720px; margin: 0 auto; padding: 8px 16px 48px; width: 100%; flex: 1; }
-  h2.sectiontitle { font-size: 24px; margin: 8px 0 4px; }
-  h2 { font-size: 17px; margin: 0 0 2px; }
-  .sub { color: var(--ink-2); margin: 0 0 20px; font-size: 15px; }
-  .modsub { color: var(--ink-2); margin: 0 0 12px; font-size: 14px; }
+  .wrap { width: min(760px, 100% - 40px); margin-inline: auto; }
+  /* nav */
+  nav {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--grid);
+  }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+  .brand img { height: 30px; width: auto; display: block; }
+  .brand .lg-dark { display: none; }
+  :root[data-theme="dark"] .brand .lg-light { display: none; }
+  :root[data-theme="dark"] .brand .lg-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .brand .lg-light { display: none; }
+    :root:not([data-theme="light"]) .brand .lg-dark { display: block; }
+  }
+  .theme-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: none;
+    border: 1.5px solid var(--grid); color: var(--ink-2); cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    letter-spacing: .08em; text-transform: uppercase; padding: 8px 13px;
+    border-radius: 999px; min-height: 40px;
+  }
+  .theme-btn svg { width: 15px; height: 15px; }
+  .theme-btn .lbl-dark { display: none; }
+  :root[data-theme="dark"] .theme-btn .lbl-light { display: none; }
+  :root[data-theme="dark"] .theme-btn .lbl-dark { display: inline; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-btn .lbl-light { display: none; }
+    :root:not([data-theme="light"]) .theme-btn .lbl-dark { display: inline; }
+  }
+  /* hero / thank-you */
+  .hero-sec {
+    position: relative; overflow: hidden; text-align: center;
+    padding: 52px 0 44px;
+    background:
+      radial-gradient(ellipse at 22% 0%, rgba(var(--violet-rgb), .16), transparent 55%),
+      radial-gradient(ellipse at 82% 8%, rgba(var(--lime-rgb), .20), transparent 52%);
+  }
+  .hero-sec h1 { font-size: clamp(30px, 5.2vw, 48px); margin: 14px 0 0; }
+  .hero-sec .lead {
+    font-size: clamp(17px, 2.1vw, 19px); color: var(--ink-2);
+    max-width: 52ch; margin: 18px auto 0; text-wrap: pretty;
+  }
+  .mol { display: inline-block; }
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px; justify-content: center;
+    font-family: "Instrument Sans", sans-serif; font-weight: 600; font-size: 16px;
+    padding: 13px 26px; border-radius: 999px; text-decoration: none;
+    border: 1.5px solid transparent; cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary { background: var(--violet); color: var(--on-accent); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(var(--violet-rgb), .35); }
+  .closenote {
+    font-family: "IBM Plex Mono", monospace; color: var(--muted);
+    font-size: 13px; margin: 16px 0 0;
+  }
+  /* main */
+  main { flex: 1; padding: 40px 0 8px; width: 100%; }
+  main .wrap > .sectiontitle { font-size: clamp(24px, 3.6vw, 30px); margin: 0 0 4px; }
+  h2.sectiontitle { }
+  .card h2 { font-size: 19px; margin: 0 0 2px; }
+  .sub { color: var(--ink-2); margin: 0 0 22px; font-size: 15.5px; }
+  .modsub { color: var(--ink-2); margin: 0 0 14px; font-size: 14.5px; }
   .card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: .5rem; padding: 20px; margin-bottom: 16px;
+    border-radius: 20px; padding: 24px; margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(var(--ground-rgb), .5);
   }
-  .hero { font-size: 20px; line-height: 1.35; margin: 0; }
-  .hero strong { font-size: 34px; display: block; margin-bottom: 2px; }
+  .hero { font-size: 20px; line-height: 1.4; margin: 0; }
+  .hero strong { font-size: 40px; display: block; margin-bottom: 2px;
+    font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -.03em; }
   .hero .pct { color: var(--you); }
-  .meta { color: var(--ink-2); font-size: 14px; margin: 10px 0 0; }
-  .peerline { font-size: 15px; color: var(--ink); margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); }
+  .meta {
+    font-family: "IBM Plex Mono", monospace; color: var(--ink-2);
+    font-size: 13.5px; margin: 12px 0 0;
+  }
+  .peerline { font-size: 15px; color: var(--ink); margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--grid); }
   .peerline .n { color: var(--muted); }
   #chartwrap { position: relative; }
   svg { display: block; width: 100%; height: auto; }
   .tooltip {
     position: absolute; pointer-events: none; display: none;
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 6px 10px; font-size: 13px; color: var(--ink);
-    box-shadow: 0 2px 8px rgba(0,0,0,.12); white-space: nowrap; z-index: 2;
+    border-radius: 10px; padding: 6px 10px; font-size: 13px; color: var(--ink);
+    box-shadow: 0 4px 16px var(--shadow, rgba(23,23,22,.14)); white-space: nowrap; z-index: 2;
   }
-  .askrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .askrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
   .askrow input {
-    flex: 1 1 180px; font: inherit; padding: 10px 12px; border-radius: .5rem;
-    border: 1px solid var(--baseline); background: var(--surface); color: var(--ink);
+    flex: 1 1 180px; font: inherit; padding: 12px 14px; border-radius: 999px;
+    border: 1.5px solid var(--baseline); background: var(--surface); color: var(--ink);
   }
+  .askrow input:focus { outline: none; border-color: var(--violet); }
   .askrow button {
-    font: inherit; font-weight: 600; padding: 10px 18px; border-radius: .5rem;
-    border: none; background: var(--violet); color: #fff; cursor: pointer;
+    font: inherit; font-weight: 600; padding: 12px 22px; border-radius: 999px;
+    border: none; background: var(--violet); color: var(--on-accent); cursor: pointer;
   }
-  .askrow button:hover { background: var(--violet-hover); }
-  .privacy { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
-  details { margin-top: 12px; font-size: 14px; color: var(--ink-2); }
+  .privacy {
+    font-family: "IBM Plex Mono", monospace; color: var(--muted);
+    font-size: 12.5px; margin: 10px 0 0;
+  }
+  details { margin-top: 14px; font-size: 14px; color: var(--ink-2); }
+  details summary { cursor: pointer; color: var(--violet); }
   details table { border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
   details th, details td { text-align: right; padding: 3px 12px 3px 0; border-bottom: 1px solid var(--grid); }
   details th { color: var(--muted); font-weight: 500; }
-  .foot { color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .foot { color: var(--muted); font-size: 13px; line-height: 1.6; margin-top: 22px; }
   .foot a { color: var(--violet); }
-  .backrow { text-align: center; margin: 24px 0 8px; }
+  .backrow { text-align: center; margin: 28px 0 8px; }
   .hidden { display: none; }
-  .contextline { font-size: 14px; color: var(--ink-2); margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--grid); }
-  footer.sg {
-    padding: 14px 0; text-align: center; color: #fff; font-size: 14px;
-    background-image: linear-gradient(to bottom, rgba(var(--violet-rgb), 1), rgba(var(--violet-rgb), 0.95));
+  .contextline { font-size: 14px; color: var(--ink-2); margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--grid); }
+  /* footer */
+  footer.sg { border-top: 1px solid var(--grid); padding: 28px 0; margin-top: 12px; }
+  footer.sg .foot-in { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+  footer.sg img { height: 26px; width: auto; }
+  footer.sg .lg-dark { display: none; }
+  :root[data-theme="dark"] footer.sg .lg-light { display: none; }
+  :root[data-theme="dark"] footer.sg .lg-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) footer.sg .lg-light { display: none; }
+    :root:not([data-theme="light"]) footer.sg .lg-dark { display: block; }
   }
-  footer.sg a { color: #fff; font-weight: 600; }
+  footer.sg .foot-note { color: var(--muted); font-size: 13px; margin: 0; max-width: 42ch; }
+  footer.sg a.foot-link { color: var(--ink-2); text-decoration: none; font-size: 14px; }
+  footer.sg a.foot-link:hover { color: var(--violet); }
 </style>
 </head>
 <body>
-<header class="navbar"><div class="container"><a href="__HOME_URL__">SG Tech Pulse</a></div></header>
+<nav><div class="wrap nav-in">
+  <a class="brand" href="__HOME_URL__" aria-label="SG Tech Pulse 2026 · Encuesta de Salarios">
+    <img class="lg-light" src="https://salarios.sg.com.mx/images/brand/logo-negro_hu_4935ae413724ddf0.webp" width="440" height="102" alt="SG Tech Pulse 2026 · Encuesta de Salarios">
+    <img class="lg-dark" src="https://salarios.sg.com.mx/images/brand/logo-blanco_hu_d2b6415631d4722c.webp" width="440" height="102" alt="">
+  </a>
+  <button class="theme-btn" id="theme-toggle" type="button" aria-label="Cambiar entre tema claro y oscuro">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span class="lbl-light">Claro</span><span class="lbl-dark">Oscuro</span>
+  </button>
+</div></nav>
 
-<section class="masthead">
-  <div class="inner">
-    <h1>¡Gracias por participar! 🫶</h1>
-    <p class="lead">Tu respuesta quedó registrada de forma anónima y ya forma parte del estudio de salarios,
-    IA, diversidad y carreras tecnológicas en LATAM. Esto es lo que tu respuesta nos permite ver.</p>
+<section class="hero-sec">
+  <div class="wrap">
+    <svg class="mol" width="60" height="34" viewBox="0 0 60 34" aria-hidden="true">
+      <line x1="16" y1="17" x2="34" y2="11" stroke="var(--lime)" stroke-width="1.5"/>
+      <line x1="34" y1="11" x2="46" y2="22" stroke="var(--violet)" stroke-width="1.5"/>
+      <circle cx="14" cy="17" r="7" fill="var(--violet)"/>
+      <circle cx="34" cy="10" r="5" fill="var(--lime)"/>
+      <circle cx="47" cy="23" r="6" fill="var(--coral)"/>
+    </svg>
+    <p class="eyebrow">SG Tech Pulse 2026 · Encuesta de Salarios</p>
+    <h1>¡Gracias por participar!</h1>
+    <p class="lead">Tu respuesta quedó registrada de forma anónima y ya forma parte del estudio de
+    salarios, IA, diversidad y carreras tech en Latinoamérica. Esto es lo que tu respuesta permite ver.</p>
   </div>
 </section>
 
 <main>
+  <div class="wrap">
   <h2 class="sectiontitle">¿Dónde está tu sueldo?</h2>
   <p class="sub">Tu sueldo base mensual comparado con quienes ya respondieron la encuesta.</p>
 
@@ -747,13 +870,36 @@ PAGE_HTML = r"""<!doctype html>
     La encuesta sigue abierta<span id="sharespan"></span>.
   </p>
 
-  <div class="backrow"><a class="btn-sg" href="__HOME_URL__">Volver a SG Tech Pulse</a>
+  <div class="backrow"><a class="btn btn-primary" href="__HOME_URL__">Volver a SG Tech Pulse</a>
     <p class="closenote">Puedes cerrar esta pestaña sin problema: no hay nada pendiente de guardar.</p>
+  </div>
   </div>
 </main>
 
-<footer class="sg">Este es un servicio más de <a href="https://sg.com.mx">SG Software Guru</a>, porque "we ♥ devs".</footer>
+<footer class="sg"><div class="wrap foot-in">
+  <a class="brand" href="__HOME_URL__" aria-label="SG Software Guru">
+    <img class="lg-light" src="https://salarios.sg.com.mx/images/brand/logo-negro_hu_4935ae413724ddf0.webp" width="440" height="102" alt="SG Software Guru">
+    <img class="lg-dark" src="https://salarios.sg.com.mx/images/brand/logo-blanco_hu_d2b6415631d4722c.webp" width="440" height="102" alt="">
+  </a>
+  <p class="foot-note">Una iniciativa de SG Software Guru, agencia de Developer Relations y bureau de inteligencia del mercado tech.</p>
+  <a class="foot-link" href="https://sg.com.mx">sg.com.mx</a>
+</div></footer>
 <script>
+// Theme toggle — shares the "tp-theme" key with the landing site.
+(function () {
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  function current() {
+    var set = document.documentElement.getAttribute("data-theme");
+    if (set) return set;
+    return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  btn.addEventListener("click", function () {
+    var next = current() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("tp-theme", next); } catch (e) {}
+  });
+})();
 (async function () {
   const fmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
   const fmtK = v => v >= 1000 ? "$" + Math.round(v / 1000) + "k" : "$" + v;
