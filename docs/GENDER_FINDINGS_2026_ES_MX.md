@@ -1,122 +1,142 @@
 # Brecha Salarial de Género — SG Tech Pulse 2026 (Hallazgos Preliminares)
 
-> **"En el tech mexicano, ser mujer cuesta desde el primer día, y cada ascenso lo encarece."**
+> 🔄 **Actualizado 2026-09-21** con el volcado vigente (`data/Responses - Encuesta de Salarios SG 2026 - 21 September 2026.csv`, 622 respuestas; 561 residentes en México). Reemplaza las cifras de julio de 2026 (270 respuestas de México). Varias afirmaciones de julio cambiaron con la muestra más grande — ver el registro de cambios al final. **Los materiales de campaña derivados** (figuras de gender-slides, decks de Slidev, tarjetas, `docs/ig_scripts/`) todavía tienen fijas las cifras anteriores y deben regenerarse desde esta versión.
 
-**Fecha:** 2026-07-28
-**Datos:** Volcado de respuestas en vivo de SG Tech Pulse 2026, **restringido a respondientes residentes en México** (92% de la muestra). 270 respuestas de México (212 completas). Género: 170 hombres, 96 mujeres, 4 personas no binarias. Muestra para análisis salarial: **n=245** (154 hombres, 91 mujeres).
-**Estado:** Preliminar. La encuesta sigue abierta; la muestra es autoseleccionada (no es una muestra probabilística del mercado).
+> **"En el tech mexicano las mujeres son mayoría en el medio, y se evaporan rumbo a la cima."**
+
+**Fecha:** 2026-09-21
+**Datos:** Volcado en vivo de SG Tech Pulse 2026, **restringido a residentes en México** (90% de la muestra). 561 respuestas de México. Género: 340 hombres, 213 mujeres, 5 no binarias. Muestra para análisis salarial: **n=500** (303 hombres, 197 mujeres).
+**Estado:** Preliminar. La encuesta sigue abierta; muestra autoseleccionada (no probabilística del mercado).
 
 ---
 
 ## Resumen ejecutivo
 
-**En el tech mexicano, ser mujer cuesta desde el primer día, y cada ascenso lo encarece.** La brecha ya está presente en las primeras etapas y se acumula conforme las mujeres ascienden, alcanzando su punto más ancho en niveles gerenciales. No es solo un problema de pipeline; es un castigo que crece con la seniority. Cuatro hallazgos:
+**En el tech mexicano las mujeres son mayoría en la mitad de la escalera y se evaporan al subir — y la brecha salarial se ensancha en cada peldaño que sí logran subir.** Cinco hallazgos:
 
-1. **El costo que se acumula.** Ya hay brecha temprano (**~13% en junior/medio**) y crece con cada peldaño: **Medio −24%, Senior −28%, Gerente −42%**. Cerca de **la mitad de la brecha cruda no se explica** por ninguna diferencia de experiencia, nivel o rol (Oaxaca-Blinder).
-2. **La desaparición.** Las mujeres son **62% de los puestos de nivel medio pero solo 32% de senior en adelante**: el conteo se adelgaza justo donde crece el castigo salarial.
-3. **Los pesos sin explicación.** Para una mujer senior, cerca de **$15,000/mes (~$176,000/año)** es un castigo puro que nada de su trabajo explica.
-4. **La salida solo para ellos (direccional).** El mayor aumento del mercado — trabajar para un empleador extranjero — tiene ahí una **brecha de 58%**; la salida del pago local bajo es esencialmente masculina (muestra pequeña, n=12 mujeres).
+1. **El costo que se acumula.** La brecha cruda de medianas es **38%** ($76,000 hombres vs $47,000 mujeres) y se ensancha con el rango: **Medio −22%, Senior −27%, Gerente −32%.**
+2. **La desaparición.** Las mujeres son el **62% de los puestos de nivel Medio pero solo ~31% de Senior en adelante.** Mayoría en el medio, alrededor de una de cada tres en la cima — y las brechas de origen (cuándo empezaron, acceso temprano a computadora) prácticamente se cerraron, así que es una historia de **paga y progresión**, no de entrada al pipeline.
+3. **El residuo.** Empareja a un hombre y una mujer en experiencia, seniority, rol e inglés y **cerca de cuatro quintas partes de la brecha se cierra** — pero sobrevive una **multa de ~12%** que nada en el papel explica. Para una mujer senior son aproximadamente **$7,700/mes (~$93,000/año)**.
+4. **La salida que no rescata.** Hoy las mujeres llegan a empleadores extranjeros a la **misma tasa** que los hombres (la "salida solo para hombres" de julio ya no aplica), pero ahí ganan **57% menos** — la prima transfronteriza no cierra la brecha, la repite.
+5. **La pausa de carrera (mecanismo).** Las mujeres interrumpen o reducen su carrera >10 meses por motivos familiares/personales **2.3× más** que los hombres (16% vs 7%) — un motor plausible de la desaparición.
 
-Brecha cruda: mediana base mensual **$79,500 (hombres) vs $48,000 (mujeres), −40%** (IC 95% [21%, 50%]). Muestra autoseleccionada; tratar como preliminar.
+IC 95% de la brecha cruda [29%, 48%] (bootstrap). Muestra autoseleccionada; tratar como preliminar.
 
 ---
 
-## Hallazgo 1 — El costo que se acumula: brecha desde el inicio que crece con el nivel
+## Hallazgo 1 — El costo que se acumula: una brecha que se ensancha con el rango
 
-**Brecha cruda.** Salario base mensual, mediana: hombres **$79,500** vs mujeres **$48,000** → **−40%** (IC 95% [21%, 50%]). El intervalo es ahora más estrecho (n=91 mujeres) y excluye firmemente el cero.
+**Brecha cruda.** Salario base mensual, mediana: hombres **$76,000** vs mujeres **$47,000** → **−38%** (IC 95% [29%, 48%], n=197 mujeres).
 
-**La brecha ya existe temprano y se acumula con la seniority:**
+**Se ensancha con el seniority:**
 
 | Etapa de carrera | Hombres (mediana) | Mujeres (mediana) | Brecha | n (H / M) |
 |---|---|---|---|---|
-| Junior / Medio | $34,500 | $30,000 | **−13%** | 30 / 34 |
-| Senior en adelante | $90,300 | $70,000 | **−23%** | 124 / 57 |
+| Junior / Medio | $35,000 | $32,000 | **−9%** | 53 / 84 |
+| Senior en adelante | $85,000 | $63,453 | **−25%** | 247 / 109 |
 
-Por nivel individual el ensanchamiento es marcado: **Medio −24%, Senior −28%, Gerente −42%** (Gerente n=10 mujeres, direccional). En el nivel de entrada (Junior solo) las mujeres van un poco arriba, pero esa celda es demasiado pequeña para ser confiable (n=9 mujeres), así que la brecha temprana se ancla en la banda junior/medio.
-
-**La mitad de la brecha no se explica.** Una descomposición Oaxaca-Blinder separa la brecha cruda en una parte explicada por cualificaciones medibles (experiencia, seniority, inglés, rol) y un residual:
-
-| Componente | Proporción de la brecha cruda |
-|---|---|
-| Explicado por cualificaciones | ~48% |
-| **Residual no explicado** | **~52% (un castigo puro de ~20%)** |
-
-*Lo no explicado no equivale a discriminación probada — también contiene factores que no medimos, incluidos los ítems de mecanismo eliminados del formulario desplegado (ver Limitaciones).*
+Por nivel individual: **Medio −22%, Senior −27%, Gerente −32%** (Gerente n=14 mujeres, direccional). En el nivel Junior aislado las mujeres van nominalmente arriba, pero esa celda es chica y volátil (n=26 mujeres), así que el arranque se ancla en la banda junior/medio, donde la brecha es un modesto −9%.
 
 ---
 
-## Hallazgo 2 — La desaparición: mayoría en medio, una de cada tres arriba
+## Hallazgo 2 — La desaparición: mayoría en el medio, una de cada tres en la cima
 
-- **Las mujeres son 36%** de la muestra en total, pero la distribución se adelgaza con la seniority: **62% de los puestos de nivel medio (Medio) son de mujeres, contra 32% de senior en adelante.** Mayoría en el medio, aproximadamente una de cada tres en la cima.
-- El adelgazamiento cae justo donde crece el castigo salarial (Hallazgo 1): menos mujeres *y* peor pagadas, en el mismo peldaño.
-- **Nota sobre origen del pipeline:** con la muestra más grande las brechas de origen casi se cerraron (edad del primer programa 18 vs 17; acceso a computadora en la infancia 49% vs 51%), así que la historia ahora es claramente de *pago y progresión*, no de que las mujeres entren a tech más tarde o con menos acceso temprano.
+- Las mujeres son el **39%** de los respondientes de México (sobre hombres+mujeres), pero la distribución se adelgaza con el rango: **59% de Junior y 62% de Medio son mujeres, contra 32% de Senior y 24–25% de Staff/Principal y Gerente.** Mayoría en la base y el medio, alrededor de una de cada tres en la cima.
+- El adelgazamiento cae exactamente donde crece la multa salarial (Hallazgo 1): menos mujeres *y* peor pagadas, en el mismo peldaño.
+- **La explicación del pipeline ya no se sostiene.** Con la muestra más grande, las brechas de origen se cerraron: la edad mediana del primer programa es **17 en ambos** géneros, y el acceso a computadora en la infancia es **53% (mujeres) vs 49% (hombres)** — si acaso, ellas reportan un poco *más* acceso temprano. No entran más tarde ni con menos exposición; se les detiene por debajo de los niveles senior.
 
 ---
 
-## Hallazgo 3 — Los pesos sin explicación
+## Hallazgo 3 — El residuo: la parte que ningún currículum explica
 
-**La intuición.** Pon lado a lado a un hombre y a una mujer con currículos idénticos en papel: misma experiencia, mismo nivel, mismo rol, mismo inglés. La descomposición Oaxaca-Blinder pregunta cuánto de la brecha sobrevive a ese emparejamiento. Cerca de la mitad se cierra (diferencias reales de cualificación); la otra mitad se queda: dos personas que se ven iguales en papel, con distinto sueldo.
+Pon lado a lado a un hombre y una mujer con perfiles idénticos —misma experiencia, mismo seniority, mismo rol, mismo inglés— y pregunta cuánto de la brecha sobrevive.
 
-La mitad de la brecha es un castigo puro. Aplicando el residual no explicado de ~20% (Hallazgo 1) a los salarios:
+- **Oaxaca-Blinder** (México, referencia agrupada) parte la **brecha log de 36%** en **~80% explicado** por composición (sobre todo seniority y rol — es decir, la desaparición) y **~20% no explicado**.
+- La brecha ajustada de ecuación única —una mujer idéntica en cada control medido— es de **~12%.**
 
-| | Mediana mujer | Hombre equivalente | Castigo mensual | Castigo anual |
+Monetizando el residuo de ~12%:
+
+| | Mediana de la mujer | Hombre equivalente | Multa mensual | Multa anual |
 |---|---|---|---|---|
-| Mujer mediana | $48,000 | ~$59,700 | ~$11,700 | **~$141,000** |
-| Mujer senior | $60,000 | ~$74,600 | ~$14,600 | **~$176,000** |
+| Mujer mediana | $47,000 | ~$53,200 | ~$6,200 | **~$75,000** |
+| Mujer senior | $58,300 | ~$66,000 | ~$7,700 | **~$93,000** |
 
-Para una mujer senior, cerca de **$15,000 al mes, unos $176,000 al año**, es dinero que nada de su experiencia, nivel o rol explica.
+Para una mujer senior, cerca de **$7,700 al mes —unos $93,000 al año— es paga que nada sobre su experiencia, nivel, rol o inglés explica.**
+
+> **Matiz honesto:** este residuo es *menor* que la estimación de julio (~12% vs el ~20% anterior). Ahora más de la brecha se atribuye a la composición — lo cual no es buena noticia, porque composición aquí significa *la desaparición*: se mantiene a las mujeres fuera de los peldaños senior mejor pagados. Cerrar solo el residuo apenas movería el 38%.
 
 ---
 
-## Hallazgo 4 (direccional) — La salida solo para ellos
+## Hallazgo 4 — La salida que no rescata
 
-Trabajar para un empleador extranjero es uno de los mayores aumentos del mercado. Pero ese carril no está igual de abierto: **entre quienes trabajan para empleadores extranjeros la brecha es 58%** (hombres $115,000 vs mujeres $48,500, n=12 mujeres), contra 36% en empleadores nacionales. Tratar el 58% como direccional (celda femenina pequeña), pero es consistente con el patrón general.
+Trabajar para un empleador extranjero es uno de los mayores aumentos del mercado. En julio la preocupación era el acceso —que el carril fuera esencialmente masculino. **Eso se volteó: hoy las mujeres llegan a empleadores extranjeros a la misma tasa que los hombres.** Pero el rescate no ocurre:
 
-Razones de acceso de apoyo (residentes en México, mujeres vs hombres):
+- Entre quienes trabajan para empleador extranjero, la brecha es **57%** (hombres **$115,000** vs mujeres **$50,000**, n=27 mujeres) — *más ancha* que la brecha de 25% en niveles senior a nivel local.
+
+Así que la prima transfronteriza, presentada como la puerta de escape del bajo sueldo local, **reproduce la brecha en vez de cerrarla.**
+
+Razones de acceso (residentes en México, mujeres vs hombres):
 
 | Acceso | Hombres | Mujeres | RR (M/H) |
 |---|---|---|---|
-| Equity (acciones/opciones/RSU) | 22% | 19% | 0.85 |
-| Empleador extranjero | 17% | 13% | 0.74 |
-| Totalmente remoto | 46% | 46% | 1.00 (sin brecha) |
-| Roles centrados en IA (conteo) | 15 | 6 | — |
+| Equity (stock/opciones/RSU) | 17% | 17% | 1.02 (sin brecha) |
+| Empleador extranjero | 12% | 13% | 1.09 (sin brecha) |
+| Totalmente remoto | 40% | 37% | 0.91 |
+| Roles centrados en IA (conteo) | 34 | 17 | — |
 
-Nota: las cifras de la semana de lanzamiento (3× equity, 2× remoto, 7 a 0 en IA) eran artefactos de muestra pequeña. Con la muestra actual la brecha de equity es modesta (RR 0.85), la de remoto no existe, y sí aparecen mujeres en roles de IA. Citar esta tabla.
+Nota: las brechas de acceso de julio (equity, remoto, empleador extranjero) prácticamente se cerraron. La asimetría de acceso que queda está en los **roles centrados en IA** (los hombres superan a las mujeres ~2 a 1) — ver las historias para medios de IA.
 
 ---
 
-## Apoyo — Experiencia vivida de las mujeres
+## Hallazgo 5 — La pausa de carrera (el mecanismo)
 
-Descriptivo, solo mujeres, n≈77, celdas por debajo del umbral suprimidas:
+El candidato más claro a mecanismo detrás de la desaparición aparece directo en los datos: **las mujeres interrumpen o reducen su carrera por más de 10 meses, por responsabilidades familiares o personales, a 2.3× la tasa de los hombres — 16% de las mujeres vs 7% de los hombres.** En una industria que mide seniority por años continuos y por visibilidad, una pausa de diez meses no cuesta diez meses de sueldo —resetea el reloj del ascenso justo en la etapa de vida donde se decide el salto de Medio a Senior. Menos mujeres dan ese salto; la pirámide se adelgaza.
 
-- **~33%** reporta haberse sentido insegura o haber sufrido acoso ("rara vez" 27% + "frecuentemente" 6%).
-- **69%** dice que su empleador **no tiene un programa formal** para promover a mujeres hacia el liderazgo.
-- **54%** es el 20% o menos de su grupo de pares (mediana 20% de pares mujeres): más de la mitad es una clara minoría en su propio equipo.
+---
+
+## Soporte — Experiencia vivida, solo mujeres
+
+Descriptivo, solo mujeres, residentes en México; celdas bajo umbral suprimidas:
+
+- **~25%** reporta haberse sentido insegura o haber sufrido acoso en su empleador actual ("rara vez" 34 + "frecuentemente" 8, de 166 respuestas sustantivas) — cerca de una de cada cuatro, con 8 que lo viven de forma *frecuente*.
+- **63%** dice que su empleador **no tiene ningún programa formal** para promover mujeres a liderazgo (n=167).
+- **40%** son 20% o menos de su grupo de pares (mediana 20% de pares mujeres) — una clara minoría en su propio equipo.
 
 ---
 
 ## Metodología
 
-- **Geografía:** restringido a **respondientes residentes en México** (92% de la muestra) para que el encuadre "tech mexicano" coincida con los datos; se excluyen las 23 respuestas fuera de México (en su mayoría de EUA).
-- **Salario:** base mensual, normalizado a MXN (reportes en USD × tipo de cambio 18.5; las conclusiones son estables entre TC 17 y 20). Transformado a logaritmo para la regresión; se recortan outliers fuera de ~$8k–$400k.
+- **Geografía:** restringido a **residentes en México** (90% de la muestra) para que el marco "tech mexicano" cuadre con los datos.
+- **Salario:** base mensual, normalizado a MXN (reportes en USD × TC 18.5; estable entre TC 17–20). Transformado a log para la regresión; atípicos fuera de ~$8k–$400k recortados.
 - **Brecha cruda:** mediana (robusta) con IC 95% por bootstrap de 3,000 muestras.
-- **Oaxaca-Blinder:** descomposición twofold con coeficientes de referencia agrupados sobre un conjunto parsimonioso de controles (experiencia, rango de seniority, uso de inglés, familia de rol) para que sea estimable en la submuestra femenina. El castigo monetizado aplica el residual no explicado (en puntos log) a las medianas salariales.
-- **Supresión:** se retiene cualquier celda publicada con menos de 5 mujeres. Las personas no binarias (n=4) se excluyen de la inferencia.
-- **Muestra:** respondientes autoseleccionados; se presenta como muestra de respondientes, no como estimación poblacional.
+- **Oaxaca-Blinder:** descomposición twofold con coeficientes de referencia agrupados sobre un set parsimonioso de controles (experiencia, rango de seniority, uso de inglés, familia de rol). La brecha ajustada de ecuación única es el coeficiente de una dummy femenina en la misma especificación. La multa monetizada aplica el residuo de ~12% a las medianas.
+- **Supresión:** celdas delgadas (p. ej. Gerente n=14, Junior n=26 mujeres) marcadas como direccionales. No binarias (n=5) excluidas de la inferencia.
+- **Muestra:** autoseleccionada; se presenta como muestra de respondientes, no como estimación poblacional.
 
 ---
 
 ## Limitaciones
 
-- **Muestra femenina aún modesta** (91 con salario) → los intervalos son más estrechos que antes, pero las celdas por nivel (p. ej. Gerente n=10, Junior n=9) siguen siendo delgadas; el resultado de Junior solo (mujeres un poco arriba) no es confiable.
-- **Sin descomposición por mecanismo.** El instrumento desplegado eliminó los ítems de negociación / transparencia salarial / promoción / patrocinio del rediseño, por lo que el residual es *no explicado*, no atribuido a canales específicos. Para explicar *por qué* persiste la brecha, esos ítems deben volver en la siguiente ola.
-- **Mezcla de monedas** (reportes en USD) resuelta con un solo supuesto de tipo de cambio.
-- **Preliminar:** las cifras se moverán conforme se llene la encuesta; tratar como direccionales.
+- **Celdas por nivel aún modestas** (Gerente n=14, Staff/Principal n=8 mujeres) → esas brechas por nivel son direccionales.
+- **Sin descomposición de mecanismo más allá del ítem de pausa de carrera.** El instrumento desplegado todavía carece de ítems de negociación / transparencia salarial / sponsorship, así que el residuo de ~12% es *no explicado*, no atribuido a canales específicos. Para explicar *por qué* persiste, esas preguntas deberían volver en la próxima ola.
+- **Mezcla de monedas** (reportes en USD) manejada con un único supuesto de tipo de cambio.
+- **Preliminar:** las cifras se moverán conforme se llene la encuesta.
 
 ---
 
-## Implicaciones (para AMITI / advocacy)
+## Registro de cambios vs la versión de julio 2026
 
-- El reencuadre es el mensaje: **el castigo empieza temprano y se acumula con el nivel.** A las mujeres ya se les paga menos en la etapa temprana y la brecha crece con cada peldaño hacia la gerencia. La mitad no la explican las cualificaciones. Es un problema de pago y progresión, no de entrada al pipeline — sobre todo ahora que las brechas de acceso temprano prácticamente se cerraron.
-- Peticiones concretas: rendición de cuentas del empleador en **auditorías de equidad salarial en todos los niveles** (no solo la cima) y en **programas formales de mujeres hacia el liderazgo** (69% de las mujeres reporta que no hay ninguno).
-- Antes de que esto salga al exterior: (1) seguir creciendo la muestra femenina, y (2) restaurar los ítems de mecanismo para poder descomponer el residual de ~52% no explicado en canales de negociación, patrocinio y promoción.
+- **Brecha cruda:** 40% → **38%** (IC más ajustado, n=197 mujeres).
+- **Residuo no explicado:** ~20% → **~12%**; la parte "explicada" del Oaxaca subió de ~48% a ~80%. La brecha es ahora más claramente una historia de composición (la desaparición) que de multa pura.
+- **Se retira la "salida solo para hombres":** el *acceso* a empleador extranjero ya es igual por género (RR 1.09); la historia es la **brecha de paga de 57% en empleadores extranjeros**, no el acceso.
+- **Brechas de acceso a equity y remoto:** prácticamente cerradas (RR 1.02 y 0.91).
+- **Hallazgo nuevo:** el ítem de **pausa de carrera** (16% mujeres vs 7% hombres) se surface como el principal candidato a mecanismo.
+- **Brechas de origen** (edad del primer programa, acceso a computadora en la infancia): confirmadas cerradas.
+
+---
+
+## Implicaciones (para AMITI / incidencia)
+
+- El reencuadre es el mensaje: **las mujeres son mayoría en el medio y se evaporan en la cima.** Es un problema de paga y progresión, no de entrada al pipeline — las brechas de origen se cerraron. Arreglar el paso del ascenso, no solo la entrada.
+- Peticiones concretas: rendición de cuentas de empleadores en **auditorías de equidad salarial en cada nivel** (no solo la cima); **programas formales de mujeres a liderazgo** (63% de las mujeres reporta ninguno); y **reincorporación de carrera estructurada** para que una pausa familiar deje de resetear el reloj del seniority.
+- Antes de que esto salga al exterior: (1) seguir creciendo las celdas femeninas por nivel, y (2) restaurar las preguntas de mecanismo para poder descomponer el residuo de ~12% en canales de negociación, sponsorship y ascenso.
