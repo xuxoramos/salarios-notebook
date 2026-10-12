@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-La IA no solo está cambiando cómo se trabaja, ya está creando puestos nuevos con nombre propio. En la muestra de México, 51 personas dicen tener un rol centrado en inteligencia artificial, y no hablamos de etiquetas infladas. Los cargos más comunes son ingeniero de GenAI, LLM o agentes, product manager de IA, ingeniero de machine learning y prompt manager. Son títulos que hace tres años casi no existían en un organigrama mexicano.
+La IA no solo está cambiando cómo se trabaja, ya está creando puestos nuevos con nombre propio. En la muestra de México, 54 personas dicen tener un rol centrado en inteligencia artificial, y no hablamos de etiquetas infladas. Los cargos más comunes son ingeniero de GenAI, LLM o agentes, product manager de IA, ingeniero de machine learning y prompt manager. Son títulos que hace tres años casi no existían en un organigrama mexicano.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ Hay un detalle que conviene mirar desde ahora, cuando la frontera aún es chica 
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. 51 personas reportan un rol centrado en IA; los más frecuentes son ingeniero de GenAI, LLM o agentes (15), product manager de IA (10), ingeniero de ML (6) y prompt manager (6). En roles de IA, los hombres superan a las mujeres cerca de dos a uno (34 contra 17). Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. 54 personas reportan un rol centrado en IA. Los más frecuentes son ingeniero de GenAI, LLM o agentes (16), product manager de IA (11), ingeniero de ML (6) y prompt manager (6). En roles de IA, los hombres superan a las mujeres cerca de dos a uno (37 contra 17). Preliminar y de muestra autoseleccionada._

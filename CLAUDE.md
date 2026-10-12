@@ -32,7 +32,7 @@ There are no tests or linters.
 ## Data
 
 - `data/answers-2020.csv` … `answers-2022.csv`: original survey answers. Values are coded keys; decode them with the lookup tables in `data/options/*_options.csv`.
-- `data/Salarios2026-Dump - Encuesta de Salarios SG 2026.csv`: live response dump of the 2026 survey (still collecting; treat findings as preliminary).
+- `data/Responses - Encuesta de Salarios SG 2026 - <date>.csv`: live response dump of the 2026 survey, latest by date (currently `12 October 2026.csv`, 688 responses; still collecting; treat findings as preliminary). Earlier dated dumps are superseded and removed.
 - `data/ingles_gdl.csv`: per the spec, ignore this file.
 - Analysis target is `salarymx`. Exclude other compensation fields (`salaryusd`, `extramx`, `extrausd`) as predictors.
 

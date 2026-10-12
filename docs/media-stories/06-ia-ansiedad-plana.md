@@ -16,4 +16,4 @@ Aquí hay un consuelo genuino, y conviene decirlo sin cinismo. Si la incertidumb
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. Confianza en que las habilidades sigan siendo relevantes en tres años, en escala de 1 a 5: media de 3.4. Por experiencia, de 0 a 3 años promedia 3.5 y de 16 años en adelante 3.5. Quienes usan agentes promedian 3.3 contra 3.4 del resto. El 15% responde 2 o menos. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Confianza en que las habilidades sigan siendo relevantes en tres años, en escala de 1 a 5: media de 3.4. Por experiencia, de 0 a 3 años promedia 3.5 y de 16 años en adelante 3.5. Quienes usan agentes promedian 3.3 contra 3.4 del resto. El 16% responde 2 o menos. Preliminar y de muestra autoseleccionada._

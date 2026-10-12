@@ -16,4 +16,4 @@ Muchas empresas presumen sus licencias de maternidad y luego no diseñan el regr
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. A la pregunta de si interrumpió o redujo su actividad profesional por más de diez meses por responsabilidades personales o familiares, respondió que sí el 16% de las mujeres y el 7% de los hombres (sobre respuestas válidas). Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. A la pregunta de si interrumpió o redujo su actividad profesional por más de diez meses por responsabilidades personales o familiares, respondió que sí el 16% de las mujeres y el 7% de los hombres (sobre respuestas válidas). Preliminar y de muestra autoseleccionada._

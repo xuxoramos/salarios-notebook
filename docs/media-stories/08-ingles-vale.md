@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-En el tech mexicano, tu inglés vale más que casi cualquier certificación. Quienes trabajan todo el día en inglés tienen una mediana de 80,000 pesos al mes, mientras que quienes nunca lo usan se quedan en 35,000. Estamos hablando de 2.3 veces el sueldo, por la misma chamba, cambiando nada más el idioma en el que la haces.
+En el tech mexicano, tu inglés vale más que casi cualquier certificación. Quienes trabajan todo el día en inglés tienen una mediana de 80,000 pesos al mes, mientras que quienes nunca lo usan se quedan en 35,800. Estamos hablando de 2.3 veces el sueldo, por la misma chamba, cambiando nada más el idioma en el que la haces.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ De todas las palancas de sueldo, esta es la que más está en tus manos. No pued
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. Mediana de salario base según la frecuencia de uso del inglés en el trabajo: nunca 35,000 pesos (n=35), todo el tiempo 80,000 (n=140). Es asociación, sin ajustar por experiencia. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Mediana de salario base según la frecuencia de uso del inglés en el trabajo: nunca 35,800 pesos (n=42), todo el tiempo 80,000 (n=150). Es asociación, sin ajustar por experiencia. Preliminar y de muestra autoseleccionada._

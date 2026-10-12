@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-La forma de trabajar con IA que mejor se paga es, justamente, la que menos usan los juniors. Programar dándole instrucciones a agentes se asocia con una mediana de 79,500 pesos al mes, contra 58,000 del resto. Pero su adopción sube con la veteranía, porque apenas el 8% de quienes llevan de cero a tres años trabaja así, mientras que entre quienes llevan de siete a quince años ya lo hace cerca de uno de cada cinco. Los que más tienen que ganar o que perder con los agentes son los que menos los están usando.
+La forma de trabajar con IA que mejor se paga es, justamente, la que menos usan los juniors. Programar dándole instrucciones a agentes se asocia con una mediana de 79,500 pesos al mes, contra 60,000 del resto. Pero su adopción sube con la veteranía, porque apenas el 7% de quienes llevan de cero a tres años trabaja así, mientras que entre quienes llevan de siete a quince años ya lo hace cerca de uno de cada cinco. Los que más tienen que ganar o que perder con los agentes son los que menos los están usando.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ Si la IA concentra el flujo de trabajo mejor pagado entre quienes ya están arri
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. Adopción del flujo con agentes por experiencia: de 0 a 3 años 8%, de 7 a 10 años 19%, de 11 a 15 años 22%. Mediana salarial de quienes usan agentes 79,500 pesos contra 58,000 del resto. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Adopción del flujo con agentes por experiencia: de 0 a 3 años 7%, de 7 a 10 años 20%, de 11 a 15 años 21%. Mediana salarial de quienes usan agentes 79,500 pesos contra 60,000 del resto. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._

@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-Trabajar para una empresa de fuera se paga mucho mejor, y ya no es un caso raro. En México, quienes tienen un empleador con sede en el extranjero reportan una mediana de 89,200 pesos al mes, contra 62,500 de quienes trabajan para una empresa local. Es una diferencia cercana al 43%, por hacer prácticamente el mismo trabajo pero facturándolo hacia afuera. Y ya es el 13% del mercado el que está enchufado a ese esquema.
+Trabajar para una empresa de fuera se paga mucho mejor, y ya no es un caso raro. En México, quienes tienen un empleador con sede en el extranjero reportan una mediana de 85,000 pesos al mes, contra 61,600 de quienes trabajan para una empresa local. Es una diferencia cercana al 38%, por hacer prácticamente el mismo trabajo pero facturándolo hacia afuera. Y ya es el 14% del mercado el que está enchufado a ese esquema.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ Antes de leer esto como la salida soñada, vale una nota fina. Ese mejor sueldo 
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. Empleador con sede en el extranjero: 13% de la muestra. Mediana de salario base de 89,200 pesos contra 62,500 de empleador local, una diferencia cercana al 43%. Esquemas más frecuentes: representante local, contratista independiente e intermediario tipo Deel o Remote. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Empleador con sede en el extranjero: 14% de la muestra. Mediana de salario base de 85,000 pesos contra 61,600 de empleador local, una diferencia cercana al 38%. Esquemas más frecuentes: representante local, contratista independiente e intermediario tipo Deel o Remote. Preliminar y de muestra autoseleccionada._

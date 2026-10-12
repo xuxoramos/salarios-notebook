@@ -16,4 +16,4 @@ Este dato explica por qué tantos juniors se sienten mal pagados, porque de hech
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 21 de septiembre de 2026, residentes en México. Mediana de salario base por experiencia en el sector: 0 a 2 años 22,000 pesos, 3 a 5 años 40,000, 6 a 10 años 65,000, 11 a 20 años 90,000. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Mediana de salario base por experiencia en el sector: 0 a 2 años 22,000 pesos, 3 a 5 años 40,000, 6 a 10 años 64,000, 11 a 20 años 90,000. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
