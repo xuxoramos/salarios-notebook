@@ -10,7 +10,7 @@ Piezas cortas pensadas para prensa y redes, sacadas del volcado de respuestas de
 
 **Género**
 - [01 · La desaparición](01-genero-desaparicion.md). Mayoría en el medio y apenas un cuarto en la cima.
-- [02 · La brecha que nadie explica](02-genero-brecha-controlada.md). 37% en crudo y un 10% que ningún control borra.
+- [02 · La brecha es un techo, no una multa](02-genero-brecha-controlada.md). 37% en crudo, y la parte sólida es el ascenso, no la paga por el mismo puesto.
 - [03 · La pausa que cuesta la carrera](03-genero-pausa-carrera.md). Ellas interrumpen más del doble.
 - [04 · No es el sueldo, es sentirse segura](04-genero-seguridad-cultura.md). Acoso y cultura como motivo de fuga.
 - [10 · La salida que no rescata](10-genero-salida-no-rescata.md). Con empleador extranjero, la brecha se hace más ancha.
@@ -18,7 +18,7 @@ Piezas cortas pensadas para prensa y redes, sacadas del volcado de respuestas de
 **Inteligencia artificial**
 - [05 · Programar con agentes es cosa de hombres](05-ia-brecha-agentes.md). El cruce de género con IA.
 - [06 · La ansiedad pareja](06-ia-ansiedad-plana.md). Dieciséis años de experiencia no dan más certeza que un junior.
-- [07 · La herramienta que paga la usan los que ya ganan](07-ia-juniors-rezagados.md). La IA concentra la ventaja.
+- [07 · Los agentes no son cosa de veteranos](07-ia-juniors-rezagados.md). Sin gradiente por antigüedad; la división real es de género.
 - [12 · El puesto que hace tres años no existía](12-ia-puesto-que-no-existia.md). Nace una categoría de empleo, y nace con sesgo.
 
 **Mercado y salario de fondo**

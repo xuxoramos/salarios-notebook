@@ -16,7 +16,7 @@
 
 1. **El costo que se acumula.** La brecha cruda de medianas es **37%** ($75,000 hombres vs $47,250 mujeres) y se profundiza hacia los peldaños senior: **Medio −20%, Senior −25%** (el nivel Gerente marca **−20%** pero se apoya en apenas 15 mujeres — direccional).
 2. **La desaparición.** Las mujeres son el **61% de los puestos de nivel Medio pero solo ~30% de Senior en adelante.** Mayoría en el medio, alrededor de una de cada tres en la cima — y las brechas de origen (cuándo empezaron, acceso temprano a computadora) prácticamente se cerraron, así que es una historia de **paga y progresión**, no de entrada al pipeline.
-3. **El residuo.** Empareja a un hombre y una mujer en experiencia, seniority, rol e inglés y **cerca de cuatro quintas partes de la brecha se cierra** — pero sobrevive una **multa de ~10%** que nada en el papel explica. Para una mujer senior son aproximadamente **$6,800/mes (~$82,000/año)**.
+3. **La escalera, no la multa.** Al emparejar experiencia, inglés, nivel y rol, la brecha cae de 37% a **~10%** por etapas. Pero ese ~10% tiene un **IC 95% de [0%, 20%] que toca el cero**, así que no afirmamos una multa fija por el mismo trabajo. El efecto queda **acotado entre ~10% y 37%**, y la parte grande y sólida es la progresión (la desaparición), no la paga por el mismo puesto.
 4. **La salida que no rescata.** Hoy las mujeres llegan a empleadores extranjeros a la **misma tasa** que los hombres (la "salida solo para hombres" de julio ya no aplica), pero ahí ganan **54% menos** — la prima transfronteriza no cierra la brecha, la repite.
 5. **La pausa de carrera (mecanismo).** Las mujeres interrumpen o reducen su carrera >10 meses por motivos familiares/personales **2.3× más** que los hombres (16% vs 7%) — un motor plausible de la desaparición.
 
@@ -47,23 +47,24 @@ Por nivel individual: **Medio −20%, Senior −25%, Gerente −20%.** La brecha
 
 ---
 
-## Hallazgo 3 — El residuo: la parte que ningún currículum explica
+## Hallazgo 3 — ¿De dónde viene la brecha? De la escalera
 
-Pon lado a lado a un hombre y una mujer con perfiles idénticos —misma experiencia, mismo seniority, mismo rol, mismo inglés— y pregunta cuánto de la brecha sobrevive.
+Pon lado a lado a un hombre y una mujer y mira cuánto de la brecha sobrevive a cada control. Cae de forma ordenada conforme se agregan:
 
-- **Oaxaca-Blinder** (México, referencia agrupada) parte la **brecha log de 35%** en **~82% explicado** por composición (sobre todo seniority y rol — es decir, la desaparición) y **~18% no explicado**.
-- La brecha ajustada de ecuación única —una mujer idéntica en cada control medido— es de **~10%.**
+| Controles | Brecha ajustada |
+|---|---|
+| Sin ajuste | **35%** |
+| + experiencia | 25% |
+| + inglés | 22% |
+| + nivel (seniority) | 15% |
+| + rol | **10%** |
 
-Monetizando el residuo de ~10%:
+- La **descomposición Oaxaca-Blinder** (México, referencia agrupada) parte la brecha log en **~82% explicado** por composición (sobre todo seniority y rol, es decir, la desaparición) y **~18% no explicado**.
+- La brecha ajustada de ecuación única —una mujer idéntica en cada control medido— es de **~10%**, pero su **intervalo de confianza al 95% es [0%, 20%]: toca el cero.** A igualdad de todo lo medible no podemos afirmar una multa distinta de cero. El residuo es **robusto al tipo de cambio** (~10% con TC 17, 18.5 y 20).
 
-| | Mediana de la mujer | Hombre equivalente | Multa mensual | Multa anual |
-|---|---|---|---|---|
-| Mujer mediana | $47,250 | ~$52,500 | ~$5,250 | **~$63,000** |
-| Mujer senior | $60,000 | ~$66,800 | ~$6,800 | **~$82,000** |
+**Lectura honesta: cotas, no un punto.** El efecto del género queda **acotado entre ~10% (emparejando todo) y 37% (sin ajustar)**. Y hay una trampa estadística: controlar por nivel y rol *subestima* el efecto, porque el nivel y el rol son en parte consecuencia del mismo sesgo —a las mujeres se las mantiene abajo—. Así que el valor real vive en ese rango, y el extremo bajo (~10%) ni siquiera se distingue de cero.
 
-Para una mujer senior, cerca de **$6,800 al mes —unos $82,000 al año— es paga que nada sobre su experiencia, nivel, rol o inglés explica.**
-
-> **Matiz honesto:** este residuo sigue *encogiendo* — **~10%** ahora, frente a ~12% en septiembre y ~20% en julio. Ahora más de la brecha se atribuye a la composición — lo cual no es buena noticia, porque composición aquí significa *la desaparición*: se mantiene a las mujeres fuera de los peldaños senior mejor pagados. Cerrar solo el residuo apenas movería el 37%.
+> **El mensaje firme no es la multa, es la escalera.** La parte grande y estadísticamente sólida de la brecha es la **progresión**: a las mujeres se las mantiene en los peldaños peor pagados (Hallazgo 2). El pedazo que ni el nivel ni el rol explican es chico y frágil. Cerrar solo ese residuo apenas movería el 37%. No lo llames discriminación probada.
 
 ---
 
@@ -90,7 +91,7 @@ Nota: las brechas de acceso de julio (equity, remoto, empleador extranjero) prá
 
 ## Hallazgo 5 — La pausa de carrera (el mecanismo)
 
-El candidato más claro a mecanismo detrás de la desaparición aparece directo en los datos: **las mujeres interrumpen o reducen su carrera por más de 10 meses, por responsabilidades familiares o personales, a 2.3× la tasa de los hombres — 16% de las mujeres vs 7% de los hombres.** En una industria que mide seniority por años continuos y por visibilidad, una pausa de diez meses no cuesta diez meses de sueldo —resetea el reloj del ascenso justo en la etapa de vida donde se decide el salto de Medio a Senior. Menos mujeres dan ese salto; la pirámide se adelgaza.
+El candidato más claro a mecanismo detrás de la desaparición aparece directo en los datos: **las mujeres interrumpen o reducen su carrera por más de 10 meses, por responsabilidades familiares o personales, a 2.3× la tasa de los hombres — 16% de las mujeres vs 7% de los hombres.** (Denominador sobre la muestra total de cada género; sobre quienes respondieron el ítem las tasas son ~21% vs ~9%, y la razón 2.3× no cambia.) En una industria que mide seniority por años continuos y por visibilidad, una pausa de diez meses no cuesta diez meses de sueldo —resetea el reloj del ascenso justo en la etapa de vida donde se decide el salto de Medio a Senior. Menos mujeres dan ese salto; la pirámide se adelgaza.
 
 ---
 
@@ -109,7 +110,7 @@ Descriptivo, solo mujeres, residentes en México; celdas bajo umbral suprimidas:
 - **Geografía:** restringido a **residentes en México** (90% de la muestra) para que el marco "tech mexicano" cuadre con los datos.
 - **Salario:** base mensual, normalizado a MXN (reportes en USD × TC 18.5; estable entre TC 17–20). Transformado a log para la regresión; atípicos fuera de ~$8k–$400k recortados.
 - **Brecha cruda:** mediana (robusta) con IC 95% por bootstrap de 3,000 muestras.
-- **Oaxaca-Blinder:** descomposición twofold con coeficientes de referencia agrupados sobre un set parsimonioso de controles (experiencia, rango de seniority, uso de inglés, familia de rol). La brecha ajustada de ecuación única es el coeficiente de una dummy femenina en la misma especificación. La multa monetizada aplica el residuo de ~10% a las medianas.
+- **Oaxaca-Blinder y escalera de controles:** descomposición twofold con coeficientes de referencia agrupados sobre un set parsimonioso de controles (experiencia, rango de seniority, uso de inglés, familia de rol). La brecha ajustada de ecuación única es el coeficiente de una dummy femenina en la misma especificación; reportamos su IC 95% por bootstrap (1,000 réplicas) y el escalonado de la brecha al agregar cada bloque de controles. No se monetiza el residuo porque su intervalo toca el cero.
 - **Supresión:** celdas delgadas (p. ej. Gerente n=15 mujeres) marcadas como direccionales. No binarias (n=5) excluidas de la inferencia.
 - **Muestra:** autoseleccionada; se presenta como muestra de respondientes, no como estimación poblacional.
 
@@ -118,7 +119,9 @@ Descriptivo, solo mujeres, residentes en México; celdas bajo umbral suprimidas:
 ## Limitaciones
 
 - **Celdas por nivel aún modestas** (Gerente n=15 mujeres; Staff/Principal todavía delgada) → esas brechas por nivel son direccionales.
-- **Sin descomposición de mecanismo más allá del ítem de pausa de carrera.** El instrumento desplegado todavía carece de ítems de negociación / transparencia salarial / sponsorship, así que el residuo de ~10% es *no explicado*, no atribuido a canales específicos. Para explicar *por qué* persiste, esas preguntas deberían volver en la próxima ola.
+- **El residuo ajustado no es estadísticamente distinguible de cero** (IC 95% [0%, 20%]). Es consistente con una multa chica por el mismo trabajo, pero también con ninguna. El hallazgo firme es la brecha cruda (37%) operando por la progresión (la desaparición), no el residuo.
+- **Controles potencialmente endógenos.** Controlar por nivel y rol puede *subestimar* el efecto del género, porque a las mujeres se las mantiene abajo en esas mismas variables. Por eso presentamos cotas (~10% a 37%) en lugar de un único punto.
+- **Sin descomposición de mecanismo más allá del ítem de pausa de carrera.** El instrumento desplegado todavía carece de ítems de negociación / transparencia salarial / sponsorship, así que el residuo es *no explicado*, no atribuido a canales específicos. Para explicar *por qué* persiste, esas preguntas deberían volver en la próxima ola.
 - **Mezcla de monedas** (reportes en USD) manejada con un único supuesto de tipo de cambio.
 - **Preliminar:** las cifras se moverán conforme se llene la encuesta.
 
@@ -128,7 +131,7 @@ Descriptivo, solo mujeres, residentes en México; celdas bajo umbral suprimidas:
 
 - **Brecha cruda:** 38% → **37%** (n=212 mujeres; IC más ajustado [29%, 46%]).
 - **Brechas por nivel:** Medio −22% → **−20%**, Senior −27% → **−25%**, Gerente −32% → **−20%**. El nivel Gerente adelgazó a **15 mujeres** y ya no extiende el ensanchamiento monótono, así que el encuadre pasa de "se ensancha en cada peldaño" a **"se ensancha hacia senior"**, con Gerente marcado como direccional.
-- **Residuo no explicado:** ~12% → **~10%**; la parte "explicada" del Oaxaca subió de ~80% a ~82%. La multa monetizada de la mujer senior bajó de ~$7,700/mes (~$93,000/año) a **~$6,800/mes (~$82,000/año)**.
+- **Residuo no explicado:** ~12% → **~10%**; la parte "explicada" del Oaxaca subió de ~80% a ~82%. **Endurecimiento metodológico:** ahora reportamos la escalera de controles (37% → 25% → 22% → 15% → 10%), el IC 95% del residuo ajustado (**[0%, 20%], toca el cero**) y su robustez al TC (10% con TC 17/18.5/20). Se retira la multa monetizada de la mujer senior (~$6,800/mes), porque el residuo no es distinguible de cero; el efecto se reporta como cotas (~10% a 37%).
 - **La salida que no rescata:** la brecha en empleador extranjero se estrechó de 57% a **54%** (hombres $115,000 → $109,000; n mujeres 27 → 30); el acceso sigue parejo por género (14%/14%).
 - **La desaparición:** la participación femenina de Senior en adelante 31% → **30%**; participación total 39% → **38%**; Staff/Principal bajó a 20%.
 

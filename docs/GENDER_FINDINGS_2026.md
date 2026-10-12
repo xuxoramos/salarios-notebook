@@ -16,7 +16,7 @@
 
 1. **The compounding cost.** The raw median gap is **37%** ($75,000 men vs $47,250 women) and it deepens toward the senior rungs: **Medio −20%, Senior −25%** (the Gerente tier reads **−20%** but rests on just 15 women — directional).
 2. **The vanishing.** Women are **61% of mid-level (Medio) roles but only ~30% of senior-and-above.** Majority in the middle, roughly one in three at the top — and the origin gaps (when they started, early computer access) have essentially closed, so this is a **pay-and-progression** story, not a pipeline-entry one.
-3. **The residual.** Match a man and a woman on experience, seniority, role and English and about **four-fifths of the gap closes** — but a **~10% penalty survives** that nothing on paper explains. For a senior woman that is roughly **$6,800/month (~$82,000/year)**.
+3. **The ladder, not the penalty.** Matching on experience, English, level and role, the gap falls from 37% to **~10%** in stages. But that ~10% has a **95% CI of [0%, 20%] that touches zero**, so we do not assert a fixed same-work penalty. The effect is **bounded between ~10% and 37%**, and the large, solid part is progression (the vanishing), not pay for the same job.
 4. **The exit that doesn't rescue.** Women now reach foreign employers at the **same rate** as men (the July "male-only exit" is gone), yet at those employers they still earn **54% less** — the cross-border premium doesn't close the gap, it repeats it.
 5. **The career pause (mechanism).** Women interrupt or scale back their careers >10 months for family/personal reasons **2.3× more** than men (16% vs 7%) — a plausible engine of the vanishing.
 
@@ -47,23 +47,24 @@ By individual tier: **Medio −20%, Senior −25%, Gerente −20%.** The gap dee
 
 ---
 
-## Finding 3 — The residual: the part no résumé explains
+## Finding 3 — Where the gap comes from: the ladder
 
-Line up a man and a woman with identical profiles — same experience, same seniority, same role, same English — and ask how much of the gap survives.
+Line up a man and a woman and watch how much of the gap survives each control. It falls in an orderly way as you add them:
 
-- **Oaxaca-Blinder** (Mexico, pooled reference) splits the **35% log gap** into **~82% explained** by composition (mostly seniority and role — i.e., the vanishing) and **~18% unexplained**.
-- The single-equation adjusted gap — a woman identical on every measured control — is **~10%.**
+| Controls | Adjusted gap |
+|---|---|
+| None | **35%** |
+| + experience | 25% |
+| + English | 22% |
+| + level (seniority) | 15% |
+| + role | **10%** |
 
-Monetizing the ~10% residual:
+- **Oaxaca-Blinder** (Mexico, pooled reference) splits the log gap into **~82% explained** by composition (mostly seniority and role — i.e., the vanishing) and **~18% unexplained**.
+- The single-equation adjusted gap — a woman identical on every measured control — is **~10%**, but its **95% CI is [0%, 20%]: it touches zero.** Holding everything measured equal, we cannot assert a non-zero penalty. The residual is **robust to the FX assumption** (~10% at FX 17, 18.5 and 20).
 
-| | Woman's median | Equivalent man | Monthly penalty | Annual penalty |
-|---|---|---|---|---|
-| Median woman | $47,250 | ~$52,500 | ~$5,250 | **~$63,000** |
-| Senior woman | $60,000 | ~$66,800 | ~$6,800 | **~$82,000** |
+**Read it as bounds, not a point.** The gender effect is **bounded between ~10% (matching on everything) and 37% (unadjusted)**. And there is a statistical trap: controlling for level and role likely *understates* the effect, because level and role are themselves partly downstream of the same bias — women are held below the senior rungs. So the true value lives in that range, and the low end (~10%) is not even distinguishable from zero.
 
-For a senior woman, roughly **$6,800 a month — about $82,000 a year — is pay that nothing about her experience, level, role or English explains.**
-
-> **Honest caveat:** this residual keeps *shrinking* — **~10%** now, versus ~12% in September and ~20% in July. More of the gap is now attributable to composition — which is not good news, because composition here means *the vanishing*: women are systematically kept off the senior, better-paid rungs. Closing the residual alone would barely move the 37%.
+> **The firm message is not the penalty, it's the ladder.** The large, statistically solid part of the gap is **progression**: women are kept on the lower-paid rungs (Finding 2). The slice that neither level nor role explains is small and fragile. Closing that residual alone would barely move the 37%. Do not call it proven discrimination.
 
 ---
 
@@ -90,7 +91,7 @@ Note: the July access gaps (equity, remote, foreign-employer) have essentially c
 
 ## Finding 5 — The career pause (the mechanism)
 
-The clearest candidate mechanism behind the vanishing shows up directly in the data: **women interrupt or scale back their careers for more than 10 months, for family or personal responsibilities, at 2.3× the male rate — 16% of women vs 7% of men.** In an industry that measures seniority by continuous years and visibility, a ten-month pause doesn't cost ten months of pay — it resets the promotion clock at exactly the life stage where the Medio→Senior jump is decided. Fewer women make that jump; the pyramid thins.
+The clearest candidate mechanism behind the vanishing shows up directly in the data: **women interrupt or scale back their careers for more than 10 months, for family or personal responsibilities, at 2.3× the male rate — 16% of women vs 7% of men.** (Denominator is each gender's full sample; among those who answered the item the rates are ~21% vs ~9%, and the 2.3× ratio is unchanged.) In an industry that measures seniority by continuous years and visibility, a ten-month pause doesn't cost ten months of pay — it resets the promotion clock at exactly the life stage where the Medio→Senior jump is decided. Fewer women make that jump; the pyramid thins.
 
 ---
 
@@ -109,7 +110,7 @@ Descriptive, women-only, Mexico residents; cells below threshold suppressed:
 - **Geography:** restricted to **Mexico-resident respondents** (90% of the sample) so the "tech mexicano" framing matches the data.
 - **Salary:** base monthly, normalized to MXN (USD reports × FX 18.5; stable across FX 17–20). Log-transformed for the regression; outliers outside ~$8k–$400k trimmed.
 - **Raw gap:** median (robust) with a 3,000-sample bootstrap 95% CI.
-- **Oaxaca-Blinder:** twofold decomposition with pooled reference coefficients over a parsimonious control set (experience, seniority rank, English use, role family). The single-equation adjusted gap is the coefficient on a female dummy in the same specification. The monetized penalty applies the ~10% residual to median salaries.
+- **Oaxaca-Blinder and control ladder:** twofold decomposition with pooled reference coefficients over a parsimonious control set (experience, seniority rank, English use, role family). The single-equation adjusted gap is the coefficient on a female dummy in the same specification; we report its bootstrap 95% CI (1,000 replicates) and how the gap migrates as each control block is added. The residual is not monetized, because its interval includes zero.
 - **Suppression:** thin cells (e.g. Gerente n=15 women) flagged as directional. Non-binary respondents (n=5) excluded from inference.
 - **Sample:** self-selected respondents; presented as a respondent sample, not a population estimate.
 
@@ -118,7 +119,9 @@ Descriptive, women-only, Mexico residents; cells below threshold suppressed:
 ## Limitations
 
 - **Tier cells still modest** (Gerente n=15 women; Staff/Principal still thin) → those tier gaps are directional.
-- **No mechanism decomposition beyond the career-pause item.** The deployed instrument still lacks negotiation / pay-transparency / sponsorship items, so the ~10% residual is *unexplained*, not attributed to specific channels. To explain *why* the gap persists, those questions should return in the next wave.
+- **The adjusted residual is not statistically distinguishable from zero** (95% CI [0%, 20%]). It is consistent with a small same-work penalty, but also with none. The firm finding is the raw gap (37%) operating through progression (the vanishing), not the residual.
+- **Potentially endogenous controls.** Controlling for level and role may *understate* the gender effect, since women are held down on those same variables. That is why we report bounds (~10% to 37%) rather than a single point.
+- **No mechanism decomposition beyond the career-pause item.** The deployed instrument still lacks negotiation / pay-transparency / sponsorship items, so the residual is *unexplained*, not attributed to specific channels. To explain *why* the gap persists, those questions should return in the next wave.
 - **Currency mix** (USD reporters) handled by a single FX assumption.
 - **Preliminary:** figures will move as the survey fills.
 
@@ -128,7 +131,7 @@ Descriptive, women-only, Mexico residents; cells below threshold suppressed:
 
 - **Raw gap:** 38% → **37%** (n=212 women; CI tightened to [29%, 46%]).
 - **Per-tier gaps:** Medio −22% → **−20%**, Senior −27% → **−25%**, Gerente −32% → **−20%**. The Gerente tier thinned to **15 women** and no longer extends the monotonic widening, so the framing moves from "widens at every rung" to **"widens toward senior,"** with Gerente flagged as directional.
-- **Unexplained residual:** ~12% → **~10%**; Oaxaca "explained" share rose from ~80% to ~82%. The monetized senior-woman penalty fell from ~$7,700/mo (~$93,000/yr) to **~$6,800/mo (~$82,000/yr)**.
+- **Unexplained residual:** ~12% → **~10%**; Oaxaca "explained" share rose from ~80% to ~82%. **Methodological hardening:** we now report the control ladder (37% → 25% → 22% → 15% → 10%), the bootstrap 95% CI on the adjusted residual (**[0%, 20%], touches zero**), and its FX robustness (10% at FX 17/18.5/20). The monetized senior-woman penalty (~$6,800/mo) is retired, because the residual is not distinguishable from zero; the effect is reported as bounds (~10% to 37%).
 - **The exit that doesn't rescue:** the foreign-employer gap narrowed from 57% to **54%** (men $115,000 → $109,000; n women 27 → 30); access stays equal by gender (14%/14%).
 - **The vanishing:** senior-and-above female share 31% → **30%**; total female participation 39% → **38%**; Staff/Principal share eased to 20%.
 

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SG Tech Pulse 2026 · Hallazgos · Reporte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#FFFFFF; --surface:#FFFFFF; --surface-2:#EFEBE4;
+  --ink:#171716; --ink-2:#4A463F; --muted:#8C867A; --grid:#E0DACF; --baseline:#CFC8BB; --border:#DED8CD;
+  --violet:#6B3DFA; --lime:#B4D52B; --coral:#FD655C;
+  --bar:#6B3DFA; --women:#E8483F; --men:#C4BCAE; --on-accent:#FFFFFF;
+}
+*{box-sizing:border-box}
+html,body{margin:0; background:#fff; color:var(--ink);
+  font-family:"Instrument Sans",system-ui,sans-serif; font-size:11pt; line-height:1.5; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif; letter-spacing:-.02em; line-height:1.05; margin:0}
+.mono{font-family:"IBM Plex Mono",monospace}
+svg text{font-family:"Instrument Sans",sans-serif}
+/* figures static (no animation) */
+.gbar,.gcol,.gline,.cell,.glabel,.gdot{opacity:1 !important; transform:none !important; stroke-dashoffset:0 !important}
+svg{display:block; width:100%; height:auto; overflow:visible}
+
+.page{max-width:720px; margin:0 auto; padding:28px 32px}
+
+/* cover */
+.cover{height:252mm; display:flex; flex-direction:column; justify-content:center; padding:0 32px; max-width:720px; margin:0 auto; break-after:page}
+.cover .kick{font-family:"IBM Plex Mono",monospace; font-size:11pt; letter-spacing:.16em; text-transform:uppercase; color:var(--violet); margin-bottom:22px}
+.cover h1{font-size:46pt; font-weight:800; max-width:12ch}
+.cover .sub{font-size:16pt; color:var(--ink-2); margin-top:18px; max-width:30ch; font-weight:500}
+.cover .rule{height:4px; width:72px; background:var(--violet); border-radius:2px; margin:40px 0 20px}
+.cover .meta{font-family:"IBM Plex Mono",monospace; font-size:10pt; color:var(--muted); line-height:1.7}
+.cover .org{font-style:italic; color:var(--ink-2); margin-top:36px; font-size:10.5pt}
+
+/* intro */
+.intro h2{font-size:22pt; color:var(--violet); margin-bottom:14px}
+.intro p{color:var(--ink-2); margin:10px 0}
+.intro .meth{background:var(--surface-2); border-radius:12px; padding:18px 22px; margin-top:20px}
+.intro .meth h3{font-size:13pt; margin-bottom:8px}
+ul.doc{list-style:none; padding:0; margin:10px 0}
+ul.doc li{position:relative; padding-left:20px; margin:7px 0; color:var(--ink-2)}
+ul.doc li::before{content:""; position:absolute; left:2px; top:9px; width:6px; height:6px; border-radius:50%; background:var(--violet)}
+
+/* act header */
+.act-header{break-before:page; padding-top:30px; margin-bottom:6px}
+.act-header .num{font-family:"IBM Plex Mono",monospace; font-size:10pt; letter-spacing:.18em; color:var(--muted)}
+.act-header h2{font-size:30pt; font-weight:800; margin:8px 0 6px; max-width:18ch}
+.act-header .kicker{font-size:13pt; color:var(--ink-2)}
+.act-header .aline{height:4px; width:56px; border-radius:2px; margin-top:16px}
+
+/* finding */
+.finding{break-inside:avoid; padding:20px 0; border-bottom:1px solid var(--border)}
+.finding:last-child{border-bottom:none}
+.finding .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:9.5pt; letter-spacing:.14em; text-transform:uppercase; color:var(--violet); margin-bottom:6px}
+.finding h3{font-size:17pt; font-weight:700; margin-bottom:8px}
+.finding .prose{color:var(--ink-2); margin:6px 0}
+.finding .bigstat{font-family:"Bricolage Grotesque",sans-serif; font-weight:800; font-size:40pt; color:var(--violet); line-height:1; margin:6px 0}
+.finding .bigstat.coral{color:var(--women)}
+.finding .figwrap{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 16px 10px; margin:12px 0 8px}
+.finding .cap{font-family:"IBM Plex Mono",monospace; font-size:8.5pt; color:var(--muted); line-height:1.5}
+
+.appendix{break-before:page}
+.appendix h2{font-size:22pt; color:var(--violet); margin-bottom:12px}
+.appendix p, .appendix li{color:var(--ink-2); font-size:10.5pt}
+footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-family:"IBM Plex Mono",monospace; font-size:9pt}
+@media print{ .page,.cover{padding-left:0; padding-right:0} }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="kick">Encuesta de Salarios · corte de México</div>
+  <h1>Cuánto vale programar en México</h1>
+  <div class="sub">Hallazgos de SG Tech Pulse 2026, contados como una sola historia.</div>
+  <div class="rule"></div>
+  <div class="meta" id="coverMeta"></div>
+  <div class="org">Una iniciativa de SG Software Guru</div>
+</section>
+
+<section class="page intro">
+  <h2>Cómo leer este reporte</h2>
+  <p>Este documento recorre los hallazgos de la encuesta como una sola narrativa, de lo general a lo particular. Empieza por la mediana del mercado, sigue con las palancas que suben el sueldo, entra a la brecha de género, pasa por la IA y cierra con la cuenta humana.</p>
+  <p>Está escrito en español de México, en oraciones completas y con el dato a la vista. Cada cifra se reproduce desde el volcado de respuestas.</p>
+  <div class="meth">
+    <h3>Nota metodológica</h3>
+    <ul class="doc" id="introMeth"></ul>
+  </div>
+</section>
+
+<div id="report"></div>
+
+<section class="page appendix">
+  <h2>Metodología y límites</h2>
+  <ul class="doc">
+    <li>Muestra autoseleccionada, no probabilística. Describe a quienes quisieron responder, no al mercado entero, y no se puede ponderar a la población. La encuesta sigue abierta, así que las cifras son preliminares.</li>
+    <li>La mayoría de las comparaciones son asociaciones, no efectos causales. Un lenguaje, una ciudad, una modalidad o una certificación marcan dónde trabaja la gente, no son palancas que se accionen solas. No las presentamos como causas.</li>
+    <li>Se muestran cerca de treinta cortes. Algunos son exploratorios. Las celdas con menos de unos 15 casos se señalan como direccionales y pueden ser ruido. Personas no binarias excluidas de la inferencia por tamaño de celda.</li>
+    <li>Donde importa, se reportan intervalos de confianza bootstrap al 95%. El resto son estimaciones puntuales.</li>
+    <li>Corte restringido a residentes en México, el 90% de la muestra, para que el marco "tech mexicano" coincida con los datos. Salario base mensual normalizado a pesos. Dólares a tipo de cambio 18.5, estable entre 17 y 20. Transformación logarítmica para las regresiones. Atípicos fuera de ~$8k a $400k recortados.</li>
+    <li>La brecha de género es el único punto con un modelo de controles, una descomposición tipo Oaxaca-Blinder sobre experiencia, inglés, nivel y familia de rol. El efecto queda acotado entre ~10% emparejando todo y 37% sin ajustar, y el residuo totalmente ajustado tiene un intervalo de confianza que toca el cero. No es discriminación probada. Controlar por nivel y rol, que son en parte consecuencia del mismo sesgo, probablemente subestima el efecto, así que el valor real vive en ese rango.</li>
+  </ul>
+  <p style="margin-top:16px">Detalle completo en <span class="mono">docs/GENERAL_FINDINGS_2026.md</span> y <span class="mono">docs/GENDER_FINDINGS_2026.md</span>.</p>
+  <footer class="end" id="endNote"></footer>
+</section>
+
+<script src="charts.js"></script>
+<script src="data.js"></script>
+<script>
+(function(){
+  "use strict";
+  var D=window.SG_DATA||{}, L=D.levers||{}, G=D.gender||{}, AI=D.ai||{}, HU=D.human||{}, M=D.meta||{};
+  var pf=pesoFull;
+
+  document.getElementById("coverMeta").innerHTML =
+    "Volcado del "+M.date_es+"<br>"+M.total_n+" respuestas · "+M.mx_n+" residentes en México<br>"+M.women+" mujeres · "+M.men+" hombres<br>Preliminar · uso para prensa";
+  document.getElementById("endNote").textContent = "SG Tech Pulse 2026 · volcado del "+M.date_es+" · "+M.total_n+" respuestas";
+
+  document.getElementById("introMeth").innerHTML = [
+    "La muestra son "+M.total_n+" respuestas, "+M.mx_n+" en México. Autoseleccionada y preliminar.",
+    "Salario base bruto mensual en pesos. Dólares a tipo de cambio "+M.fx+".",
+    "Salvo donde se menciona un modelo con controles, las cifras son asociaciones, no causas."
+  ].map(function(t){return "<li>"+t+"</li>";}).join("");
+
+  var engMul=(L.english[L.english.length-1].median/L.english[0].median).toFixed(1);
+  var stackJava=L.stack.filter(function(d){return d.label==="Java";})[0].median;
+  var stackJS=L.stack.filter(function(d){return d.label==="JavaScript";})[0].median;
+  var mtyMed=L.city.filter(function(d){return d.label==="Monterrey";})[0].median;
+  var sizeSmallEntry=L.company_size.slice().sort(function(a,b){return a.median-b.median;})[0];
+
+  var ACTS=[
+    { num:"", name:"", color:"var(--violet)", kicker:"", findings:[
+      { eyebrow:"El número", title:"Todo empieza en la mediana", big:pf(D.overall.median), bigcoral:false,
+        prose:["El salario base mensual en el centro del mercado es "+pf(D.overall.median)+". La mitad gana más, la mitad gana menos. Ese número es el punto de partida. Lo interesante es lo que lo mueve y lo que esconde."],
+        cap:"Mediana de salario base mensual. n="+D.overall.n+" con salario, residentes en México." }
+    ]},
+    { num:"Acto 1", name:"Lo que sube el número", color:"var(--violet)", kicker:"Las palancas que separan un sueldo del siguiente.", findings:[
+      { eyebrow:"La palanca de fondo", title:"La experiencia es el motor",
+        fig:function(){return barsH(L.experience.map(function(d){return {label:d.label+" años", value:d.median};}));},
+        prose:["De los primeros años a la madurez, el sueldo se multiplica por cuatro. El salto grande no está al entrar, está entre los primeros años y la década de experiencia."],
+        cap:"Mediana por años de experiencia en tecnología." },
+      { eyebrow:"Inglés", title:"El inglés es la palanca más cara de ignorar",
+        fig:function(){return barsH(L.english.map(function(d){return {label:d.label, value:d.median};}), {accentFn:function(d,i){return i===0?"var(--men)":"var(--bar)";}});},
+        prose:["Quien trabaja todo el tiempo en inglés gana unas "+engMul+" veces lo de quien nunca lo usa. No es el nivel en un certificado, es el uso diario. El salto se concentra entre usarlo de vez en cuando y usarlo en juntas y correos."],
+        cap:"Mediana por frecuencia de uso del inglés. Nunca "+pf(L.english[0].median)+" contra todo el tiempo "+pf(L.english[L.english.length-1].median)+", unas "+L.english_mult.mult+" veces (IC 95% ["+L.english_mult.ci[0]+", "+L.english_mult.ci[1]+"]). Asociación. El efecto aislado del inglés exige el DAG del estudio 2020-2022." },
+      { eyebrow:"La economía Deel", title:"Trabajar para fuera paga una prima",
+        fig:function(){return compare({label:"Empleador extranjero", value:L.foreign.foreign_median},{label:"Empleador local", value:L.foreign.local_median}, "+"+L.foreign.premium_pct+"%", {c2:"var(--men)"});},
+        prose:["El "+L.foreign.share_pct+"% trabaja para una empresa extranjera, muchas veces fuera de la nómina local, a través de intermediarios como Deel o Remote. Es el mejor aumento disponible sin cambiar de ciudad."],
+        cap:"Mediana "+pf(L.foreign.foreign_median)+" contra "+pf(L.foreign.local_median)+" local, +"+L.foreign.premium_pct+"% (IC 95% ["+L.foreign.premium_ci[0]+"%, "+L.foreign.premium_ci[1]+"%], amplio). n extranjero="+L.foreign.foreign_n+". Asociación. Quién llega a un empleo extranjero no es aleatorio." },
+      { eyebrow:"Stack", title:"El lenguaje que usas marca tu sueldo",
+        fig:function(){return barsH(L.stack.filter(function(d){return d.n>=8||["Java","C#","Python","JavaScript"].indexOf(d.label)>=0;}).map(function(d){return {label:d.label, value:d.median};}));},
+        prose:["No es que un lenguaje sea mejor que otro. Cada lenguaje vive en un tipo de empresa y de proyecto. El stack es una pista del mercado donde trabajas."],
+        cap:"Mediana por lenguaje más usado (n≥8). Java "+pf(stackJava)+", JavaScript "+pf(stackJS)+". El lenguaje es un marcador del mercado, no una palanca. Asociación, no causa." },
+      { eyebrow:"Código postal", title:"Tu sueldo depende de dónde vives",
+        fig:function(){return barsH(L.city.map(function(d){return {label:d.label, value:d.median};}), {accentFn:function(d,i){return i===0?"var(--bar)":(i===L.city.length-1?"var(--women)":"var(--bar)");}});},
+        prose:["La Ciudad de México encabeza por un margen amplio. El trabajo remoto prometía borrar esta diferencia. Todavía no lo hace."],
+        cap:"Mediana por ciudad (n≥10). CDMX "+pf(L.city[0].median)+". Monterrey "+pf(mtyMed)+". Asociación. Refleja dónde se concentran las industrias." },
+      { eyebrow:"Oficina o remoto", title:"Volver a la oficina cuesta caro",
+        fig:function(){return compare({label:"Totalmente remoto", value:L.modality.remote_median},{label:"Totalmente presencial", value:L.modality.onsite_median}, "+"+Math.round(100*(L.modality.remote_median/L.modality.onsite_median-1))+"%", {c2:"var(--men)"});},
+        prose:["Quien trabaja de forma totalmente remota reporta una mediana muy por encima de quien va todos los días a la oficina. El remoto no es solo comodidad. Es acceso a empleadores que pagan más."],
+        cap:"Remoto "+pf(L.modality.remote_median)+" (n="+L.modality.remote_n+") contra presencial "+pf(L.modality.onsite_median)+" (n="+L.modality.onsite_n+"). Asociación. El remoto suele venir con empleadores que ya pagan más." },
+      { eyebrow:"Acciones", title:"El club de las acciones",
+        fig:function(){return compare({label:"Con acciones", value:L.equity.with_median},{label:"Sin acciones", value:L.equity.without_median}, "+"+Math.round(100*(L.equity.with_median/L.equity.without_median-1))+"%", {c2:"var(--men)"});},
+        prose:["Recibir compensación en acciones es raro y marca una frontera. Quien está dentro reporta una mediana muy superior. Es un club chico y bien pagado, una de cada "+Math.round(100/L.equity.share_pct)+" personas."],
+        cap:"Con acciones "+pf(L.equity.with_median)+" contra "+pf(L.equity.without_median)+" sin ellas. n con acciones="+L.equity.with_n+". Asociación. Las acciones marcan el tipo de empresa." },
+      { eyebrow:"Formación", title:"La maestría sí paga. El bootcamp todavía no",
+        fig:function(){return barsH(L.degree.filter(function(d){return d.n>=10;}).map(function(d){return {label:d.label, value:d.median};}));},
+        prose:["El nivel educativo más alto sigue moviendo el sueldo. La maestría se despega de la licenciatura. Por cómo aprendiste a programar, el trabajo y la escuela pagan más que un bootcamp o un curso en línea."],
+        cap:"Mediana por nivel educativo más alto (n≥10). Asociación. Los retornos a la educación están confundidos por selección." },
+      { eyebrow:"Tamaño de empresa", title:"El castigo de la empresa chica",
+        fig:function(){return barsH(L.company_size.slice().sort(function(a,b){return a.median-b.median;}).map(function(d){return {label:d.label+" empl.", value:d.median};}), {accentFn:function(d,i){return i===0?"var(--women)":"var(--bar)";}});},
+        prose:["La empresa más chica paga la mediana más baja de todas. El tamaño compra estructura, presupuesto y rangos salariales más altos."],
+        cap:"Mediana por tamaño de empresa. La más chica, "+sizeSmallEntry.label+", en "+pf(sizeSmallEntry.median)+". Asociación. El tamaño marca estructura y presupuesto." },
+      { eyebrow:"Certificaciones", title:"Certificarse ayuda, pero poco",
+        fig:function(){return compare({label:"Con certificación", value:L.certs.with_median},{label:"Sin certificación", value:L.certs.without_median}, "+"+L.certs.pct_delta+"%", {c2:"var(--men)"});},
+        prose:["Tener al menos una certificación activa se asocia con un sueldo más alto. La diferencia es real pero modesta. No es la transformación que venden los cursos."],
+        cap:"Con certificación "+pf(L.certs.with_median)+" contra "+pf(L.certs.without_median)+" sin ninguna. La mitad de la muestra tiene alguna. Asociación, no causa. Certificarse y ganar más pueden venir juntos." }
+    ]},
+    { num:"Acto 2", name:"Lo que el número esconde", color:"var(--women)", kicker:"La misma mediana cuenta dos historias según el género.", findings:[
+      { eyebrow:"La brecha", title:"Hombres y mujeres no parten del mismo número", big:G.raw.gap_pct+"%", bigcoral:true,
+        prose:["Hombres "+pf(G.raw.men_median)+". Mujeres "+pf(G.raw.women_median)+". Es la brecha cruda de salario base, sin ajustar por nada. El intervalo de confianza no toca el cero. La diferencia es real."],
+        cap:"Brecha cruda. IC 95% ["+G.raw.ci_low+"%, "+G.raw.ci_high+"%]. n="+G.raw.women_n+" mujeres, "+G.raw.men_n+" hombres." },
+      { eyebrow:"La desaparición", title:"Mayoría en el medio, se evaporan rumbo a la cima",
+        fig:function(){return shareBars(G.vanishing);},
+        prose:["Las mujeres son mayoría en los niveles de entrada y medios. Arriba, apenas una de cada tres. El conteo se adelgaza justo donde el sueldo crece."],
+        cap:"% de mujeres por nivel. "+G.senior_plus_share+"% de senior en adelante. Participación total "+G.participation+"%." },
+      { eyebrow:"El costo se acumula", title:"La brecha se ensancha hacia el nivel senior",
+        fig:function(){return slope(G.by_tier);},
+        prose:["En el nivel medio la distancia ya existe. Hacia senior se ensancha. Cada peldaño que suben, se les paga menos que a sus pares hombres."],
+        cap:"Mediana por nivel. Medio -"+G.by_tier[0].gap_pct+"%, Senior -"+G.by_tier[1].gap_pct+"%. Gerente en "+G.by_tier[2].women_n+" mujeres, direccional." },
+      { eyebrow:"De dónde viene la brecha", title:"La brecha está en la escalera",
+        fig:function(){return barsH(G.rigor.sensitivity.map(function(s){return {label:s.spec, value:s.penalty};}), {fmt:function(v){return v+"%";}, accentFn:function(d,i){return i===0?"var(--women)":(i===G.rigor.sensitivity.length-1?"var(--men)":"var(--bar)");}});},
+        prose:["Empareja a un hombre y una mujer y la brecha cae de 37% a ~10% conforme se agregan controles. El salto más grande llega al emparejar nivel y rol. Y eso es justo la desaparición: a las mujeres se les mantiene en los peldaños de abajo, peor pagados.",
+               "El efecto del género queda acotado entre ~"+G.rigor.bounds_lower+"% emparejando todo y "+G.rigor.bounds_upper+"% sin ajustar. La parte que ni el nivel ni el rol explican es chica, y su intervalo de confianza toca el cero, así que no afirmamos un castigo fijo por el mismo trabajo. La brecha es, sobre todo, de progresión."],
+        cap:"Brecha ajustada por conjunto de controles. Con todo ajustado ~"+G.rigor.bounds_lower+"% (IC 95% ["+G.rigor.adjusted_ci[0]+", "+G.rigor.adjusted_ci[1]+"], toca el cero). Estable entre tipos de cambio 17 y 20." },
+      { eyebrow:"La salida que no rescata", title:"El empleo extranjero repite la brecha",
+        fig:function(){return pairBars([{tier:"Extranjero", men_median:G.foreign_gap.men_median, women_median:G.foreign_gap.women_median, gap_pct:G.foreign_gap.gap_pct}]);},
+        prose:["Las mujeres llegan al empleo extranjero a la misma tasa que los hombres. El acceso ya está parejo. Pero ahí la brecha es todavía más ancha que en el mercado local. La prima transfronteriza no cierra la diferencia, la repite."],
+        cap:"Extranjero: hombres "+pf(G.foreign_gap.men_median)+" contra mujeres "+pf(G.foreign_gap.women_median)+". Acceso "+G.foreign_gap.access_m+"% ellos, "+G.foreign_gap.access_w+"% ellas. n="+G.foreign_gap.women_n+" mujeres, direccional." },
+      { eyebrow:"La pausa de carrera", title:"Una pausa que reinicia el reloj",
+        fig:function(){return comparePct({label:"Mujeres", value:G.pause.women_pct},{label:"Hombres", value:G.pause.men_pct}, G.pause.ratio+"x");},
+        prose:["Las mujeres interrumpen o reducen su carrera por más de diez meses, por motivos familiares o personales, a más del doble de la tasa de los hombres. En una industria que mide la antigüedad en años continuos, una pausa reinicia el reloj del ascenso justo cuando se decide el salto a senior."],
+        cap:"% que interrumpió o redujo su carrera >10 meses. Mujeres "+G.pause.women_pct+"% contra hombres "+G.pause.men_pct+"%." },
+      { eyebrow:"El aislamiento", title:"La excepción en su propia sala",
+        fig:function(){return waffle(G.lived.isolation_pct);},
+        prose:["Más de la mitad de las mujeres son el 20% o menos de su equipo. Son minoría clara donde trabajan.",
+               G.lived.harassment_pct+"% reporta haberse sentido insegura o haber sufrido acoso en su empleo actual. "+G.lived.noprogram_pct+"% dice que su empresa no tiene ningún programa formal para promover mujeres al liderazgo."],
+        cap:G.lived.isolation_pct+"% son ≤20% de su equipo. Mediana: "+G.lived.isolation_median+"% de pares mujeres. n="+G.lived.isolation_n+"." },
+      { eyebrow:"El mito del pipeline", title:"No es un problema de entrada",
+        prose:["Los orígenes ya se emparejaron. La edad del primer programa es "+G.origin.first_program_w+" años en las mujeres y "+G.origin.first_program_m+" en los hombres. El acceso a computadora en la infancia es "+G.origin.computer_w+"% ellas contra "+G.origin.computer_m+"% ellos.",
+               "Las mujeres no entran más tarde ni con menos exposición. Se les detiene abajo de los niveles senior. Es un problema de pago y de ascenso, no de intake."],
+        cap:"Indicadores de origen, mujeres contra hombres. Residentes en México." }
+    ]},
+    { num:"Acto 3", name:"La nueva forma del trabajo", color:"var(--violet)", kicker:"La IA ya cambió cómo se escribe el código. Y arranca sesgada.", findings:[
+      { eyebrow:"Cómo se programa hoy", title:"Media industria ya casi no escribe código a mano",
+        fig:function(){return donut([{label:"Instruyo a los agentes", value:AI.coding_split.agentic_pct},{label:"A mano + IA de apoyo", value:AI.coding_split.support_pct},{label:"A mano + IA complementaria", value:AI.coding_split.complementary_pct}], "instruye agentes");},
+        prose:["La mitad de quienes crean código dicen que sobre todo instruyen a los agentes y revisan el resultado. Escribir cada línea a mano ya es la minoría."],
+        cap:"Cómo se crea código hoy, entre quienes respondieron cómo lo crean. n="+AI.coding_split.n+" (México)." },
+      { eyebrow:"Y paga", title:"Trabajar con agentes se asocia con más sueldo",
+        fig:function(){return compare({label:"Instruye agentes", value:AI.agentic_pay.agent_median},{label:"El resto", value:AI.agentic_pay.rest_median}, "+"+AI.agentic_pay.pct+"%", {c1:"var(--lime)", c2:"var(--men)"});},
+        prose:["Quienes trabajan sobre todo instruyendo agentes reportan una mediana más alta. Es descriptivo, no causal. Pero la dirección es clara."],
+        cap:"Mediana "+pf(AI.agentic_pay.agent_median)+" contra "+pf(AI.agentic_pay.rest_median)+" el resto, +"+AI.agentic_pay.pct+"% (IC 95% ["+AI.agentic_pay.ci[0]+"%, "+AI.agentic_pay.ci[1]+"%]). Descriptivo, no causal." },
+      { eyebrow:"La ola arranca sesgada", title:"Programar con agentes es, por ahora, cosa de hombres",
+        fig:function(){return comparePct({label:"Hombres", value:AI.adoption_by_gender.men_pct},{label:"Mujeres", value:AI.adoption_by_gender.women_pct}, "", {c1:"var(--men)", c2:"var(--women)"});},
+        prose:["Entre quienes desarrollan software, la mitad de los hombres ya instruye a los agentes, contra un tercio de las mujeres. La brecha sobrevive al comparar el mismo rol. La nueva ola empieza inclinada."],
+        cap:"% que instruye agentes. Hombres "+AI.adoption_by_gender.men_pct+"% (n="+AI.adoption_by_gender.men_n+") contra mujeres "+AI.adoption_by_gender.women_pct+"% (n="+AI.adoption_by_gender.women_n+")." },
+      { eyebrow:"El puesto que no existía", title:"Un oficio nuevo, ya con nombre", big:""+AI.roles.count, bigcoral:false,
+        prose:[AI.roles.count+" personas ya tienen un puesto centrado en IA. Ingeniero de agentes, product manager de IA, prompt manager. Hace tres años no existían en la encuesta. Y aquí también hay sesgo: los hombres superan a las mujeres por más de dos a uno."],
+        cap:"Puestos centrados en IA en México. Hombres "+AI.roles.men+" contra mujeres "+AI.roles.women+"." }
+    ]},
+    { num:"Acto 4", name:"La cuenta humana", color:"var(--coral)", kicker:"Buen sueldo no siempre significa buena situación.", findings:[
+      { eyebrow:"Finanzas personales", title:"Ganan bien, pero no siempre llegan al retiro",
+        fig:function(){return barsH([{label:"Sin fondo de retiro", value:HU.finances.no_retirement_pct},{label:"Con deuda educativa", value:HU.finances.edu_debt_pct},{label:"Segundo empleo", value:HU.finances.second_job_pct},{label:"No ahorra nada", value:HU.finances.no_savings_pct},{label:"Sin seguridad social", value:HU.finances.no_ss_pct}], {fmt:function(v){return v+"%";}, accentFn:function(){return "var(--coral)";}});},
+        prose:["El sector es formal y los sueldos son altos para el país. Aun así, uno de cada cinco no aporta a un fondo de retiro y una parte no logra ahorrar nada. El sueldo alto no se traduce solo en seguridad futura."],
+        cap:"% de la muestra, residentes en México. Ahorro mediana "+HU.finances.savings_median+"% del ingreso. n="+HU.finances.n+"." },
+      { eyebrow:"Inclusión", title:"Neurodivergentes, y solos",
+        fig:function(){return waffle(HU.neurodiv.no_support_pct);},
+        prose:["Una de cada siete personas reporta una neurodivergencia diagnosticada. De ellas, la mayoría dice que su empresa no la apoya para que no afecte su trabajo. El talento está. El acompañamiento no."],
+        cap:HU.neurodiv.pct+"% reporta una neurodivergencia (n="+HU.neurodiv.n+"). Las celdas marcan el "+HU.neurodiv.no_support_pct+"% sin apoyo." }
+    ]}
+  ];
+
+  var html="";
+  ACTS.forEach(function(act){
+    if(act.name){
+      html+='<section class="page act-header"><div class="num">'+act.num+'</div><h2 style="color:'+act.color+'">'+act.name+'</h2><div class="kicker">'+act.kicker+'</div><div class="aline" style="background:'+act.color+'"></div></section>';
+      html+='<div class="page">';
+    } else {
+      html+='<div class="page">';
+    }
+    act.findings.forEach(function(f){
+      html+='<div class="finding"><div class="eyebrow">'+f.eyebrow+'</div><h3>'+f.title+'</h3>';
+      if(f.big) html+='<div class="bigstat'+(f.bigcoral?' coral':'')+'">'+f.big+'</div>';
+      if(f.fig) html+='<div class="figwrap">'+f.fig()+'</div>';
+      (f.prose||[]).forEach(function(p){ html+='<p class="prose">'+p+'</p>'; });
+      if(f.cap) html+='<div class="cap">'+f.cap+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+  });
+  document.getElementById("report").innerHTML=html;
+})();
+</script>
+</body>
+</html>

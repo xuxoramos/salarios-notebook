@@ -1,19 +1,19 @@
-# La herramienta que paga la usan los que ya ganan
+# Los agentes no son cosa de veteranos
 
 > Inteligencia artificial · más allá del uso
 
 ## La afirmación
 
-La forma de trabajar con IA que mejor se paga es, justamente, la que menos usan los juniors. Programar dándole instrucciones a agentes se asocia con una mediana de 79,500 pesos al mes, contra 60,000 del resto. Pero su adopción sube con la veteranía, porque apenas el 7% de quienes llevan de cero a tres años trabaja así, mientras que entre quienes llevan de siete a quince años ya lo hace cerca de uno de cada cinco. Los que más tienen que ganar o que perder con los agentes son los que menos los están usando.
+Programar dándole instrucciones a agentes no se concentra en los más veteranos. La adopción corre entre un tercio y más de la mitad en cada tramo de experiencia, sin un ascenso claro por años en el oficio. Y el flujo con agentes paga: una mediana de 79,500 pesos al mes contra 60,000 del resto. El beneficio no está reservado para quien lleva más tiempo.
 
 ## El matiz
 
-El relato optimista dice que la IA democratiza, que le da superpoderes al principiante y aplana la jerarquía. Los datos apuntan al revés. La herramienta con agentes se concentra donde ya hay seniority, y con ella se concentra el salario. No es que los agentes vuelvan senior a un junior, es que los seniors, con criterio para revisar lo que produce el agente, son los que pueden delegar sin romper nada, y por eso adoptan más. La IA no está borrando la ventaja de la experiencia, la está capitalizando.
+Sería fácil suponer que los seniors acaparan el flujo con agentes, porque tienen el criterio para revisar lo que produce el modelo. Los datos no muestran ese escalón. Entre quienes contestaron cómo escriben código, la adopción está repartida a lo largo de la experiencia. Los tramos que se ven más bajos descansan en pocos casos, no en un patrón real por antigüedad. Lo que la ola agéntica no respeta es la veteranía.
 
 ## La advertencia
 
-Si la IA concentra el flujo de trabajo mejor pagado entre quienes ya están arriba, el efecto neto no es un piso más parejo, sino una escalera con los primeros peldaños serruchados. El junior que cree que "con IA ya no necesito aprender los fundamentos" se está quedando fuera de la práctica que hoy distingue a los que revisan agentes de los que compiten contra ellos. Aprender a juzgar el código sigue siendo el boleto, y la IA lo encareció en lugar de eliminarlo.
+La división que sí es real en quién monta esta ola no es la antigüedad, es el género. Entre quienes desarrollan software, la mitad de los hombres ya instruye a los agentes contra un tercio de las mujeres. Si hay una brecha que vigilar conforme el flujo con agentes se vuelve la norma, es esa, no una de juniors contra seniors. Poner la lupa en la edad del código distrae de la grieta que de verdad se está abriendo.
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Adopción del flujo con agentes por experiencia: de 0 a 3 años 7%, de 7 a 10 años 20%, de 11 a 15 años 21%. Mediana salarial de quienes usan agentes 79,500 pesos contra 60,000 del resto. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Adopción del flujo con agentes por experiencia, entre quienes contestaron cómo crean código: sin gradiente claro por años, entre un tercio y más de la mitad por tramo. El tramo de 0 a 3 años descansa en apenas 10 casos, así que es ruido. Mediana salarial de quienes usan agentes 79,500 pesos contra 60,000 del resto. Entre quienes desarrollan software, adopción de hombres 50% contra mujeres 32%. Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
