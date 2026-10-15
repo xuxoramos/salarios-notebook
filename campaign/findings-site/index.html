@@ -111,6 +111,11 @@ ul.doc li::before{content:""; position:absolute; left:2px; top:11px; width:7px; 
 footer.sg{background:var(--surface); border-top:1px solid var(--border); padding:48px 20px; text-align:center}
 footer.sg .mono{font-size:12px; color:var(--muted); letter-spacing:.1em}
 footer.sg .cta{font-family:"Bricolage Grotesque",sans-serif; font-weight:800; font-size:clamp(26px,5vw,44px); margin-bottom:14px; letter-spacing:-.03em}
+footer.sg .thanks{margin-top:34px; padding-top:28px; border-top:1px solid var(--border)}
+footer.sg .thanks-note{font-size:15px; color:var(--ink-2); margin-bottom:18px; max-width:46ch; margin-left:auto; margin-right:auto}
+footer.sg .thanks-logos{display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:center}
+footer.sg .chip{background:#FFFFFF; border:1px solid var(--border); border-radius:12px; padding:12px 18px; display:inline-flex; align-items:center}
+footer.sg .chip img{height:34px; width:auto; display:block}
 .methwith{background:var(--surface-2)}
 @media (max-width:640px){ body{font-size:17px} .fig{padding:16px 12px 12px} }
 </style>
@@ -383,7 +388,15 @@ footer.sg .cta{font-family:"Bricolage Grotesque",sans-serif; font-weight:800; fo
 <footer class="sg">
   <div class="cta">Responde SG Tech Pulse 2026.</div>
   <div class="mono" id="footNote"></div>
-  <div class="mono" style="margin-top:14px">Una iniciativa de SG Software Guru</div>
+  <div class="thanks">
+    <div class="thanks-note">Gracias a Improving, Mobiik y Svitla por difundir esta encuesta en la comunidad tech.</div>
+    <div class="thanks-logos">
+      <span class="chip"><img src="logos/LogoImproving.png" alt="Improving"></span>
+      <span class="chip"><img src="logos/LogoMobiik.png" alt="Mobiik"></span>
+      <span class="chip"><img src="logos/LogoSvitla.png" alt="Svitla"></span>
+    </div>
+  </div>
+  <div class="mono" style="margin-top:22px">Una iniciativa de SG Software Guru</div>
 </footer>
 
 <script src="charts.js"></script>

@@ -66,6 +66,10 @@ ul.doc li::before{content:""; position:absolute; left:2px; top:9px; width:6px; h
 .appendix h2{font-size:22pt; color:var(--violet); margin-bottom:12px}
 .appendix p, .appendix li{color:var(--ink-2); font-size:10.5pt}
 footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-family:"IBM Plex Mono",monospace; font-size:9pt}
+.thanks{break-inside:avoid; text-align:center; margin-top:34px; padding-top:22px; border-top:1px solid var(--border)}
+.thanks-note{font-size:10.5pt; color:var(--ink-2); margin-bottom:16px}
+.thanks-logos{display:flex; flex-wrap:wrap; gap:26px; justify-content:center; align-items:center}
+.thanks-logos img{height:40px; width:auto}
 @media print{ .page,.cover{padding-left:0; padding-right:0} }
 </style>
 </head>
@@ -103,6 +107,14 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
     <li>La brecha de género es el único punto con un modelo de controles, una descomposición tipo Oaxaca-Blinder sobre experiencia, inglés, nivel y familia de rol. El efecto queda acotado entre ~10% emparejando todo y 37% sin ajustar, y el residuo totalmente ajustado tiene un intervalo de confianza que toca el cero. No es discriminación probada. Controlar por nivel y rol, que son en parte consecuencia del mismo sesgo, probablemente subestima el efecto, así que el valor real vive en ese rango.</li>
   </ul>
   <p style="margin-top:16px">Detalle completo en <span class="mono">docs/GENERAL_FINDINGS_2026.md</span> y <span class="mono">docs/GENDER_FINDINGS_2026.md</span>.</p>
+  <div class="thanks">
+    <div class="thanks-note">Gracias a Improving, Mobiik y Svitla por difundir esta encuesta en la comunidad tech.</div>
+    <div class="thanks-logos">
+      <img src="logos/LogoImproving.png" alt="Improving">
+      <img src="logos/LogoMobiik.png" alt="Mobiik">
+      <img src="logos/LogoSvitla.png" alt="Svitla">
+    </div>
+  </div>
   <footer class="end" id="endNote"></footer>
 </section>
 
