@@ -18,8 +18,12 @@ light-dark toggle).
 - `build_data.py` — recomputes **every number** from the current dump
   (Mexico-resident respondents, base monthly MXN, USD × 18.5, trimmed 8k–400k) and
   writes `data.js` (`window.SG_DATA`) + `data.json`. Documents the column mappings.
+- `phrases.js` — `window.SG_PH`, helpers that write the Spanish sentences whose
+  wording depends on the data (e.g. whether the adjusted gender residual's CI crosses
+  zero, whether the AI-adoption gap is significant). Used by both pages.
 - `data.js` / `data.json` — generated. The pages read these; **nothing is hardcoded
   in the HTML.**
+- `logos/` — sponsor logos for the closing thank-you.
 - `SG-Tech-Pulse-2026-Hallazgos.pdf` — the exported report (committed).
 
 ## Framing
@@ -49,5 +53,5 @@ Prose that cites a number pulls it from `window.SG_DATA`, so it never drifts.
 
 ## Deploy
 
-Static files. Serve `index.html` (and `report.html`, `charts.js`, `data.js`) from any
+Static files. Serve `index.html` (and `report.html`, `charts.js`, `phrases.js`, `data.js`, `logos/`) from any
 static host, e.g. alongside `pulse-result` on thedata.pub. No build step, no backend.

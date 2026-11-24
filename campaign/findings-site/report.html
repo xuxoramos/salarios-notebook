@@ -102,9 +102,10 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
     <li>Muestra autoseleccionada, no probabilística. Describe a quienes quisieron responder, no al mercado entero, y no se puede ponderar a la población. La encuesta sigue abierta, así que las cifras son preliminares.</li>
     <li>La mayoría de las comparaciones son asociaciones, no efectos causales. Un lenguaje, una ciudad, una modalidad o una certificación marcan dónde trabaja la gente, no son palancas que se accionen solas. No las presentamos como causas.</li>
     <li>Se muestran cerca de treinta cortes. Algunos son exploratorios. Las celdas con menos de unos 15 casos se señalan como direccionales y pueden ser ruido. Personas no binarias excluidas de la inferencia por tamaño de celda.</li>
-    <li>Donde importa, se reportan intervalos de confianza bootstrap al 95%. El resto son estimaciones puntuales.</li>
+    <li>Donde importa, se reportan intervalos de confianza al 95%: bootstrap en general, y errores robustos HC3 para el modelo de género. El resto son estimaciones puntuales.</li>
+    <li>Los porcentajes se calculan sobre quienes respondieron cada pregunta.</li>
     <li>Corte restringido a residentes en México, el 90% de la muestra, para que el marco "tech mexicano" coincida con los datos. Salario base mensual normalizado a pesos. Dólares a tipo de cambio 18.5, estable entre 17 y 20. Transformación logarítmica para las regresiones. Atípicos fuera de ~$8k a $400k recortados.</li>
-    <li>La brecha de género es el único punto con un modelo de controles, una descomposición tipo Oaxaca-Blinder sobre experiencia, inglés, nivel y familia de rol. El efecto queda acotado entre ~10% emparejando todo y 37% sin ajustar, y el residuo totalmente ajustado tiene un intervalo de confianza que toca el cero. No es discriminación probada. Controlar por nivel y rol, que son en parte consecuencia del mismo sesgo, probablemente subestima el efecto, así que el valor real vive en ese rango.</li>
+    <li id="methGender"></li>
   </ul>
   <p style="margin-top:16px">Detalle completo en <span class="mono">docs/GENERAL_FINDINGS_2026.md</span> y <span class="mono">docs/GENDER_FINDINGS_2026.md</span>.</p>
   <div class="thanks">
@@ -119,6 +120,7 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
 </section>
 
 <script src="charts.js"></script>
+<script src="phrases.js"></script>
 <script src="data.js"></script>
 <script>
 (function(){
@@ -151,7 +153,7 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
     { num:"Acto 1", name:"Lo que sube el número", color:"var(--violet)", kicker:"Las palancas que separan un sueldo del siguiente.", findings:[
       { eyebrow:"La palanca de fondo", title:"La experiencia es el motor",
         fig:function(){return barsH(L.experience.map(function(d){return {label:d.label+" años", value:d.median};}));},
-        prose:["De los primeros años a la madurez, el sueldo se multiplica por cuatro. El salto grande no está al entrar, está entre los primeros años y la década de experiencia."],
+        prose:["De los primeros años a la madurez, el sueldo llega a ser "+SG_PH.times(L.experience_mult)+" el de entrada. El salto grande no está al entrar, está entre los primeros años y la década de experiencia."],
         cap:"Mediana por años de experiencia en tecnología." },
       { eyebrow:"Inglés", title:"El inglés es la palanca más cara de ignorar",
         fig:function(){return barsH(L.english.map(function(d){return {label:d.label, value:d.median};}), {accentFn:function(d,i){return i===0?"var(--men)":"var(--bar)";}});},
@@ -204,9 +206,9 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
         cap:"Mediana por nivel. Medio -"+G.by_tier[0].gap_pct+"%, Senior -"+G.by_tier[1].gap_pct+"%. Gerente en "+G.by_tier[2].women_n+" mujeres, direccional." },
       { eyebrow:"De dónde viene la brecha", title:"La brecha está en la escalera",
         fig:function(){return barsH(G.rigor.sensitivity.map(function(s){return {label:s.spec, value:s.penalty};}), {fmt:function(v){return v+"%";}, accentFn:function(d,i){return i===0?"var(--women)":(i===G.rigor.sensitivity.length-1?"var(--men)":"var(--bar)");}});},
-        prose:["Empareja a un hombre y una mujer y la brecha cae de 37% a ~10% conforme se agregan controles. El salto más grande llega al emparejar nivel y rol. Y eso es justo la desaparición: a las mujeres se les mantiene en los peldaños de abajo, peor pagados.",
-               "El efecto del género queda acotado entre ~"+G.rigor.bounds_lower+"% emparejando todo y "+G.rigor.bounds_upper+"% sin ajustar. La parte que ni el nivel ni el rol explican es chica, y su intervalo de confianza toca el cero, así que no afirmamos un castigo fijo por el mismo trabajo. La brecha es, sobre todo, de progresión."],
-        cap:"Brecha ajustada por conjunto de controles. Con todo ajustado ~"+G.rigor.bounds_lower+"% (IC 95% ["+G.rigor.adjusted_ci[0]+", "+G.rigor.adjusted_ci[1]+"], toca el cero). Estable entre tipos de cambio 17 y 20." },
+        prose:["Empareja a un hombre y una mujer y la brecha cae de "+G.raw.gap_pct+"% a ~"+G.rigor.bounds_lower+"% conforme se agregan controles. El salto más grande llega al emparejar nivel y rol. Y eso es justo la desaparición: a las mujeres se les mantiene en los peldaños de abajo, peor pagados.",
+               SG_PH.residual(G.rigor).line],
+        cap:SG_PH.residual(G.rigor).cap },
       { eyebrow:"La salida que no rescata", title:"El empleo extranjero repite la brecha",
         fig:function(){return pairBars([{tier:"Extranjero", men_median:G.foreign_gap.men_median, women_median:G.foreign_gap.women_median, gap_pct:G.foreign_gap.gap_pct}]);},
         prose:["Las mujeres llegan al empleo extranjero a la misma tasa que los hombres. El acceso ya está parejo. Pero ahí la brecha es todavía más ancha que en el mercado local. La prima transfronteriza no cierra la diferencia, la repite."],
@@ -214,18 +216,18 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
       { eyebrow:"La pausa de carrera", title:"Una pausa que reinicia el reloj",
         fig:function(){return comparePct({label:"Mujeres", value:G.pause.women_pct},{label:"Hombres", value:G.pause.men_pct}, G.pause.ratio+"x");},
         prose:["Las mujeres interrumpen o reducen su carrera por más de diez meses, por motivos familiares o personales, a más del doble de la tasa de los hombres. En una industria que mide la antigüedad en años continuos, una pausa reinicia el reloj del ascenso justo cuando se decide el salto a senior."],
-        cap:"% que interrumpió o redujo su carrera >10 meses. Mujeres "+G.pause.women_pct+"% contra hombres "+G.pause.men_pct+"%." },
+        cap:"% que interrumpió o redujo su carrera >10 meses, entre quienes respondieron. Mujeres "+G.pause.women_pct+"% contra hombres "+G.pause.men_pct+"%." },
       { eyebrow:"El aislamiento", title:"La excepción en su propia sala",
         fig:function(){return waffle(G.lived.isolation_pct);},
-        prose:["Más de la mitad de las mujeres son el 20% o menos de su equipo. Son minoría clara donde trabajan.",
+        prose:["Más de la mitad de las mujeres dice que, entre quienes tienen un puesto similar al suyo, 20% o menos son mujeres. Son minoría clara donde trabajan.",
                G.lived.harassment_pct+"% reporta haberse sentido insegura o haber sufrido acoso en su empleo actual. "+G.lived.noprogram_pct+"% dice que su empresa no tiene ningún programa formal para promover mujeres al liderazgo."],
-        cap:G.lived.isolation_pct+"% son ≤20% de su equipo. Mediana: "+G.lived.isolation_median+"% de pares mujeres. n="+G.lived.isolation_n+"." },
+        cap:G.lived.isolation_pct+"% dice que entre sus pares de puesto 20% o menos son mujeres. Mediana: "+G.lived.isolation_median+"% de pares mujeres. n="+G.lived.isolation_n+"." },
       { eyebrow:"El mito del pipeline", title:"No es un problema de entrada",
         prose:["Los orígenes ya se emparejaron. La edad del primer programa es "+G.origin.first_program_w+" años en las mujeres y "+G.origin.first_program_m+" en los hombres. El acceso a computadora en la infancia es "+G.origin.computer_w+"% ellas contra "+G.origin.computer_m+"% ellos.",
                "Las mujeres no entran más tarde ni con menos exposición. Se les detiene abajo de los niveles senior. Es un problema de pago y de ascenso, no de intake."],
         cap:"Indicadores de origen, mujeres contra hombres. Residentes en México." }
     ]},
-    { num:"Acto 3", name:"La nueva forma del trabajo", color:"var(--violet)", kicker:"La IA ya cambió cómo se escribe el código. Y arranca sesgada.", findings:[
+    { num:"Acto 3", name:"La nueva forma del trabajo", color:"var(--violet)", kicker:"La IA ya cambió cómo se escribe el código. Y podría arrancar sesgada.", findings:[
       { eyebrow:"Cómo se programa hoy", title:"Media industria ya casi no escribe código a mano",
         fig:function(){return donut([{label:"Instruyo a los agentes", value:AI.coding_split.agentic_pct},{label:"A mano + IA de apoyo", value:AI.coding_split.support_pct},{label:"A mano + IA complementaria", value:AI.coding_split.complementary_pct}], "instruye agentes");},
         prose:["La mitad de quienes crean código dicen que sobre todo instruyen a los agentes y revisan el resultado. Escribir cada línea a mano ya es la minoría."],
@@ -234,22 +236,22 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
         fig:function(){return compare({label:"Instruye agentes", value:AI.agentic_pay.agent_median},{label:"El resto", value:AI.agentic_pay.rest_median}, "+"+AI.agentic_pay.pct+"%", {c1:"var(--lime)", c2:"var(--men)"});},
         prose:["Quienes trabajan sobre todo instruyendo agentes reportan una mediana más alta. Es descriptivo, no causal. Pero la dirección es clara."],
         cap:"Mediana "+pf(AI.agentic_pay.agent_median)+" contra "+pf(AI.agentic_pay.rest_median)+" el resto, +"+AI.agentic_pay.pct+"% (IC 95% ["+AI.agentic_pay.ci[0]+"%, "+AI.agentic_pay.ci[1]+"%]). Descriptivo, no causal." },
-      { eyebrow:"La ola arranca sesgada", title:"Programar con agentes es, por ahora, cosa de hombres",
+      { eyebrow:"Una señal que vigilar", title:"¿Programar con agentes es cosa de hombres?",
         fig:function(){return comparePct({label:"Hombres", value:AI.adoption_by_gender.men_pct},{label:"Mujeres", value:AI.adoption_by_gender.women_pct}, "", {c1:"var(--men)", c2:"var(--women)"});},
-        prose:["Entre quienes desarrollan software, la mitad de los hombres ya instruye a los agentes, contra un tercio de las mujeres. La brecha sobrevive al comparar el mismo rol. La nueva ola empieza inclinada."],
-        cap:"% que instruye agentes. Hombres "+AI.adoption_by_gender.men_pct+"% (n="+AI.adoption_by_gender.men_n+") contra mujeres "+AI.adoption_by_gender.women_pct+"% (n="+AI.adoption_by_gender.women_n+")." },
+        prose:[SG_PH.aiGender(AI.adoption_by_gender)],
+        cap:"% que instruye agentes. Hombres "+AI.adoption_by_gender.men_pct+"% (n="+AI.adoption_by_gender.men_n+") contra mujeres "+AI.adoption_by_gender.women_pct+"% (n="+AI.adoption_by_gender.women_n+"). Prueba exacta de Fisher, p="+AI.adoption_by_gender.fisher_p+"." },
       { eyebrow:"El puesto que no existía", title:"Un oficio nuevo, ya con nombre", big:""+AI.roles.count, bigcoral:false,
-        prose:[AI.roles.count+" personas ya tienen un puesto centrado en IA. Ingeniero de agentes, product manager de IA, prompt manager. Hace tres años no existían en la encuesta. Y aquí también hay sesgo: los hombres superan a las mujeres por más de dos a uno."],
+        prose:[AI.roles.count+" personas ya tienen un puesto centrado en IA. Ingeniero de agentes, product manager de IA, prompt manager. Hace tres años no existían en la encuesta. "+SG_PH.aiRoles(AI.roles, G.participation)],
         cap:"Puestos centrados en IA en México. Hombres "+AI.roles.men+" contra mujeres "+AI.roles.women+"." }
     ]},
     { num:"Acto 4", name:"La cuenta humana", color:"var(--coral)", kicker:"Buen sueldo no siempre significa buena situación.", findings:[
       { eyebrow:"Finanzas personales", title:"Ganan bien, pero no siempre llegan al retiro",
         fig:function(){return barsH([{label:"Sin fondo de retiro", value:HU.finances.no_retirement_pct},{label:"Con deuda educativa", value:HU.finances.edu_debt_pct},{label:"Segundo empleo", value:HU.finances.second_job_pct},{label:"No ahorra nada", value:HU.finances.no_savings_pct},{label:"Sin seguridad social", value:HU.finances.no_ss_pct}], {fmt:function(v){return v+"%";}, accentFn:function(){return "var(--coral)";}});},
-        prose:["El sector es formal y los sueldos son altos para el país. Aun así, uno de cada cinco no aporta a un fondo de retiro y una parte no logra ahorrar nada. El sueldo alto no se traduce solo en seguridad futura."],
-        cap:"% de la muestra, residentes en México. Ahorro mediana "+HU.finances.savings_median+"% del ingreso. n="+HU.finances.n+"." },
+        prose:["El sector es formal y los sueldos son altos para el país. Aun así, "+SG_PH.oneIn(HU.finances.no_retirement_pct)+" no aporta a un fondo de retiro y una parte no logra ahorrar nada. El sueldo alto no se traduce solo en seguridad futura."],
+        cap:"% de quienes respondieron, residentes en México. Ahorro mediana "+HU.finances.savings_median+"% del ingreso. n="+HU.finances.n+"." },
       { eyebrow:"Inclusión", title:"Neurodivergentes, y solos",
         fig:function(){return waffle(HU.neurodiv.no_support_pct);},
-        prose:["Una de cada siete personas reporta una neurodivergencia diagnosticada. De ellas, la mayoría dice que su empresa no la apoya para que no afecte su trabajo. El talento está. El acompañamiento no."],
+        prose:[SG_PH.cap(SG_PH.oneIn(HU.neurodiv.pct, true))+" personas reporta una neurodivergencia diagnosticada. De ellas, la mayoría dice que su empresa no la apoya para que no afecte su trabajo. El talento está. El acompañamiento no."],
         cap:HU.neurodiv.pct+"% reporta una neurodivergencia (n="+HU.neurodiv.n+"). Las celdas marcan el "+HU.neurodiv.no_support_pct+"% sin apoyo." }
     ]}
   ];
@@ -273,6 +275,7 @@ footer.end{text-align:center; padding:30px 0 10px; color:var(--muted); font-fami
     html+='</div>';
   });
   document.getElementById("report").innerHTML=html;
+  document.getElementById("methGender").textContent = SG_PH.residual(G.rigor).method;
 })();
 </script>
 </body>

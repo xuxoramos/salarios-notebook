@@ -68,6 +68,22 @@ def oaxaca():
                 resid=1 - np.exp(adj))
 OX = oaxaca()
 
+def hc3_residual():
+    """Analytic HC3 robust 95% CI for the adjusted female penalty (same controls)."""
+    d = df[(g.isin(["Femenino", "Masculino"])) & mx & norm.notna()].copy()
+    e_ = num(9).reindex(d.index); d = d[e_.notna()]; e_ = e_[e_.notna()]
+    fem = (S(3).reindex(d.index) == "Femenino").values.astype(float)
+    y = np.log(norm.reindex(d.index).values)
+    X = pd.concat([pd.DataFrame({"const": 1.0, "female": fem, "exp": e_.values})] +
+                  [pd.get_dummies(S(i).reindex(d.index), prefix=str(i), drop_first=True).astype(float).reset_index(drop=True) for i in (53, 22, 31)], axis=1).values
+    b, *_ = np.linalg.lstsq(X, y, rcond=None); r = y - X @ b
+    XtXi = np.linalg.pinv(X.T @ X); h = np.einsum("ij,jk,ik->i", X, XtXi, X)
+    w = np.where(h < 0.9999, r ** 2 / np.clip(1 - h, 1e-12, None) ** 2, 0.0)
+    se = np.sqrt((XtXi @ (X.T * w) @ X @ XtXi)[1, 1])
+    pen = lambda x: 100 * (1 - np.exp(x))
+    return pen(b[1]), pen(b[1] + 1.96 * se), pen(b[1] - 1.96 * se)
+RES_PT, RES_LO, RES_HI = hc3_residual()
+
 MEN = "#94a3b8"; WOMEN = "#e11d48"; INK = "#0f172a"; MUTED = "#64748b"; GRID = "#e2e8f0"
 plt.rcParams.update({
     "figure.dpi": 160, "savefig.dpi": 160, "savefig.bbox": "tight",
@@ -95,7 +111,7 @@ for i, (m, f, gg) in enumerate(zip(men, women, gaps)):
     ax.text(i+w/2, f+1800, f"${f/1000:.0f}k", ha="center", fontsize=12, color=WOMEN, fontweight="bold")
     ax.annotate(gg, (i, max(m, f)+9000), ha="center", color=WOMEN, fontsize=17, fontweight="bold")
 ax.set_xticks(list(x)); ax.set_xticklabels(stages); peso(ax)
-ax.set_title("El costo se acumula: la brecha crece con cada nivel", fontsize=17, fontweight="bold", loc="left", pad=12)
+ax.set_title("El costo se acumula hacia el nivel senior", fontsize=17, fontweight="bold", loc="left", pad=12)
 ax.set_ylabel("Salario base mensual (mediana)"); ax.legend(frameon=False, loc="upper left")
 ax.set_ylim(0, max(men)*1.25); ax.spines[["top", "right"]].set_visible(False)
 save(fig, "fig1_toll.png")
@@ -111,7 +127,7 @@ for t, m, f in zip(tiers, men, women):
                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec=WOMEN, lw=1))
 ax.fill_between(tiers, men, women, color=WOMEN, alpha=0.08); peso(ax)
 ax.set_ylabel("Salario base mensual (mediana)")
-ax.set_title("Cada ascenso encarece ser mujer", fontsize=18, fontweight="bold", loc="left", pad=12)
+ax.set_title("La brecha se abre del nivel medio al senior", fontsize=18, fontweight="bold", loc="left", pad=12)
 ax.legend(frameon=False, loc="upper left"); ax.set_ylim(min(women)*0.8, max(men)*1.1)
 ax.spines[["top", "right"]].set_visible(False)
 save(fig, "fig2_scissors.png")
@@ -131,17 +147,16 @@ save(fig, "fig3_vanishing.png")
 
 # ── Fig 4: Oaxaca explained vs unexplained ──────────────────────────
 exp_pct = round(100*OX["exp_share"]); unexp_pct = 100-exp_pct
-sr_woman = med(W & (lvl == "Senior")); resid = OX["resid"]
-pen_mo = sr_woman*resid/(1-resid); pen_yr = pen_mo*12
+zero_txt = "apenas se distingue del cero" if RES_LO > 0 else "toca el cero"
 fig, ax = plt.subplots(figsize=(9.5, 3.4))
 ax.barh([0], [exp_pct], color="#cbd5e1", label="Explicado por composición")
-ax.barh([0], [unexp_pct], left=[exp_pct], color=WOMEN, label="Castigo no explicado")
+ax.barh([0], [unexp_pct], left=[exp_pct], color=WOMEN, label="Residuo sin explicar")
 ax.text(exp_pct/2, 0, f"{exp_pct}%\nexplicado", ha="center", va="center", color=INK, fontsize=14, fontweight="bold")
-ax.text(exp_pct+unexp_pct/2, 0, f"{unexp_pct}%\nsin explicación", ha="center", va="center", color="white", fontsize=13, fontweight="bold")
+ax.text(exp_pct+unexp_pct/2, 0, f"{unexp_pct}%\nsin explicar", ha="center", va="center", color="white", fontsize=12, fontweight="bold")
 ax.set_xlim(0, 100); ax.set_yticks([]); ax.grid(False); ax.set_xlabel("Proporción de la brecha cruda (%)", labelpad=8)
-ax.set_title("La mayor parte es composición; un residuo no lo explica nada", fontsize=16, fontweight="bold", loc="left", pad=10)
+ax.set_title("La mayor parte es escalera: queda un residuo chico", fontsize=16, fontweight="bold", loc="left", pad=10)
 ax.spines[["top", "right", "left"]].set_visible(False)
-fig.text(0.5, -0.16, rf"$\approx$ \${pen_mo/1000:.1f}k al mes  ·  ~\${pen_yr/1000:.0f}k al año  que una mujer senior pierde sin explicación",
+fig.text(0.5, -0.16, f"Residuo ajustado ≈ {RES_PT:.0f}%  ·  IC 95% {RES_LO:.0f}% a {RES_HI:.0f}%  ·  {zero_txt}, no se convierte a pesos",
          ha="center", color=WOMEN, fontsize=14, fontweight="bold")
 save(fig, "fig4_oaxaca.png")
 
@@ -159,9 +174,9 @@ ax.text(2, unexp_pct/2, f"{unexp_pct}%", ha="center", va="center", color="white"
 ax.set_xticks([0, 1, 2])
 ax.set_xticklabels([f"Brecha cruda\n\\${raw_m/1000:.0f}k vs \\${raw_w/1000:.0f}k",
                     "− Diferencias reales en el CV\n(experiencia, nivel, rol, inglés)",
-                    "Castigo no explicado\nmismo CV, distinto sueldo"], fontsize=11)
+                    "Residuo sin explicar\nchico e impreciso"], fontsize=11)
 ax.set_ylim(0, 116); ax.set_yticks([]); ax.grid(False)
-ax.set_title("Con el mismo currículum en papel, un residuo se queda", fontsize=16, fontweight="bold", loc="left", pad=10)
+ax.set_title("Con el mismo currículum en papel, queda un residuo chico", fontsize=16, fontweight="bold", loc="left", pad=10)
 ax.spines[["top", "right", "left"]].set_visible(False)
 save(fig, "fig4_waterfall.png")
 
@@ -169,7 +184,8 @@ save(fig, "fig4_waterfall.png")
 same = (S(10) == "Yes"); fore = (S(10) == "No")
 segs = ["Empleador\nnacional", "Empleador\nextranjero"]
 men = [med(M & same), med(M & fore)]; women = [med(W & same), med(W & fore)]
-acc_m = 100*(fore & M).sum()/M.sum(); acc_w = 100*(fore & W).sum()/W.sum()
+ans10 = S(10).isin(["Yes", "No"])  # denominator: those who answered
+acc_m = 100*(fore & M).sum()/(M & ans10).sum(); acc_w = 100*(fore & W).sum()/(W & ans10).sum()
 fig, ax = plt.subplots(figsize=(9.5, 5.4)); x = range(2); w = 0.36
 ax.bar([i-w/2 for i in x], men, w, label="Hombres", color=MEN)
 ax.bar([i+w/2 for i in x], women, w, label="Mujeres", color=WOMEN)
@@ -186,7 +202,7 @@ fig.text(0.5, -0.03, f"Acceso a empleador extranjero, ya parejo: hombres {acc_m:
          ha="center", color=MUTED, fontsize=12)
 save(fig, "fig5_exit.png")
 
-# ── Fig 6: isolation waffle (women who are ≤20% of their team) ──────
+# ── Fig 6: isolation waffle (women whose similar-role peers are ≤20% women) ──
 pw = num(70)[W].dropna(); iso = 100*(pw <= 20).mean(); med_peers = int(np.median(pw))
 N_ROSE = round(iso); GREY = "#cbd5e1"
 fig, ax = plt.subplots(figsize=(9.5, 5.8)); cell, gp = 1.0, 0.14
@@ -194,9 +210,9 @@ for idx in range(100):
     r, cc = idx // 10, idx % 10
     ax.add_patch(plt.Rectangle((cc, r), cell-gp, cell-gp, color=(WOMEN if idx < N_ROSE else GREY)))
 ax.set_xlim(-0.2, 10.0); ax.set_ylim(-0.2, 10.2); ax.set_aspect("equal"); ax.axis("off")
-ax.set_title("Dos de cada cinco mujeres son minoría clara en su propio equipo",
+ax.set_title(("Más de la mitad de las mujeres" if iso > 50 else f"{iso:.0f}% de las mujeres") + " son minoría clara entre sus pares de puesto",
              fontsize=17, fontweight="bold", loc="left", pad=14, color=INK)
-fig.text(0.5, 0.02, f"{iso:.0f}% son ≤20% de su equipo  ·  mediana: {med_peers}% de pares mujeres  ·  n={len(pw)} mujeres",
+fig.text(0.5, 0.02, f"{iso:.0f}% dice que entre sus pares de puesto 20% o menos son mujeres  ·  mediana: {med_peers}%  ·  n={len(pw)} mujeres",
          ha="center", color=WOMEN, fontsize=13, fontweight="bold")
 save(fig, "fig6_isolation.png")
 
@@ -220,7 +236,7 @@ for y, v in zip(ypos, vals):
     ax.text(v+1, y, f"{v}%", va="center", fontsize=14, fontweight="bold", color=(AI_ACCENT if y == 2 else INK))
 ax.set_yticks(ypos); ax.set_yticklabels(cats, fontsize=12)
 ax.set_xlim(0, max(vals)+12); ax.set_xticks([]); ax.set_xlabel("% de quienes desarrollan software", labelpad=8)
-ax.set_title("Casi la mitad ya no programa a mano: instruye a los agentes", fontsize=16, fontweight="bold", loc="left", pad=12)
+ax.set_title(("La mitad" if vals[0] >= 50 else "Casi la mitad") + " ya no programa a mano: instruye a los agentes", fontsize=16, fontweight="bold", loc="left", pad=12)
 ax.grid(False); ax.spines[["top", "right", "bottom"]].set_visible(False)
 fig.text(0.5, -0.02, f"Entre quienes desarrollan software · n={len(prog)} (México)", ha="center", color=MUTED, fontsize=12)
 save(fig, "fig7_ai.png")

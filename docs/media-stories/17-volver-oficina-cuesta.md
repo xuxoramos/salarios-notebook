@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-En el tech mexicano, el trabajo remoto se paga mucho mejor que el presencial. Quien trabaja totalmente remoto tiene una mediana de 71,500 pesos al mes. Quien va todos los días a la oficina se queda en 42,150. El remoto reporta cerca de 70% más que el presencial. El híbrido queda en medio.
+En el tech mexicano, el trabajo remoto se paga mucho mejor que el presencial. Quien trabaja totalmente remoto tiene una mediana de 70,000 pesos al mes. Quien va todos los días a la oficina se queda en 40,000. El remoto reporta 75% más que el presencial. El híbrido queda en medio.
 
 ## El matiz
 
@@ -16,8 +16,8 @@ No es que la silla de la oficina baje el sueldo por arte de magia. Lo que mide e
 
 ## La advertencia
 
-Las empresas que están forzando el regreso total a la oficina compiten por talento contra un mercado remoto que paga 70% más. El mandato de volver no sale gratis, se paga en fuga. Si el sueldo presencial no sube, la puerta de salida ya tiene letrero y es de trabajo desde casa.
+Las empresas que están forzando el regreso total a la oficina compiten por talento contra un mercado remoto que paga 75% más. El mandato de volver no sale gratis, se paga en fuga. Si el sueldo presencial no sube, la puerta de salida ya tiene letrero y es de trabajo desde casa.
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Mediana de salario base por modalidad: totalmente remoto 71,500 pesos (n=240), híbrido 63,226 (n=234), totalmente presencial 42,150 (n=84). Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 19 de noviembre de 2026, residentes en México. Mediana de salario base por modalidad: totalmente remoto 70,000 pesos (n=267), híbrido 60,600 (n=265), totalmente presencial 40,000 (n=110). Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._

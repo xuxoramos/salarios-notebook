@@ -6,10 +6,10 @@
 
 El lenguaje con el que programas se nota en el sueldo. Entre los lenguajes con muestra suficiente en el tech mexicano, las medianas quedan así:
 
-- Java 85,000 pesos al mes, un 33% arriba de la mediana nacional.
-- C# 75,000, un 18% arriba.
-- Python 67,000, apenas arriba del promedio.
-- JavaScript 57,000, un 11% debajo.
+- Java 85,000 pesos al mes, un 42% arriba de la mediana nacional.
+- C# 75,000, un 25% arriba.
+- Python 65,000, apenas arriba del promedio.
+- JavaScript 50,000, un 17% debajo.
 
 El lenguaje de moda para empezar, JavaScript, es de los que menos pagan.
 
@@ -27,4 +27,4 @@ Nadie cambia de lenguaje de la noche a la mañana, pero sí se puede leer el map
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Mediana de salario base por lenguaje más usado en el trabajo: Java 85,000 pesos (n=41), C# 75,000 (n=49), Python 67,000 (n=49), JavaScript 57,000 (n=35), PHP 45,000 (n=8). Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 19 de noviembre de 2026, residentes en México. Mediana de salario base por lenguaje más usado en el trabajo: Java 85,000 pesos (n=43), C# 75,000 (n=53), Python 65,000 (n=53), JavaScript 50,000 (n=40), PHP 40,000 (n=9). Es asociación, no causalidad. Preliminar y de muestra autoseleccionada._

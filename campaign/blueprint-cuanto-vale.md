@@ -73,9 +73,9 @@ Arranca con los datos más sólidos para generar confianza; deja los de muestra 
 | 10 | 14 Certificaciones | rompe mitos |
 | 11 | 10 Industria | identidad de sector |
 | 12 | 08 Diáspora EE.UU. | carnada, para compartir en redes de diáspora |
-| 13 | 16 Vibe coding | novedoso, muy compartible, dato sólido (n=210) |
-| 14 | 15 Rol en IA | prima de rol, refuerza el ángulo de carrera (n=32) |
-| 15 | 17 Roles 100% IA | carnada pura, mercado emergente (n=61) |
+| 13 | 16 Vibe coding | novedoso, muy compartible, dato sólido (n=232) |
+| 14 | 15 Rol en IA | prima de rol, refuerza el ángulo de carrera (n=36) |
+| 15 | 17 Roles 100% IA | carnada pura, mercado emergente (n=73) |
 | 16 | 06 Mapa de LATAM | cierre "llena el mapa" |
 
 ---
@@ -95,8 +95,8 @@ Formato base para rediseño. Las tarjetas actuales siguen esta estructura.
 | Campo | Uso | Tamaño | Peso |
 |---|---|---|---|
 | `kicker` | Etiqueta superior (la pregunta "¿Cuánto vale tu ___?" o "SG Tech Pulse 2026"). Mayúsculas. | 30 px | 700 |
-| `stat` | La cifra estrella (ej. `2.5×`, `+77%`). | 340 px | 900 |
-| `stat.sm` | Variante para cifras/textos largos (ej. `85%`, `−8%`, `≈ 0%`). | 210 px | 900 |
+| `stat` | La cifra estrella (ej. `2.2×`, `+64%`). | 340 px | 900 |
+| `stat.sm` | Variante para cifras/textos largos (ej. `90%`, `−25%`, `+11%`). | 210 px | 900 |
 | `head` | Titular que explica la cifra. | 66 px | 800 |
 | `sub` | Detalle o cifras de apoyo. | 40 px | 500 |
 | `fine` | Letra chica: tamaño de muestra y advertencia metodológica. | 24 px | normal |
@@ -119,11 +119,16 @@ Regla de diseño: no repetir el mismo tema en tarjetas consecutivas del carrusel
 
 ## 4. Fuente de datos y método
 
-- **Fuente:** SG Tech Pulse 2026, corte de **688 respuestas** (2026-10-12).
-- **Métrica:** mediana del **salario base mensual en USD**. Si la persona reportó en USD se usa ese valor; si reportó en MXN se convierte con tipo de cambio 18.5. Se recortan valores fuera de 400 a 25,000 USD/mes.
-- **Mediana general de referencia:** ~$3,445 USD/mes (mediana $64,000 MXN a TC 18.5; n=601 con salario).
-- Las cifras son **preliminares y de muestra autoseleccionada**. No representan al sector completo; representan a quien ha respondido hasta hoy.
-- **Tarjetas 15 a 17 (bloque de IA):** ahora provienen del corte refrescado de 688 respuestas (`docs/GENERAL_FINDINGS_2026.md`, 2026-10-12). Las cifras en MXN se convirtieron a USD con el mismo tipo de cambio (18.5) para que la unidad calce con el resto del set. Los porcentajes de adopción de IA (tarjetas 16 y 17) se calculan sobre el subconjunto que respondió las preguntas de IA (n=210 en generación de código), no sobre las 688.
+- **Fuente:** SG Tech Pulse 2026, corte de **787 respuestas** (19 de noviembre de 2026). 712 son de residentes en México (90%).
+- **Población:** las tarjetas de segmento (02 a 05, 07 y 10 a 14) usan solo a **residentes en México** con salario reportado (n=642). La tarjeta 06 (Mapa de LATAM) cuenta respuestas de toda la muestra (712 de 787).
+- **Métrica:** mediana del **salario base mensual**. Quien reportó en USD se convierte a MXN con tipo de cambio 18.5. La mediana en MXN se divide entre 18.5 para mostrarla en USD/mes. Se descartan salarios fuera de un rango aproximado de 8,000 a 400,000 pesos al mes.
+- **Mediana de referencia:** $3,243 USD/mes ($60,000 MXN a TC 18.5, residentes en México con salario, n=642). La mediana de la muestra completa también es $60,000 MXN. En el corte anterior era ~$3,445.
+- **Excepciones de población:**
+  - Tarjetas 09 (Seguridad) y 15 (Rol en IA): mediana del rol en la **muestra completa**, comparada contra la mediana de México.
+  - Tarjeta 08 (Diáspora): residentes en Estados Unidos (n=26, 16 con sueldo reportado). Mediana $11,500 USD/mes.
+  - Tarjetas 16 y 17 (bloque de IA): **muestra completa** (`docs/GENERAL_FINDINGS_2026.md`, 2026-11-19).
+- Los porcentajes se calculan sobre quienes respondieron cada pregunta. La adopción de agentes (tarjeta 16) se calcula sobre quienes respondieron la pregunta de generación de código (117 de 232), no sobre las 787. El equity (tarjeta 13) lo recibe 18% de los residentes en México que respondieron esa pregunta (n=623).
+- Las cifras son **preliminares y de muestra autoseleccionada**. No representan al sector completo. Representan a quien ha respondido hasta hoy.
 
 ---
 
@@ -142,182 +147,182 @@ Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (co
 
 ### 02 · Inglés — `t-teal`
 - **Kicker:** ¿Cuánto vale tu inglés?
-- **Cifra:** 2.3×
-- **Head:** Quien usa inglés todo el día gana 2.3× lo de quien no lo usa.
-- **Sub:** Mediana: $4,324 vs $1,935 USD al mes.
-- **Letra chica:** Mediana bruta USD/mes, sin ajustar por experiencia. Muestra autoseleccionada (n=688).
+- **Cifra:** 2.2×
+- **Head:** Quien usa inglés todo el día gana 2.2× lo de quien no lo usa.
+- **Sub:** Mediana: $4,324 vs $1,978 USD al mes.
+- **Letra chica:** Mediana bruta USD/mes, residentes en México, sin ajustar por experiencia. Todo el tiempo n=160, nunca n=47. Muestra autoseleccionada.
 - **CTA:** Que tu inglés cuente
 
-> **Copy para redes:** Quien usa inglés todo el día reporta 2.3× lo de quien no lo usa: $4,324 vs $1,935 al mes (mediana, n=688). ¿Tu inglés se está pagando o te lo estás regalando? Pon tu número.
+> **Copy para redes:** Quien usa inglés todo el día reporta 2.2× lo de quien no lo usa: $4,324 vs $1,978 al mes (mediana, residentes en México). ¿Tu inglés se está pagando o te lo estás regalando? Pon tu número.
 > `#SGTechPulse #Ingles #SalariosTech #TechLATAM`
 
 ### 03 · Empleador extranjero — `t-violet`
 - **Kicker:** ¿Cuánto vale tu jefe extranjero?
-- **Cifra:** +38%
-- **Head:** Trabajar para una empresa de otro país paga ~38% más.
-- **Sub:** Mediana $4,595 vs $3,330 USD al mes (empleador local).
-- **Letra chica:** n=80 con empleador extranjero. Mediana bruta USD/mes. Muestra preliminar.
+- **Cifra:** +42%
+- **Head:** Trabajar para una empresa de otro país paga ~42% más.
+- **Sub:** Mediana $4,595 vs $3,243 USD al mes (empleador local).
+- **Letra chica:** n=86 con empleador extranjero, residentes en México. Mediana bruta USD/mes. Muestra preliminar.
 - **CTA:** Presume para quién trabajas
 
-> **Copy para redes:** Trabajar para una empresa de fuera paga ~38% más: $4,595 vs $3,330 al mes. ¿Local o extranjero? Presume para quién trabajas.
+> **Copy para redes:** Trabajar para una empresa de fuera paga ~42% más: $4,595 vs $3,243 al mes. ¿Local o extranjero? Presume para quién trabajas.
 > `#SGTechPulse #TrabajoRemoto #SalariosTech #TechLATAM`
 
 ### 04 · Nube — `t-amber`
 - **Kicker:** ¿Cuánto vale tu nube?
-- **Cifra:** +29%
-- **Head:** Quien usa Google Cloud reporta 29% más que la mediana.
-- **Sub:** AWS +25% · Azure +2%. GCP: $4,459 USD al mes.
-- **Letra chica:** Solo 14 respuestas de Google Cloud: muy pocas para confirmarlo. Ayúdanos a saber si es real.
+- **Cifra:** +33%
+- **Head:** Quien usa AWS reporta 33% más que la mediana.
+- **Sub:** Google Cloud +25% · Azure +15%. AWS: $4,324 USD al mes.
+- **Letra chica:** AWS n=95, Azure n=62. Google Cloud tiene solo 15 respuestas, muy pocas para ubicarlo bien. Ayúdanos a confirmarlo.
 - **CTA:** Pon tu nube en el mapa
 
-> **Copy para redes:** Google Cloud lidera con +29% sobre la mediana... pero solo 14 personas nos lo han dicho. AWS +25%, Azure +2%. ¿GCP de verdad paga más o es puro ruido? Ayúdanos a confirmarlo. ¿Cuál es tu nube?
+> **Copy para redes:** AWS lidera con +33% sobre la mediana: $4,324 al mes (n=95). Google Cloud marca +25%, pero solo 15 personas nos lo han dicho. Azure queda en +15%. ¿GCP paga más o menos de lo que parece? Ayúdanos a confirmarlo. ¿Cuál es tu nube?
 > `#SGTechPulse #AWS #Azure #GoogleCloud #DevOps`
 
 ### 05 · Lenguaje — `t-red`
 - **Kicker:** ¿Cuánto vale tu lenguaje?
-- **Cifra:** +80%
+- **Cifra:** +92%
 - **Head:** El lenguaje que mejor paga en la muestra casi no tiene respuestas.
-- **Sub:** Ruby lidera; Java +33%, Python +5%, JavaScript −11%.
+- **Sub:** Ruby lidera. Java +42%, Python +8%, JavaScript −17%.
 - **Letra chica:** Solo 6 respuestas de Ruby: es un guiño, no un dato. ¿Programas en algo raro? Cuéntanos.
 - **CTA:** Defiende tu lenguaje
 
-> **Copy para redes:** El lenguaje que mejor paga en la muestra casi no tiene respuestas: Ruby +80% (n=6). Java +33%, Python +5%, y JavaScript... −11%. Sí, JS debajo del promedio. ¿Nos vas a dejar así o defiendes tu lenguaje?
+> **Copy para redes:** El lenguaje que mejor paga en la muestra casi no tiene respuestas: Ruby +92% (n=6). Java +42%, Python +8%, y JavaScript... −17%. Sí, JS debajo de la mediana. ¿Nos vas a dejar así o defiendes tu lenguaje?
 > `#SGTechPulse #JavaScript #Python #Ruby #DevLATAM`
 
 ### 06 · Mapa de LATAM — `t-slate`
 - **Kicker:** ¿Cuánto se gana en tu país?
 - **Cifra:** 90% (`stat.sm`)
 - **Head:** 90% de las respuestas son de México. El resto de LATAM casi no aparece.
-- **Sub:** Colombia −15%, Argentina −35%... con 6 o 7 respuestas cada uno. No alcanza para saberlo.
-- **Letra chica:** ~620 de 688 respuestas son de México. Tu país está en blanco hasta que respondas.
+- **Sub:** Colombia −7% y Argentina −20%, con apenas 9 y 8 salarios reportados. No alcanza para saberlo.
+- **Letra chica:** 712 de 787 respuestas son de México. Tu país está en blanco hasta que respondas.
 - **CTA:** Tu país te necesita
 
-> **Copy para redes:** 90% de las respuestas son de México. Colombia, Argentina: 6 o 7 cada uno; el resto, un puñado. No alcanza para saber cuánto se gana en tu país. El mapa de sueldos de LATAM lo está dibujando México solo. Tu país está en blanco.
+> **Copy para redes:** 90% de las respuestas son de México. Colombia y Argentina: 12 y 11 respuestas. El resto, un puñado. No alcanza para saber cuánto se gana en tu país. El mapa de sueldos de LATAM lo está dibujando México solo. Tu país está en blanco.
 > `#SGTechPulse #TechLATAM #Colombia #Peru #Chile #Argentina`
 
 ### 07 · Mapa de México — `t-teal`
 - **Kicker:** ¿Cuánto se gana en tu región?
-- **Cifra:** −23% (`stat.sm`)
-- **Head:** Monterrey, la meca del norte, reporta menos que CDMX.
-- **Sub:** CDMX manda (+25%); Aguascalientes sorprende (+12%); Monterrey se queda atrás (−23%). El mapa no es el que crees.
-- **Letra chica:** CDMX n=203, Monterrey n=66, Aguascalientes n=21: direccional. Tu ciudad casi no aparece hasta que respondas.
-- **CTA:** Pon tu región en el mapa
+- **Cifra:** −25% (`stat.sm`)
+- **Head:** Monterrey, la meca del norte, reporta 25% menos que la mediana.
+- **Sub:** CDMX manda (+26%). Aguascalientes sorprende (+12%). Monterrey se queda atrás (−25%). El mapa no es el que crees.
+- **Letra chica:** CDMX n=224, Monterrey n=95, Aguascalientes n=22: direccional. Tu ciudad casi no aparece hasta que respondas.
+- **CTA:** Pon tu ciudad en el mapa
 
-> **Copy para redes:** Sorpresa: Monterrey reporta 23% menos que la mediana, mientras CDMX manda con +25% y Aguascalientes sorprende con +12%. ¿De verdad tu ciudad gana eso? Ponla en el mapa.
+> **Copy para redes:** Sorpresa: Monterrey reporta 25% menos que la mediana, mientras CDMX manda con +26% y Aguascalientes sorprende con +12%. ¿De verdad tu ciudad gana eso? Ponla en el mapa.
 > `#SGTechPulse #Monterrey #CDMX #Guadalajara #SalariosTech`
 
 **Nota de regiones:** los sueldos se agruparon por ciudad en seis regiones. Noroeste (Tijuana, Culiacán, Hermosillo, Durango), Noreste (Monterrey, Saltillo, Torreón), Bajío (Guadalajara, Querétaro, León, Aguascalientes, SLP), Centro (CDMX, Edomex, Puebla, Toluca), Sur (Guerrero, Oaxaca, Chiapas), Sureste (Veracruz, Mérida, Cancún). "Sureste" cubre lo que a veces se llama sur/sureste.
 
 ### 08 · Diáspora en EE.UU. — `t-cta`
 - **Kicker:** ¿Y los que ya cruzaron?
-- **Cifra:** 3×
-- **Head:** Los que trabajan desde Estados Unidos reportan el triple. Pero solo 26 nos han contado.
+- **Cifra:** 3.5×
+- **Head:** Los que trabajan desde Estados Unidos reportan 3.5× la mediana. Pero solo 26 nos han contado.
 - **Sub:** ¿Estás en la bahía o en un tech gringo? Tu número es la brújula de quien sueña con llegar.
-- **Letra chica:** n=26 residentes en EE.UU. ($11,500/mes mediana). Muy pocos para un dato. Preséntate.
+- **Letra chica:** n=26 residentes en EE.UU., 16 con sueldo reportado. Mediana $11,500/mes vs $3,243 en México. Muy pocos para un dato. Preséntate.
 - **CTA:** Ilumina el camino
 
-> **Copy para redes:** Los que ya cruzaron reportan 3×: $11,500 al mes de mediana. Pero solo 26 nos han contado. Si estás en la bahía o en un tech gringo, tu número es la brújula de quien sueña con llegar. Preséntate.
+> **Copy para redes:** Los que ya cruzaron reportan 3.5× la mediana de México: $11,500 al mes contra $3,243. Pero solo 26 nos han contado. Si estás en la bahía o en un tech gringo, tu número es la brújula de quien sueña con llegar. Preséntate.
 > `#SGTechPulse #LatinosInTech #SiliconValley #TechLATAM`
 
 **Nota de distribución:** esta tarjeta está pensada para compartirse en redes de diáspora (Latinx in Tech, Techqueria, grupos de empresa), no solo en el feed de Software Guru.
 
 ### 09 · Seguridad — `t-violet`
 - **Kicker:** ¿Cuánto vale tu rol?
-- **Cifra:** 1.7×
-- **Head:** Seguridad/InfoSec reporta 1.7× la mediana.
-- **Sub:** $6,000 USD al mes vs $3,445 de la mediana general.
-- **Letra chica:** Solo 12 respuestas en seguridad: muy pocas para asegurarlo. ¿Trabajas en seguridad? Cuéntanos.
+- **Cifra:** 1.5×
+- **Head:** Seguridad/InfoSec reporta 1.5× la mediana. Empata con liderazgo ejecutivo.
+- **Sub:** $4,973 USD al mes vs $3,243 de la mediana general.
+- **Letra chica:** Solo 15 respuestas en seguridad: muy pocas para asegurarlo. ¿Trabajas en seguridad? Cuéntanos.
 - **CTA:** Demuéstralo
 
-> **Copy para redes:** Seguridad/InfoSec reporta 1.7× la mediana: $6,000 al mes. Con 12 respuestas es un indicio, no un veredicto. ¿Trabajas en seguridad? Demuéstralo.
+> **Copy para redes:** Seguridad/InfoSec reporta 1.5× la mediana: $4,973 al mes. Es lo mismo que reporta liderazgo ejecutivo. Con 15 respuestas es un indicio, no un veredicto. ¿Trabajas en seguridad? Demuéstralo.
 > `#SGTechPulse #InfoSec #Ciberseguridad #SalariosTech`
 
 ### 10 · Industria — `t-red`
 - **Kicker:** ¿Cuánto vale tu industria?
-- **Cifra:** −45%
-- **Head:** Quien trabaja en gobierno reporta 45% menos que la mediana.
-- **Sub:** $1,891 vs $3,445 USD al mes. Alimentos, en cambio, +25%.
-- **Letra chica:** n=11 en gobierno. Direccional. ¿Tú en qué industria estás?
+- **Cifra:** −38%
+- **Head:** Quien trabaja en gobierno reporta 38% menos que la mediana.
+- **Sub:** $2,027 vs $3,243 USD al mes. Alimentos, en cambio, +36%.
+- **Letra chica:** n=14 en gobierno y 14 en alimentos. Direccional. ¿Tú en qué industria estás?
 - **CTA:** Suma tu industria
 
-> **Copy para redes:** Gobierno reporta 45% menos que la mediana ($1,891). Alimentos, al revés, +25%. ¿Tu industria te paga lo que vales o te ancla? Suma la tuya.
+> **Copy para redes:** Gobierno reporta 38% menos que la mediana ($2,027). Alimentos, al revés, +36%. ¿Tu industria te paga lo que vales o te ancla? Suma la tuya.
 > `#SGTechPulse #Fintech #Gobierno #SalariosTech`
 
 ### 11 · Experiencia — `t-slate`
 - **Kicker:** ¿Cuánto vale tu experiencia?
-- **Cifra:** 4×
-- **Head:** Con 11+ años se reporta casi 4× lo del que empieza.
-- **Sub:** 0-2 años $1,189 · 3-5 $2,162 · 6-10 $3,459 · 11+ $4,864 al mes.
-- **Letra chica:** Mediana USD/mes (n=601). Los primeros años son los más baratos.
+- **Cifra:** 3.1×
+- **Head:** Con 11+ años se reporta más de 3× lo del que empieza.
+- **Sub:** 0-2 años $1,378 · 3-5 $2,162 · 6-10 $3,243 · 11+ $4,324 al mes.
+- **Letra chica:** Mediana USD/mes, residentes en México (n=638). Los primeros años son los más baratos.
 - **CTA:** Pon tus años sobre la mesa
 
-> **Copy para redes:** Con 11+ años se reporta casi 4× lo del que empieza: $4,864 vs $1,189 al mes. Los primeros años son los más baratos, y nadie te lo dice. ¿En qué tramo vas? Pon tus años sobre la mesa.
+> **Copy para redes:** Con 11+ años se reporta más de 3× lo del que empieza: $4,324 vs $1,378 al mes. Los primeros años son los más baratos, y nadie te lo dice. ¿En qué tramo vas? Pon tus años sobre la mesa.
 > `#SGTechPulse #CarreraTech #SalariosTech #TechLATAM`
 
 ### 12 · Modalidad — `t-teal`
 - **Kicker:** ¿Cuánto vale trabajar remoto?
-- **Cifra:** +70%
-- **Head:** El remoto total paga 70% más que el presencial.
-- **Sub:** Remoto $3,864 vs presencial $2,278 al mes. El híbrido queda en medio.
-- **Letra chica:** Mediana USD/mes. Remoto n=240, presencial n=84. Muestra preliminar.
+- **Cifra:** +75%
+- **Head:** El remoto total paga 75% más que el presencial.
+- **Sub:** Remoto $3,784 vs presencial $2,162 al mes. El híbrido queda en medio.
+- **Letra chica:** Mediana USD/mes, residentes en México. Remoto n=267, presencial n=110. Muestra preliminar.
 - **CTA:** Presume tu modalidad
 
-> **Copy para redes:** El remoto total paga 70% más que el presencial: $3,864 vs $2,278 al mes. ¿Te están pagando la oficina? Presume tu modalidad.
+> **Copy para redes:** El remoto total paga 75% más que el presencial: $3,784 vs $2,162 al mes. ¿Te están pagando la oficina? Presume tu modalidad.
 > `#SGTechPulse #TrabajoRemoto #RemoteWork #SalariosTech`
 
 ### 13 · Equity — `t-amber`
 - **Kicker:** ¿Cuánto vale más allá del sueldo?
-- **Cifra:** +58%
-- **Head:** Quien recibe acciones reporta 58% más que quien no las recibe.
-- **Sub:** Con equity $5,135 vs $3,243 sin equity. Solo 1 de cada 5 lo recibe.
-- **Letra chica:** n=98 con acciones/RSU. Mediana de salario base USD/mes; el equity va aparte.
+- **Cifra:** +64%
+- **Head:** Quien recibe acciones reporta 64% más que quien no las recibe.
+- **Sub:** Con equity $5,135 vs $3,135 sin equity. Casi 1 de cada 5 lo recibe.
+- **Letra chica:** n=109 con acciones/RSU, residentes en México. Lo recibe 18% de quienes respondieron. Mediana de salario base USD/mes. El equity va aparte.
 - **CTA:** ¿Te toca del pastel?
 
-> **Copy para redes:** Quien recibe acciones reporta 58% más que quien no ($5,135 vs $3,243), y solo 1 de cada 5 lo recibe. El sueldo base es solo una parte. ¿A ti te toca del pastel?
+> **Copy para redes:** Quien recibe acciones reporta 64% más que quien no ($5,135 vs $3,135), y casi 1 de cada 5 lo recibe. El sueldo base es solo una parte. ¿A ti te toca del pastel?
 > `#SGTechPulse #Equity #Startups #SalariosTech`
 
 ### 14 · Certificaciones — `t-violet`
 - **Kicker:** ¿Tu certificación se paga sola?
-- **Cifra:** +13% (`stat.sm`)
-- **Head:** En la muestra, quien tiene certificación reporta 13% más.
-- **Sub:** Con cert $3,675 vs sin cert $3,243 al mes. Una diferencia pequeña pero real.
-- **Letra chica:** n=279 vs 279. ¿Tu certificación te subió el sueldo? Demuéstranos que sí.
+- **Cifra:** +11% (`stat.sm`)
+- **Head:** En la muestra, quien tiene certificación reporta 11% más.
+- **Sub:** Con cert $3,486 vs sin cert $3,135 al mes. Una diferencia pequeña.
+- **Letra chica:** n=324 vs 318, residentes en México. ¿Tu certificación te subió el sueldo? Demuéstranos que sí.
 - **CTA:** Demuéstranos que sí
 
-> **Copy para redes:** ¿La certificación se paga sola? En la muestra, un poco: con cert $3,675 vs sin cert $3,243 al mes, 13% más. ¿A ti la certificación te subió el sueldo? Demuéstranos que sí.
+> **Copy para redes:** ¿La certificación se paga sola? En la muestra, un poco: con cert $3,486 vs sin cert $3,135 al mes, 11% más. ¿A ti la certificación te subió el sueldo? Demuéstranos que sí.
 > `#SGTechPulse #Certificaciones #AWS #Scrum #SalariosTech`
 
 ### 15 · Rol en IA — `t-violet`
 - **Kicker:** ¿Cuánto vale tu rol en IA?
-- **Cifra:** +14%
-- **Head:** Ciencia de datos / IA reporta 14% más que la mediana.
-- **Sub:** Mediana $3,925 vs $3,445 USD al mes (mediana general).
-- **Letra chica:** n=32 en ciencia de datos/IA. Cifra MXN convertida a USD (TC 18.5). Muestra preliminar.
+- **Cifra:** +28%
+- **Head:** Ciencia de datos / IA reporta 28% más que la mediana.
+- **Sub:** Mediana $4,141 vs $3,243 USD al mes (mediana general).
+- **Letra chica:** n=36 en ciencia de datos/IA. Cifra MXN convertida a USD (TC 18.5). Muestra preliminar.
 - **CTA:** Defiende tu rol en IA
 
-> **Copy para redes:** Ciencia de datos / IA reporta 14% más que la mediana general: ~$3,925 vs ~$3,445 al mes. Todavía es muestra chica (n=32), pero apunta hacia dónde se mueve el dinero. ¿Ya trabajas en IA? Pon tu número.
+> **Copy para redes:** Ciencia de datos / IA reporta 28% más que la mediana general: ~$4,141 vs ~$3,243 al mes. Todavía es muestra chica (n=36), pero apunta hacia dónde se mueve el dinero. ¿Ya trabajas en IA? Pon tu número.
 > `#SGTechPulse #IA #DataScience #SalariosTech`
 
 ### 16 · Vibe coding — `t-amber`
 - **Kicker:** ¿Todavía programas a mano?
-- **Cifra:** 49%
+- **Cifra:** 50%
 - **Head:** Instruye a agentes de IA y ya casi no programa a mano.
-- **Sub:** 29% programa a mano con apoyo de IA · 18% la usa solo de vez en cuando.
-- **Letra chica:** Entre quienes respondieron la pregunta de generación de código (n=210). La encuesta sigue abierta.
+- **Sub:** 29% programa a mano con apoyo de IA · 19% la usa solo de vez en cuando.
+- **Letra chica:** 117 de 232 que respondieron la pregunta de generación de código. La encuesta sigue abierta.
 - **CTA:** Cuéntanos cómo programas
 
-> **Copy para redes:** La forma de programar ya cambió: 49% de quienes desarrollan software ya casi no programa a mano, instruye a agentes de IA y revisa el resultado (n=210). ¿Tú todavía picas código línea por línea o ya le hablas a la IA?
+> **Copy para redes:** La forma de programar ya cambió: la mitad de quienes nos contaron cómo programan ya casi no lo hace a mano. Instruye a agentes de IA y revisa el resultado (117 de 232). ¿Tú todavía picas código línea por línea o ya le hablas a la IA?
 > `#SGTechPulse #VibeCoding #IA #DevLATAM`
 
 ### 17 · Roles 100% IA — `t-slate`
 - **Kicker:** ¿Ya tienes un rol 100% IA?
-- **Cifra:** 61 ya (`stat.sm`)
-- **Head:** 61 personas ya tienen un puesto enfocado 100% en IA.
-- **Sub:** GenAI/LLM engineer, AI product manager, calidad de modelos: los nuevos títulos del sector.
-- **Letra chica:** 61 de 688 respuestas; rol abierto, no una lista cerrada. Mercado apenas naciendo.
+- **Cifra:** 73 (`stat.sm`)
+- **Head:** 73 personas ya tienen un puesto enfocado 100% en IA.
+- **Sub:** GenAI/LLM engineer, AI product manager, prompt manager: los nuevos títulos del sector.
+- **Letra chica:** 73 de 787 respuestas. Rol abierto, no una lista cerrada. Mercado apenas naciendo.
 - **CTA:** Preséntate
 
-> **Copy para redes:** Ya son 61 las personas con un puesto 100% enfocado en IA: GenAI/LLM engineer, AI product manager, calidad de modelos IA. El mercado apenas se está formando. Si tu rol ya es así, cuéntanos y ayúdanos a dibujar el mapa.
+> **Copy para redes:** Ya son 73 las personas con un puesto 100% enfocado en IA: GenAI/LLM engineer, AI product manager, prompt manager, ML engineer. El mercado apenas se está formando. Si tu rol ya es así, cuéntanos y ayúdanos a dibujar el mapa.
 > `#SGTechPulse #IA #CarrerasIA #TechLATAM`
 
 ### 18 · Llamado a la acción (fija) — `t-cta`
@@ -335,7 +340,7 @@ Para cada tarjeta: tema de color, textos exactos y la copia lista para redes (co
 
 - **Frameworks:** la encuesta 2026 no capturó el framework principal (solo si el stack cambió en 18 meses). Para tener una tarjeta de frameworks en la próxima ola, hay que **agregar la pregunta** al cuestionario.
 - **Más ángulos disponibles** para extender la campaña más allá de 16 semanas: premium por rol (frontend/backend/data), remuneración total vs base, tasa de ahorro / costo de vida, neurodivergencia (con trato respetuoso), segundo idioma, y profundizar por país conforme lleguen respuestas.
-- **IA todavía tiene tela de dónde cortar:** confianza en que las habilidades sigan siendo relevantes en 3 años (3.4/5 promedio, sin explotar en tarjeta), corte de vibe coding por seniority o rol, y seguir recalculando el bloque de IA (15-17) contra el corte de 688 conforme siga creciendo la muestra.
+- **IA todavía tiene tela de dónde cortar:** confianza en que las habilidades sigan siendo relevantes en 3 años (3.3/5 promedio, sin explotar en tarjeta), corte de vibe coding por seniority o rol, y seguir recalculando el bloque de IA (15-17) contra cada corte nuevo conforme siga creciendo la muestra (hoy 787 respuestas).
 - **Cada corte nuevo de datos** actualiza las cifras. Antes de reusar una tarjeta en una ola posterior, recalcular su número.
 
 ---

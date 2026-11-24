@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-En el tech mexicano las mujeres son mayoría, al menos hasta que empiezan los ascensos. Ellas ocupan el 61% de los puestos junior y el 61% de los de nivel medio, así que en la base y en la mitad de la escalera son más que ellos. El problema aparece cuando subes la mirada. En los puestos senior apenas llegan al 32%, y en la cima, entre gerencias y roles de mayor rango, se quedan en 20 a 25%. No es que se vayan del sector, es que se van borrando del organigrama conforme sube el nivel.
+En el tech mexicano las mujeres son mayoría, al menos hasta que empiezan los ascensos. Ellas ocupan el 66% de los puestos junior y el 59% de los de nivel medio, así que en la base y en la mitad de la escalera son más que ellos. El problema aparece cuando subes la mirada. En los puestos senior apenas llegan al 34%, y más arriba, entre gerencias y roles staff o principal, se quedan entre 23 y 32%. No es que se vayan del sector, es que se van borrando del organigrama conforme sube el nivel.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ Mientras la conversación siga girando alrededor de que faltan niñas en las car
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Participación femenina por nivel, sobre hombres y mujeres: junior 61% (n=49), medio 61% (n=99), senior 32% (n=252), gerente 25% (n=64), staff o principal 20% (n=40). Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 19 de noviembre de 2026, residentes en México. Participación femenina por nivel, sobre hombres y mujeres: junior 66% (n=56), medio 59% (n=121), senior 34% (n=283), gerente 32% (n=72), staff o principal 23% (n=47). Preliminar y de muestra autoseleccionada._

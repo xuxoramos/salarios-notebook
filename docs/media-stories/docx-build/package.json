@@ -1,0 +1,11 @@
+{
+  "name": "sg-media-stories-docx",
+  "private": true,
+  "description": "Builds SG-Tech-Pulse-2026-Historias-para-medios.docx from the media-story markdown files",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "docx": "9.16.0"
+  }
+}

@@ -4,7 +4,7 @@
 
 ## La afirmación
 
-Ellas pausan su carrera por la familia más del doble que ellos. El 16% de las mujeres en tech interrumpió o redujo su actividad profesional durante más de diez meses para atender responsabilidades personales o familiares. Entre los hombres, apenas el 7% hizo lo mismo. Es una diferencia de más de dos a uno en quién frena su trayectoria para cuidar a alguien.
+Ellas pausan su carrera por la familia más del doble que ellos. El 21% de las mujeres en tech que respondieron interrumpió o redujo su actividad profesional durante más de diez meses para atender responsabilidades personales o familiares. Entre los hombres, apenas el 9% hizo lo mismo. Es una diferencia de más de dos a uno en quién frena su trayectoria para cuidar a alguien.
 
 ## El matiz
 
@@ -16,4 +16,4 @@ Muchas empresas presumen sus licencias de maternidad y luego no diseñan el regr
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. A la pregunta de si interrumpió o redujo su actividad profesional por más de diez meses por responsabilidades personales o familiares, respondió que sí el 16% de las mujeres y el 7% de los hombres (sobre respuestas válidas). Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 19 de noviembre de 2026, residentes en México. A la pregunta de si interrumpió o redujo su actividad profesional por más de diez meses por responsabilidades personales o familiares, respondió que sí el 21% de las mujeres (n=222) y el 9% de los hombres (n=338). Ellas lo reportan 2.3 veces más que ellos. Porcentajes sobre quienes respondieron la pregunta. Preliminar y de muestra autoseleccionada._

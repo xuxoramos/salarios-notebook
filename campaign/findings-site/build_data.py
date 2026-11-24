@@ -13,6 +13,7 @@ import os, glob, json, unicodedata
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+from scipy import stats
 
 np.random.seed(2026)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -241,6 +242,8 @@ for lo, hi, lab in [(0, 2, "0-2"), (3, 5, "3-5"), (6, 10, "6-10"), (11, 20, "11-
     if m:
         exp_rows.append({"label": lab, "median": m, "n": n})
 levers["experience"] = exp_rows
+_e = {r["label"]: r["median"] for r in exp_rows}
+levers["experience_mult"] = round(_e["11-20"] / _e["0-2"], 1) if "11-20" in _e and "0-2" in _e else None
 
 data["levers"] = levers
 
@@ -316,17 +319,16 @@ gender["oaxaca"] = {"explained_pct": round(100 * expl / tot), "unexplained_pct":
 # foreign gap
 a, an = med(M & fore)
 b, bn = med(W & fore)
-accM = round(100 * (fore & M).sum() / M.sum())
-accW = round(100 * (fore & W).sum() / W.sum())
+_ans10 = S(10).isin(["Yes", "No"])  # denominator rule: those who answered
+accM = round(100 * (fore & M).sum() / (M & _ans10).sum())
+accW = round(100 * (fore & W).sum() / (W & _ans10).sum())
 gender["foreign_gap"] = {"men_median": a, "women_median": b, "gap_pct": round(100 * (1 - b / a)),
                          "women_n": bn, "men_n": an, "access_m": accM, "access_w": accW}
 
-# pause. Denominator = the full gender group (not only those who answered col 69),
-# matching docs/GENDER_FINDINGS_2026.md (16% women / 7% men, "over the total sample").
-# The 2.3x ratio is identical either way.
+# pause. Denominator rule (all assets): percentages over those who answered the item.
 def pause_rate(mask):
     yes = int((S(69)[mask] == "Yes").sum())
-    n = int(mask.sum())
+    n = int(S(69)[mask].isin(["Yes", "No"]).sum())
     return round(100 * yes / n), n
 pw_, pwn = pause_rate(W)
 pm_, pmn = pause_rate(M)
@@ -350,10 +352,11 @@ gender["lived"] = {
 # origin (closed)
 fp = num(63); comp = S(62)
 gender["origin"] = {"first_program_w": int(fp[W].median()), "first_program_m": int(fp[M].median()),
-                    "computer_w": round(100 * (comp[W] == "Yes").mean()), "computer_m": round(100 * (comp[M] == "Yes").mean())}
+                    "computer_w": round(100 * (comp[W] == "Yes").sum() / comp[W].isin(["Yes", "No"]).sum()),
+                    "computer_m": round(100 * (comp[M] == "Yes").sum() / comp[M].isin(["Yes", "No"]).sum())}
 # access parity
 def acc(mask_val, col, val):
-    x = S(col); return round(100 * (mask_val & (x == val)).sum() / mask_val.sum())
+    x = S(col); return round(100 * (mask_val & (x == val)).sum() / (mask_val & (x != "nan")).sum())
 gender["access"] = {
     "equity_m": acc(M, 27, "Yes"), "equity_w": acc(W, 27, "Yes"),
     "foreign_m": accM, "foreign_w": accW,
@@ -396,7 +399,10 @@ def adopt(mask):
     ans = mask & dev & mx & (aivals != "nan")
     return (round(100 * (agent & ans).sum() / ans.sum()) if ans.sum() else None), int(ans.sum())
 aw_, awn = adopt(W); am2, amn = adopt(M)
-ai["adoption_by_gender"] = {"women_pct": aw_, "women_n": awn, "men_pct": am2, "men_n": amn}
+_tbl = [[int((agent & M & dev & (aivals != "nan")).sum()), int((~agent & M & dev & (aivals != "nan")).sum())],
+        [int((agent & W & dev & (aivals != "nan")).sum()), int((~agent & W & dev & (aivals != "nan")).sum())]]
+ai["adoption_by_gender"] = {"women_pct": aw_, "women_n": awn, "men_pct": am2, "men_n": amn,
+                            "fisher_p": round(float(stats.fisher_exact(_tbl)[1]), 3)}
 # adoption by experience
 adopt_exp = []
 for lo, hi, lab in [(0, 3, "0-3"), (4, 6, "4-6"), (7, 10, "7-10"), (11, 15, "11-15"), (16, 99, "16+")]:
@@ -409,9 +415,10 @@ airole = S(61)
 ai["roles"] = {"count": int((mx & (airole != "nan")).sum()),
                "men": int(S(61)[M].ne("nan").sum()), "women": int(S(61)[W].ne("nan").sum()),
                "top": {k: int(v) for k, v in airole[mx & (airole != "nan")].value_counts().head(4).items()}}
+ai["roles"]["ratio"] = round(ai["roles"]["men"] / ai["roles"]["women"], 1) if ai["roles"]["women"] else None
 # confidence
 conf = num(60)
-ai["confidence"] = {"mean": round(float(conf[mx].mean()), 1), "worried_pct": round(100 * (conf[mx] <= 2).mean()),
+ai["confidence"] = {"mean": round(float(conf[mx].mean()), 1), "worried_pct": round(100 * (conf[mx].dropna() <= 2).mean()),
                     "n": int(conf[mx].notna().sum())}
 data["ai"] = ai
 
@@ -425,10 +432,10 @@ ss = S(36)
 human["finances"] = {
     "no_savings_pct": round(100 * (savmx == 0).mean()), "savings_median": int(savmx.median()),
     "save10plus_pct": round(100 * (savmx >= 10).mean()),
-    "no_retirement_pct": round(100 * (S(39)[mx] == "No").mean()),
-    "no_ss_pct": round(100 * ss[mx].str.startswith("No").mean()),
-    "edu_debt_pct": round(100 * (S(40)[mx] == "Yes").mean()),
-    "second_job_pct": round(100 * (S(33)[mx] == "Yes").mean()),
+    "no_retirement_pct": round(100 * (S(39)[mx & (S(39) != "nan")] == "No").mean()),
+    "no_ss_pct": round(100 * ss[mx & (ss != "nan")].str.startswith("No").mean()),
+    "edu_debt_pct": round(100 * (S(40)[mx & (S(40) != "nan")] == "Yes").mean()),
+    "second_job_pct": round(100 * (S(33)[mx & (S(33) != "nan")] == "Yes").mean()),
     "n": int(len(savmx)),
 }
 vac = num(30)[mx].dropna()
@@ -514,7 +521,20 @@ for _ in range(1000):
     _s = np.random.randint(0, len(_idx), len(_idx))
     _c = LinearRegression().fit(_Xf[_s], _yf[_s]).coef_[0]
     _pens.append(100 * (1 - np.exp(_c)))
+# analytic HC3 robust CI + p for the adjusted female penalty. Columns: const, female, exp, dummies.
+# Full dummy sets + constant are rank-deficient; the pseudo-inverse still gives the correct
+# variance for the female coefficient (an estimable contrast). Singleton-leverage rows (h=1) get weight 0.
+_Xa, _ya = _gender_design(FX, ["exp", "eng", "lvl", "role"])
+_Xa = np.column_stack([np.ones(len(_ya)), _Xa])
+_b, *_ = np.linalg.lstsq(_Xa, _ya, rcond=None); _r = _ya - _Xa @ _b
+_XtXi = np.linalg.pinv(_Xa.T @ _Xa); _h = np.einsum("ij,jk,ik->i", _Xa, _XtXi, _Xa)
+_w = np.where(_h < 0.9999, _r ** 2 / np.clip(1 - _h, 1e-12, None) ** 2, 0.0)
+_se = float(np.sqrt((_XtXi @ (_Xa.T * _w) @ _Xa @ _XtXi)[1, 1]))
+_pen = lambda x: 100 * (1 - np.exp(x))
 gender["rigor"] = {
+    "adjusted_point": round(_pen(_b[1]), 1),
+    "adjusted_ci_hc3": [round(_pen(_b[1] + 1.96 * _se), 1), round(_pen(_b[1] - 1.96 * _se), 1)],
+    "adjusted_p": round(float(2 * (1 - stats.norm.cdf(abs(_b[1] / _se)))), 3),
     "sensitivity": _sensitivity,
     "fx": _fx_rob,
     "adjusted_ci": [_rint(np.percentile(_pens, 2.5)), _rint(np.percentile(_pens, 97.5))],

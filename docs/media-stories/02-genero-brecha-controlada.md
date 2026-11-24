@@ -1,21 +1,23 @@
-# La brecha es un techo, no una multa
+# Un techo grande y una multa chica
 
 > Género · más allá del salario
 
 ## La afirmación
 
-La brecha salarial de género en el tech mexicano es del 37%. La mediana del sueldo base es de 75,000 pesos al mes para los hombres y de 47,250 para las mujeres. Cuando emparejas seniority, rol, años de experiencia e inglés, la brecha se encoge hasta cerca del 10%. Pero ese 10% es chico y frágil, y la parte grande y sólida está en otro lado.
+La brecha salarial de género en el tech mexicano es de 39%. La mediana del sueldo base es de 73,900 pesos al mes para los hombres y de 45,000 para las mujeres. Cuando emparejas experiencia, inglés, nivel y rol, la brecha baja a cerca de 10%. Con los datos de noviembre, ese 10% ya se distingue del cero, aunque por poco. La brecha tiene un techo grande y una multa chica.
 
 ## El matiz
 
-La brecha se desarma por etapas conforme agregas controles. Va de 37% sin ajustar a 25% con experiencia, 22% con inglés, 15% con nivel y 10% con rol. El salto grande llega al emparejar nivel y rol. Y eso es justo el problema: la brecha se explica porque a las mujeres se las mantiene en los peldaños de abajo, no porque les paguen menos por el mismo puesto.
-
-Ese 10% que queda es la parte que ningún currículum justifica. Pero su intervalo de confianza toca el cero, así que no podemos afirmar que exista una multa fija por el mismo trabajo. Hay una trampa adicional. Emparejar por nivel y rol en realidad subestima el efecto, porque el nivel y el rol son en parte consecuencia del mismo sesgo. Por eso lo honesto es hablar de un rango, entre 10% y 37%, no de un solo número.
+- La brecha se desarma por etapas. En el modelo sin controles es de 35%. Baja a 24% con experiencia, a 21% con inglés, a 16% con nivel y a 10% con rol.
+- El salto grande llega al emparejar nivel y rol. Ese es el techo: a las mujeres se las mantiene en los peldaños de abajo, peor pagados. Cerca de 82% de la brecha se explica así.
+- El 10% que queda es la multa, la parte que ningún currículum justifica. En octubre su intervalo de confianza tocaba el cero. Ahora va de 1% a 19%. La estimación no cambió. Lo que cambió es la precisión, porque hay más respuestas.
+- La multa es real, pero chica e imprecisa. Por eso no la convertimos en pesos.
+- Hay una trampa adicional. Emparejar por nivel y rol subestima el efecto, porque el nivel y el rol son en parte consecuencia del mismo sesgo. Lo honesto es hablar de un rango, entre 10% y 39%.
 
 ## La advertencia
 
-Ten cuidado con quien use el "solo 10%" como si fuera buena noticia. La lectura honesta es la contraria. El 10% es la parte chica e incierta, y el 37% es la parte real que se arma con un techo, que es hasta dónde no las dejan llegar. El techo es lo grande. Cerrar nada más la multa dejaría la brecha casi intacta. Hay que arreglar el ascenso, no solo el recibo.
+Ten cuidado con quien use el "solo 10%" como si fuera buena noticia. La multa existe, pero el problema grande es el techo. Cerrar la multa dejaría casi intacta una brecha de 39%. Hay que arreglar el ascenso, no solo el recibo. Y la multa, por sí sola, no prueba discriminación. También contiene factores que la encuesta no mide.
 
 ---
 
-_Dato: SG Tech Pulse 2026, volcado del 12 de octubre de 2026, residentes en México. Brecha cruda de medianas de 37% (mujeres 47,250 pesos contra hombres 75,000, IC 95% entre 29% y 46%). Escalera de controles: 37% sin ajuste, 25% con experiencia, 22% con inglés, 15% con nivel, 10% con rol. Descomposición Oaxaca-Blinder: cerca de 82% se explica por composición (seniority y rol). La brecha ajustada de ~10% tiene un IC 95% de [0%, 20%] que toca el cero, y es estable entre tipos de cambio 17 y 20, así que no se monetiza. El efecto se reporta como cotas de 10% a 37%. Preliminar y de muestra autoseleccionada._
+_Dato: SG Tech Pulse 2026, volcado del 19 de noviembre de 2026, residentes en México. Brecha cruda de medianas de 39% (mujeres 45,000 pesos contra hombres 73,900, IC 95% entre 30% y 46%). Escalera de controles: 35% sin controles, 24% con experiencia, 21% con inglés, 16% con nivel, 10% con rol. Descomposición Oaxaca-Blinder: cerca de 82% se explica por composición (nivel y rol). Brecha ajustada de ~10% con IC 95% de 1% a 19% (errores robustos HC3, p≈0.035), estable entre tipos de cambio 17 y 20, sin monetizar. El efecto se reporta como cotas de 10% a 39%. Preliminar y de muestra autoseleccionada._
